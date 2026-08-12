@@ -1,24 +1,67 @@
-# 🧠 虚拟测评产品 - 8款热门独立单页测评系统
+# ⚡ Assessment Studio - 8款热门独立单页测评产品
 
-本项目包含 **8 个单一、独立的热门测评 Landing Page**，新增了关于**焦虑情绪自测**与**大五人格测评**：
-
----
-
-## 📄 8 款单一独立测评页面列表
-
-| 页面文件名 | 测评分类 | 测评名称 | 测评亮点与传播特性 |
-|---|---|---|---|
-| 📄 **[`gad7.html`](file:///d:/%E8%99%9A%E6%8B%9F%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81/gad7.html)** *(新)* | **焦虑与心理** | **GAD-7 焦虑指数与精神内耗测评** | 国际标准 7 题广泛性焦虑自测，诊断情绪压力等级 |
-| 📄 **[`bigfive.html`](file:///d:/%E8%99%9A%E6%8B%9F%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81/bigfive.html)** *(新)* | **核心性格** | **大五人格专业测评 (OCEAN)** | 剖析开放性(O)、尽责性(C)、外向性(E)、宜人性(A)、神经质(N) |
-| 📄 **[`dating.html`](file:///d:/%E8%99%9A%E6%8B%9F%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81/dating.html)** | **情感爆款** | **他到底喜不喜欢你？关系信号深度拆解** | 8题高密度信号，剖析 Attraction × Investment × Commitment |
-| 📄 **[`attachment.html`](file:///d:/%E8%99%9A%E6%8B%9F%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81/attachment.html)** | **恋爱心理** | **恋爱依恋类型测评** | 剖析安全型(Secure)、焦虑型(Anxious)、回避型(Avoidant)底色 |
-| 📄 **[`battery.html`](file:///d:/%E8%99%9A%E6%8B%9F%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81/battery.html)** | **解压梗图** | **社畜精神续航与发疯指数测评** | 30秒诊断心理剩余电量与发疯指数，极具社交梗图属性 |
-| 📄 **[`eq.html`](file:///d:/%E8%99%9A%E6%8B%9F%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81/eq.html)** | **社交洞察** | **高情商测评：情绪洞察与防PUA能力** | 测评道德绑架免疫度、反PUA控场力与社交边界感 |
-| 📄 **[`mbti.html`](file:///d:/%E8%99%9A%E6%8B%9F%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81/mbti.html)** | **经典性格** | **MBTI 16型人格专业测评** | E/I、S/N、T/F、J/P 四维度经典性格偏好测试 |
-| 📄 **[`holland.html`](file:///d:/%E8%99%9A%E6%8B%9F%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81/holland.html)** | **职业规划** | **霍兰德职业兴趣测评 (RIASEC)** | 实用型、研究型、艺术型等 6 维职业倾向分配 |
+本项目包含 **8 款爆款单一独立 Landing Page 测评** 及 1 个统一测试发射台（主页）。纯静态 HTML+CSS+JS 架构，无需后端数据库，支持 1 键部署上线，内置微信小程序（一子一木）积分与抽奖引流入口。
 
 ---
 
-## 📱 微信小程序引流组件 (固定放在最下面)
+## 📄 独立单页列表 (Deployed Links)
 
-所有单页的底部均完美内置了精致单行排版的**【一子一木】小程序引流组件** (`#小程序://一子一木/0JPDrt84ecI5Gwd`)！
+部署上线后，你可以直接将以下单个 `.html` 链接贴到微信公众号、小红书、朋友圈、抖音短视频或嵌入小程序中单独推广：
+
+| 测评主题 | 单页文件名 | 访问路径示例 |
+| :--- | :--- | :--- |
+| 🏡 **全平台索引主页** | `index.html` | `https://your-project.vercel.app/` |
+| 😟 **GAD-7 焦虑与内耗测评** | `gad7.html` | `https://your-project.vercel.app/gad7.html` |
+| 🧠 **MBTI 16型人格专业测评** | `mbti.html` | `https://your-project.vercel.app/mbti.html` |
+| 💘 **关系信号深度拆解** | `dating.html` | `https://your-project.vercel.app/dating.html` |
+| 💕 **恋爱依恋类型测评** | `attachment.html` | `https://your-project.vercel.app/attachment.html` |
+| 🌊 **大五人格专业测评 (OCEAN)** | `bigfive.html` | `https://your-project.vercel.app/bigfive.html` |
+| 🔋 **社畜精神续航与发疯指数** | `battery.html` | `https://your-project.vercel.app/battery.html` |
+| 🎭 **高情商与防PUA测评** | `eq.html` | `https://your-project.vercel.app/eq.html` |
+| 🧭 **霍兰德职业兴趣测评 (RIASEC)** | `holland.html` | `https://your-project.vercel.app/holland.html` |
+
+---
+
+## 🚀 部署上线指引 (Deployment Guide)
+
+### 方案 A：GitHub + Vercel（推荐，全自动更新 & 免费 HTTPS）
+
+1. **新建 GitHub 仓库**：
+   * 打开 [GitHub](https://github.com/new)，新建一个公开仓库，例如命名为 `quiz-landing-pages`。
+
+2. **推送代码至 GitHub**（在项目目录下打开终端执行）：
+   ```bash
+   git remote add origin https://github.com/你的用户名/quiz-landing-pages.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+3. **绑定 Vercel 部署**：
+   * 打开 [Vercel 官网](https://vercel.com/) 并用 GitHub 账号登录。
+   * 点击 **"Add New..." -> "Project"**。
+   * 选择刚刚创建的 `quiz-landing-pages` 仓库，框架选 **"Other"**（原生静态项目不需要任何 Build 命令）。
+   * 点击 **"Deploy"**，等待 10 秒即上线！你将获得免费域名（如 `https://quiz-landing-pages.vercel.app`）。
+
+---
+
+### 方案 B：Vercel 网页拖拽部署（最简单，无需配置 Git）
+
+1. 打开 [Vercel 仪表盘](https://vercel.com/dashboard)。
+2. 直接将本地文件夹 `d:\虚拟测试产品` 拖入 Vercel 网页中的 **Deploy** 拖拽区域。
+3. 点击确认，10 秒内自动生成公网在线链接！
+
+---
+
+### 方案 C：免费使用 GitHub Pages
+
+1. 将代码 Push 至 GitHub 后，进入仓库的 **Settings -> Pages**。
+2. 在 **Branch** 处选择 `main` 分支，Folder 选择 `/ (root)`，点击 **Save**。
+3. 稍等 1 分钟，页面右上角即生成域名：`https://你的用户名.github.io/quiz-landing-pages/`！
+
+---
+
+## 📱 微信小程序跳转说明
+
+项目内引流按钮与口令已挂载：
+`#小程序://一子一木/0JPDrt84ecI5Gwd`
+点击按钮可一键唤起小程序或自动复制口令。
