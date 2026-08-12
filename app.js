@@ -1743,7 +1743,7 @@ function getMatrixRecommendHtml(currentTestId) {
           <h3 class="matrix-title">🌌 热门测评矩阵 · 探索多维自我</h3>
           <p class="matrix-subtitle">凭本次测试结果，加购矩阵其他核心测评均享 <strong>¥ 1.99 元</strong> 限时专享价</p>
         </div>
-        <div class="matrix-swipe-hint">👈 左右滑动探索 👉</div>
+        <div class="matrix-swipe-hint">👇 上下滑动探索 👇</div>
       </div>
       <div class="matrix-grid">
         ${cardsHtml}
