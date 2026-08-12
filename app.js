@@ -1020,7 +1020,7 @@ function getAdRewardHtml(testName) {
         </div>
       </div>
       <a href="${MINI_PROGRAM_LINK}" class="btn btn-reward" onclick="openMiniProgramAd();">
-        📱 打开小程序抽奖 →
+        🎁 领壁纸积分/抽大奖 →
       </a>
     </div>
     ${getDisclaimerHtml()}
