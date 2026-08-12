@@ -1807,7 +1807,7 @@ function showPaywallModal(testId) {
         <h2 class="paywall-title">《${test.title}》</h2>
         
         <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.5;">
-          本测评为付费专享。如果您已在<strong>闲鱼 / 小红书</strong>下单，请在下方输入发货消息中的<strong>【卡密口令】</strong>解锁；好友转发需先购买或在线解锁。
+          本测评为小红书/闲鱼已购买客户专享。首次打开自动绑定当前设备，以后无需再次输入，永久无限次免费自测！
         </p>
 
         <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:10px; padding:1rem; margin-bottom:1.2rem;">
