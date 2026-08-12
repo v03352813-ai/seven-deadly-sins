@@ -1166,6 +1166,7 @@ function calculateDatingSignalResult() {
   <button class="btn btn-primary" onclick="checkAndStartTest('dating_signal')">🔄 重新测试</button>
   <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("关系信号")}
   `;
 }
@@ -1264,6 +1265,7 @@ function calculateAttachmentResult() {
   <button class="btn btn-primary" onclick="checkAndStartTest('attachment')">🔄 重新测试</button>
   <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("依恋类型")}
   `;
 }
@@ -1336,6 +1338,7 @@ function calculateBatteryResult() {
   <button class="btn btn-primary" onclick="checkAndStartTest('battery')">🔄 重新测试</button>
   <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("精神续航")}
   `;
 }
@@ -1401,6 +1404,7 @@ function calculateEQResult() {
   <button class="btn btn-primary" onclick="checkAndStartTest('eq')">🔄 重新测试</button>
   <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("高情商")}
   `;
 }
@@ -1476,6 +1480,7 @@ function calculateGAD7Result() {
   <button class="btn btn-primary" onclick="checkAndStartTest('gad7')">🔄 重新测试</button>
   <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("焦虑内耗")}
   `;
 }
@@ -1538,6 +1543,7 @@ function calculateBigFiveResult() {
   <button class="btn btn-primary" onclick="checkAndStartTest('bigfive')">🔄 重新测试</button>
   <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("大五人格")}
   `;
 }
@@ -1627,6 +1633,7 @@ function calculateMBTIResult() {
   <button class="btn btn-primary" onclick="checkAndStartTest('mbti')">🔄 重新测试</button>
   <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("MBTI")}
   `;
 }
@@ -1686,10 +1693,58 @@ function calculateHollandResult() {
   <button class="btn btn-primary" onclick="checkAndStartTest('holland')">🔄 重新测试</button>
   <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("霍兰德")}
   `;
 }
 
+
+
+
+// 🌌 测评矩阵交叉推荐组件（推荐其他 8 款测试，单次特惠 1.99 元）
+function getMatrixRecommendHtml(currentTestId) {
+  var matrixList = [
+    { id: "mbti", icon: "🧠", title: "MBTI 16型人格专业测评", desc: "四大维度定位你的核心认知模式与职业优势" },
+    { id: "gad7", icon: "😟", title: "GAD-7 焦虑与内耗测评", desc: "评估近两周情绪负荷、压力与内耗等级" },
+    { id: "dating_signal", icon: "💘", title: "关系信号深度拆解", desc: "拆解他没说出口的好感、投入度与关系承诺" },
+    { id: "attachment", icon: "💕", title: "恋爱依恋类型测评", desc: "剖析你的亲密关系底色：安全型还是回避型" },
+    { id: "bigfive", icon: "🌊", title: "大五人格专业测评", desc: "学术级 OCEAN 五大核心性格杠杆剖析" },
+    { id: "battery", icon: "🔋", title: "社畜精神续航与发疯指数", desc: "测测心理剩余电量与抗压发疯极限" },
+    { id: "eq", icon: "🎭", title: "高情商与防PUA测评", desc: "评估同理心深度、社交边界感与防操控能力" },
+    { id: "holland", icon: "🧭", title: "霍兰德职业兴趣测评", desc: "RIASEC 六维代码定位你的理想职业赛道" }
+  ];
+
+  var filtered = matrixList.filter(function(item) { return item.id !== currentTestId; });
+
+  var cardsHtml = filtered.map(function(item) {
+    return `
+      <div class="matrix-mini-card">
+        <div>
+          <div class="matrix-card-top">
+            <span class="matrix-card-icon">${item.icon}</span>
+            <span class="matrix-card-name">${item.title}</span>
+          </div>
+          <p class="matrix-card-desc">${item.desc}</p>
+        </div>
+        <button class="matrix-card-btn" onclick="checkAndStartTest('${item.id}')">
+          🚀 解锁测评 (特惠 ¥1.99) →
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="matrix-recommend-section">
+      <div class="matrix-header">
+        <h3 class="matrix-title">🌌 热门测评矩阵 · 探索多维自我</h3>
+        <p class="matrix-subtitle">解锁矩阵其他核心测评，均享限时 <strong>¥ 1.99 元</strong> 专享特惠价</p>
+      </div>
+      <div class="matrix-grid">
+        ${cardsHtml}
+      </div>
+    </div>
+  `;
+}
 
 
 // ==========================================================================
@@ -1757,7 +1812,7 @@ function showPaywallModal(testId) {
         <div style="font-size:0.8rem; color:var(--text-sub); margin-bottom:1rem;">— 未在闲鱼/小红书下单？可直接在线解锁 —</div>
 
         <button class="pay-btn-wechat" onclick="simulateWeChatPay('${testId}')">
-          🟢 微信在线付费解锁 (¥ 9.9) →
+          🟢 微信在线付费解锁 (¥ 1.99) →
         </button>
       </div>
     </div>
