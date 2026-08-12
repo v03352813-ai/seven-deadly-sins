@@ -1,3 +1,4 @@
+var STORE_SHOP_LINK = "https://m.xianyu.com"; // 可替换为您的小红书/闲鱼店铺或商品链接
 /**
  * Assessment Platform Core Engine - Standalone Single Test Architecture
  * High-Density Comprehensive Result Engine & Instant Bulletproof Runner
@@ -1806,26 +1807,24 @@ function showPaywallModal(testId) {
     <div id="paywallModal" class="modal-overlay show">
       <div class="paywall-card">
         <button class="modal-close-btn" onclick="closePaywallModal()">×</button>
-        <span class="paywall-badge">🔒 咸鱼 / 小红书 客户专享入口</span>
+        <span class="paywall-badge">🔒 已付费客户专享入口</span>
         <h2 class="paywall-title">《${test.title}》</h2>
         
         <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.5;">
-          本测评为小红书/闲鱼已购买客户专享。首次打开自动绑定当前设备，以后无需再次输入，永久无限次免费自测！
+          本测评为<strong>已付费客户专享</strong>。如果您已下单购买，首次打开已自动绑定当前设备，以后无需再次支付，永久免费自测！未购买用户请前往店铺下单。
         </p>
 
-        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:10px; padding:1rem; margin-bottom:1.2rem;">
-          <div style="font-weight:700; color:#fbbf24; font-size:0.92rem; margin-bottom:0.6rem; text-align:left;">🔑 买家卡密口令验证：</div>
-          <div class="code-input-group" style="margin-top:0;">
-            <input type="text" id="unlockCodeInput" placeholder="输入闲鱼/小红书发送的口令 (如 VIP888)">
+        <button class="pay-btn-wechat" style="background:linear-gradient(90deg, #4f46e5 0%, #6366f1 50%, #3b82f6 100%); box-shadow:0 4px 15px rgba(99,102,241,0.35);" onclick="goToShopToBuy('${testId}')">
+          🛍️ 前往店铺下单购买 (特惠 ¥ 1.99) →
+        </button>
+
+        <div style="margin-top:0.9rem;">
+          <span class="code-unlock-toggle" onclick="toggleCodeInput()">已购买？输入发货卡密/口令解锁</span>
+          <div id="codeInputBox" class="code-input-group" style="display:none; margin-top:0.6rem;">
+            <input type="text" id="unlockCodeInput" placeholder="输入订单发货口令 (如 VIP888)">
             <button onclick="verifyUnlockCode('${testId}')">立即验证</button>
           </div>
         </div>
-
-        <div style="font-size:0.8rem; color:var(--text-sub); margin-bottom:1rem;">— 未在闲鱼/小红书下单？可直接在线解锁 —</div>
-
-        <button class="pay-btn-wechat" onclick="simulateWeChatPay('${testId}')">
-          🟢 微信在线付费解锁 (¥ 1.99) →
-        </button>
       </div>
     </div>
   `;
@@ -1834,6 +1833,17 @@ function showPaywallModal(testId) {
   if (existing) existing.remove();
   
   document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function goToShopToBuy(testId) {
+  showToast("🛍️ 正在为您打开下单页面...");
+  setTimeout(function() {
+    try {
+      window.open(STORE_SHOP_LINK, '_blank');
+    } catch(e) {
+      window.location.href = STORE_SHOP_LINK;
+    }
+  }, 600);
 }
 
 function closePaywallModal() {
