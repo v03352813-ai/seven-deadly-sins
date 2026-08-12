@@ -1,3 +1,4 @@
+var CUSTOMER_SERVICE_WECHAT = "你的客服微信"; // 可替换为您的微信号，方便没有小红书买家直接添加购买
 var STORE_SHOP_LINK = "https://m.xianyu.com"; // 可替换为您的小红书/闲鱼店铺或商品链接
 /**
  * Assessment Platform Core Engine - Standalone Single Test Architecture
@@ -1811,14 +1812,18 @@ function showPaywallModal(testId) {
         <h2 class="paywall-title">《${test.title}》</h2>
         
         <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.5;">
-          本测评为<strong>已付费客户专享</strong>。如果您已下单购买，首次打开已自动绑定当前设备，以后无需再次支付，永久免费自测！未购买用户请前往店铺下单。
+          本测评为<strong>已付费客户专享</strong>。如果您已下单购买，首次打开已自动绑定当前设备，以后无限次免费自测！未购买用户请前往店铺下单。
         </p>
 
-        <button class="pay-btn-wechat" style="background:linear-gradient(90deg, #4f46e5 0%, #6366f1 50%, #3b82f6 100%); box-shadow:0 4px 15px rgba(99,102,241,0.35);" onclick="goToShopToBuy('${testId}')">
+        <button class="pay-btn-wechat" style="background:linear-gradient(90deg, #4f46e5 0%, #6366f1 50%, #3b82f6 100%); box-shadow:0 4px 15px rgba(99,102,241,0.35); margin-bottom:0.6rem;" onclick="goToShopToBuy('${testId}')">
           🛍️ 前往店铺下单购买 (特惠 ¥ 1.99) →
         </button>
 
-        <div style="margin-top:0.9rem;">
+        <button class="btn btn-outline" style="width:100%; justify-content:center; border-radius:9999px; font-size:0.85rem; padding:0.6rem; margin-bottom:0.8rem;" onclick="copyCustomerServiceWeChat()">
+          💬 没有小红书？联系客服微信购买 →
+        </button>
+
+        <div>
           <span class="code-unlock-toggle" onclick="toggleCodeInput()">已购买？输入发货卡密/口令解锁</span>
           <div id="codeInputBox" class="code-input-group" style="display:none; margin-top:0.6rem;">
             <input type="text" id="unlockCodeInput" placeholder="输入订单发货口令 (如 VIP888)">
@@ -1835,15 +1840,24 @@ function showPaywallModal(testId) {
   document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-function goToShopToBuy(testId) {
-  showToast("🛍️ 正在为您打开下单页面...");
-  setTimeout(function() {
-    try {
-      window.open(STORE_SHOP_LINK, '_blank');
-    } catch(e) {
-      window.location.href = STORE_SHOP_LINK;
-    }
-  }, 600);
+function copyCustomerServiceWeChat() {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(CUSTOMER_SERVICE_WECHAT).then(function() {
+      showToast("💬 客服微信号【" + CUSTOMER_SERVICE_WECHAT + "】已复制！微信添加客服直接购买！");
+    }).catch(function() { fallbackCopyCS(); });
+  } else {
+    fallbackCopyCS();
+  }
+}
+
+function fallbackCopyCS() {
+  var input = document.createElement("input");
+  input.value = CUSTOMER_SERVICE_WECHAT;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand("copy");
+  document.body.removeChild(input);
+  showToast("💬 客服微信号【" + CUSTOMER_SERVICE_WECHAT + "】已复制！微信添加客服直接购买！");
 }
 
 function closePaywallModal() {
