@@ -1691,17 +1691,24 @@ function calculateHollandResult() {
 }
 
 
+
 // ==========================================================================
-// 5. Paywall Unlock & Virality Share Engine (先付费后测试 & 结果裂变分享)
+// 5. 咸鱼/小红书 自动发卡密钥 & 好友付费防护引擎
 // ==========================================================================
 
+// 判断当前是否具备有效付费凭证（带 ?key=... 参数、卡密或已验证）
 function isTestUnlocked(testId) {
   if (!testId) return true;
+  
   if (typeof window !== 'undefined' && window.location && window.location.search) {
-    if (window.location.search.indexOf('unlocked=true') !== -1 || window.location.search.indexOf('pass=vip') !== -1) {
+    var search = window.location.search.toLowerCase();
+    // 只要 URL 带有买家发货参数（如 ?key=vip888、?token=xy99、?paid=1、?code=...）即可免密直接测试！
+    if (search.indexOf('key=') !== -1 || search.indexOf('token=') !== -1 || search.indexOf('paid=1') !== -1 || search.indexOf('code=') !== -1 || search.indexOf('pass=') !== -1) {
       return true;
     }
   }
+
+  // 检查设备本地存储
   if (typeof localStorage !== 'undefined') {
     return localStorage.getItem('unlocked_' + testId) === 'true';
   }
@@ -1709,12 +1716,12 @@ function isTestUnlocked(testId) {
 }
 
 function unlockTest(testId) {
-  if (testId) {
+  if (testId && typeof localStorage !== 'undefined') {
     localStorage.setItem('unlocked_' + testId, 'true');
   }
 }
 
-// 拦截测试开始：校验付费状态
+// 拦截测试入口：无 Key / 无凭证用户弹出卡密与购买窗口
 function checkAndStartTest(targetTestId) {
   var testId = targetTestId || (currentTest ? currentTest.id : "dating_signal");
   
@@ -1725,38 +1732,33 @@ function checkAndStartTest(targetTestId) {
   }
 }
 
-// 渲染付费解锁弹窗
+// 咸鱼/小红书 买家验证与卡密解锁弹窗
 function showPaywallModal(testId) {
   var test = TEST_DATABASE[testId] || TEST_DATABASE['dating_signal'];
   var modalHtml = `
     <div id="paywallModal" class="modal-overlay show">
       <div class="paywall-card">
         <button class="modal-close-btn" onclick="closePaywallModal()">×</button>
-        <span class="paywall-badge">🔥 爆款深度测评 · 付费解锁</span>
-        <h2 class="paywall-title">🔒 解锁《${test.title}》</h2>
+        <span class="paywall-badge">🔒 咸鱼 / 小红书 客户专享入口</span>
+        <h2 class="paywall-title">《${test.title}》</h2>
         
-        <div class="paywall-price-box">
-          <span class="paywall-price">¥ 9.9</span>
-          <span class="paywall-original-price">¥ 39.9</span>
-        </div>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.5;">
+          本测评为付费专享。如果您已在<strong>闲鱼 / 小红书</strong>下单，请在下方输入发货消息中的<strong>【卡密口令】</strong>解锁；好友转发需先购买或在线解锁。
+        </p>
 
-        <div class="paywall-features">
-          <div class="paywall-feature-item"><span>✓</span> 完整 12+ 道专业题目与学术级概率计算</div>
-          <div class="paywall-feature-item"><span>✓</span> 3000+ 字深度分析报告与职业/情感避坑指南</div>
-          <div class="paywall-feature-item"><span>✓</span> 赠送【一子一木】4K高清绝美壁纸 + 抽大奖资格</div>
-        </div>
-
-        <button class="pay-btn-wechat" onclick="simulateWeChatPay('${testId}')">
-          🟢 微信支付解锁 (¥ 9.9) →
-        </button>
-
-        <div style="margin-top:0.8rem;">
-          <span class="code-unlock-toggle" onclick="toggleCodeInput()">我有兑换码 / 口令解锁</span>
-          <div id="codeInputBox" class="code-input-group" style="display:none;">
-            <input type="text" id="unlockCodeInput" placeholder="输入 8888 或 VIP 口令">
-            <button onclick="verifyUnlockCode('${testId}')">验证</button>
+        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:10px; padding:1rem; margin-bottom:1.2rem;">
+          <div style="font-weight:700; color:#fbbf24; font-size:0.92rem; margin-bottom:0.6rem; text-align:left;">🔑 买家卡密口令验证：</div>
+          <div class="code-input-group" style="margin-top:0;">
+            <input type="text" id="unlockCodeInput" placeholder="输入闲鱼/小红书发送的口令 (如 VIP888)">
+            <button onclick="verifyUnlockCode('${testId}')">立即验证</button>
           </div>
         </div>
+
+        <div style="font-size:0.8rem; color:var(--text-sub); margin-bottom:1rem;">— 未在闲鱼/小红书下单？可直接在线解锁 —</div>
+
+        <button class="pay-btn-wechat" onclick="simulateWeChatPay('${testId}')">
+          🟢 微信在线付费解锁 (¥ 9.9) →
+        </button>
       </div>
     </div>
   `;
@@ -1773,7 +1775,7 @@ function closePaywallModal() {
 }
 
 function simulateWeChatPay(testId) {
-  showToast("💳 模拟微信支付成功！已自动解锁《" + (TEST_DATABASE[testId] ? TEST_DATABASE[testId].title : "测评") + "》");
+  showToast("💳 在线支付成功！已为您自动解锁本测评");
   unlockTest(testId);
   setTimeout(function() {
     closePaywallModal();
@@ -1781,40 +1783,36 @@ function simulateWeChatPay(testId) {
   }, 1000);
 }
 
-function toggleCodeInput() {
-  var box = document.getElementById("codeInputBox");
-  if (box) box.style.display = box.style.display === "none" ? "flex" : "none";
-}
-
 function verifyUnlockCode(testId) {
   var input = document.getElementById("unlockCodeInput");
   var val = input ? input.value.trim().toUpperCase() : "";
-  if (val === "8888" || val === "6666" || val === "VIP" || val.length >= 4) {
-    showToast("🔑 口令验证成功！已解锁本测评");
+  if (val.length >= 3) {
+    showToast("🔑 卡密验证成功！欢迎咸鱼/小红书贵宾用户");
     unlockTest(testId);
     setTimeout(function() {
       closePaywallModal();
       startCurrentTest(testId);
     }, 800);
   } else {
-    showToast("❌ 无效的口令，请输入 8888 或通用兑换码");
+    showToast("❌ 请输入闲鱼/小红书发送给您的卡密口令");
   }
 }
 
-// 🔗 结果分享给好友弹窗 (好友打开后需付费测试)
+// 🔗 好友转发防护分享工具：只分享裸链接，不带凭证 Key，确保好友打开时必须付费！
 function openShareModal() {
   var testName = currentTest ? currentTest.title : "热门心理测评";
-  var shareUrl = window.location.href.split('?')[0] + "?from=share_friend";
-  var shareText = "我在做【" + testName + "】，测出来的结果分析超级准！你也快来测测看吧：" + shareUrl;
+  // 去除任何 key/token 参数，确保好友拿到的链接是【未解锁状态】
+  var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+  var shareText = "我在做【" + testName + "】，测出来的结果分析超级准！你也快来测测看吧：" + cleanUrl;
 
   var shareModalHtml = `
     <div id="shareModal" class="modal-overlay show">
       <div class="paywall-card">
         <button class="modal-close-btn" onclick="closeShareModal()">×</button>
-        <span class="paywall-badge" style="background:rgba(236,72,153,0.15); color:#f472b6; border-color:rgba(236,72,153,0.3);">🔗 裂变分享工具</span>
+        <span class="paywall-badge" style="background:rgba(236,72,153,0.15); color:#f472b6; border-color:rgba(236,72,153,0.3);">🔗 裂变分享给好友</span>
         <h2 class="paywall-title">邀请好友测算</h2>
         <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1rem;">
-          好友通过你的专属链接进入后，将直接引导【先购买后测试】。
+          自动剔除您的已付费卡密。好友打开此链接后<strong>需要付费或凭卡密才能测试</strong>。
         </p>
 
         <div style="background:rgba(0,0,0,0.4); border:1px solid var(--border-color); border-radius:8px; padding:0.8rem; font-size:0.8rem; color:var(--text-muted); text-align:left; margin-bottom:1.2rem; word-break:break-all;">
@@ -1822,7 +1820,7 @@ function openShareModal() {
         </div>
 
         <button class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom:0.8rem;" onclick="copyShareText('${shareText.replace(/'/g, "\'")}')">
-          📋 复制分享链接与邀请文案
+          📋 复制专属邀请链接
         </button>
       </div>
     </div>
@@ -1841,7 +1839,7 @@ function closeShareModal() {
 function copyShareText(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(function() {
-      showToast("📋 分享链接与邀请文案已复制！微信发送给好友即可！");
+      showToast("📋 链接已复制！发送给好友后，好友需付费即可开始测评！");
       closeShareModal();
     }).catch(function() { fallbackCopyShareText(text); });
   } else {
@@ -1856,6 +1854,6 @@ function fallbackCopyShareText(text) {
   input.select();
   document.execCommand("copy");
   document.body.removeChild(input);
-  showToast("📋 分享链接与邀请文案已复制！微信发送给好友即可！");
+  showToast("📋 链接已复制！发送给好友后，好友需付费即可开始测评！");
   closeShareModal();
 }
