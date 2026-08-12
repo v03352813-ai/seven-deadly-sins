@@ -1808,23 +1808,26 @@ function showPaywallModal(testId) {
     <div id="paywallModal" class="modal-overlay show">
       <div class="paywall-card">
         <button class="modal-close-btn" onclick="closePaywallModal()">×</button>
-        <span class="paywall-badge">🔒 已付费客户专享入口</span>
+        <span class="paywall-badge">🔒 爆款深度测评 · 微信在线解锁</span>
         <h2 class="paywall-title">《${test.title}》</h2>
         
-        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.5;">
-          本测评为<strong>已付费客户专享</strong>。如果您已下单购买，首次打开已自动绑定当前设备，以后无限次免费自测！未购买用户请前往店铺下单。
-        </p>
+        <div class="paywall-price-box">
+          <span class="paywall-price">¥ 1.99</span>
+          <span class="paywall-original-price">¥ 19.9</span>
+        </div>
 
-        <button class="pay-btn-wechat" style="background:linear-gradient(90deg, #4f46e5 0%, #6366f1 50%, #3b82f6 100%); box-shadow:0 4px 15px rgba(99,102,241,0.35); margin-bottom:0.6rem;" onclick="goToShopToBuy('${testId}')">
-          🛍️ 前往店铺下单购买 (特惠 ¥ 1.99) →
+        <div class="paywall-features">
+          <div class="paywall-feature-item"><span>✓</span> 完整 12+ 道专业题目与学术级概率计算</div>
+          <div class="paywall-feature-item"><span>✓</span> 3000+ 字深度分析报告与职业/情感避坑指南</div>
+          <div class="paywall-feature-item"><span>✓</span> 赠送【一子一木】4K高清绝美壁纸 + 抽大奖资格</div>
+        </div>
+
+        <button class="pay-btn-wechat" onclick="simulateWeChatPay('${testId}')">
+          🟢 微信在线支付解锁 (特惠 ¥ 1.99) →
         </button>
 
-        <button class="btn btn-outline" style="width:100%; justify-content:center; border-radius:9999px; font-size:0.85rem; padding:0.6rem; margin-bottom:0.8rem;" onclick="copyCustomerServiceWeChat()">
-          💬 没有小红书？联系客服微信购买 →
-        </button>
-
-        <div>
-          <span class="code-unlock-toggle" onclick="toggleCodeInput()">已购买？输入发货卡密/口令解锁</span>
+        <div style="margin-top:0.9rem;">
+          <span class="code-unlock-toggle" onclick="toggleCodeInput()">我有发货卡密 / 口令解锁</span>
           <div id="codeInputBox" class="code-input-group" style="display:none; margin-top:0.6rem;">
             <input type="text" id="unlockCodeInput" placeholder="输入订单发货口令 (如 VIP888)">
             <button onclick="verifyUnlockCode('${testId}')">立即验证</button>
@@ -1838,26 +1841,6 @@ function showPaywallModal(testId) {
   if (existing) existing.remove();
   
   document.body.insertAdjacentHTML('beforeend', modalHtml);
-}
-
-function copyCustomerServiceWeChat() {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(CUSTOMER_SERVICE_WECHAT).then(function() {
-      showToast("💬 客服微信号【" + CUSTOMER_SERVICE_WECHAT + "】已复制！微信添加客服直接购买！");
-    }).catch(function() { fallbackCopyCS(); });
-  } else {
-    fallbackCopyCS();
-  }
-}
-
-function fallbackCopyCS() {
-  var input = document.createElement("input");
-  input.value = CUSTOMER_SERVICE_WECHAT;
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand("copy");
-  document.body.removeChild(input);
-  showToast("💬 客服微信号【" + CUSTOMER_SERVICE_WECHAT + "】已复制！微信添加客服直接购买！");
 }
 
 function closePaywallModal() {
