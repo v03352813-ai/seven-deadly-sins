@@ -1811,15 +1811,19 @@ function showPaywallModal(testId) {
         <span class="paywall-badge">🔒 爆款深度测评 · 微信在线解锁</span>
         <h2 class="paywall-title">《${test.title}》</h2>
         
+        <p class="paywall-desc">
+          解锁完整 3000+ 字专业心理诊断报告，首次开启自动绑定当前设备，支持多次无限免费自测。
+        </p>
+
         <div class="paywall-price-box">
+          <span class="paywall-original-price">原价 ¥ 19.9</span>
           <span class="paywall-price">¥ 1.99</span>
-          <span class="paywall-original-price">¥ 19.9</span>
         </div>
 
         <div class="paywall-features">
-          <div class="paywall-feature-item"><span>✓</span> 完整 12+ 道专业题目与学术级概率计算</div>
-          <div class="paywall-feature-item"><span>✓</span> 3000+ 字深度分析报告与职业/情感避坑指南</div>
-          <div class="paywall-feature-item"><span>✓</span> 赠送【一子一木】4K高清绝美壁纸 + 抽大奖资格</div>
+          <div class="paywall-feature-item"><span>✓</span> 完整 12+ 道专业题目与学术级概率计算算法</div>
+          <div class="paywall-feature-item"><span>✓</span> 3000+ 字深度分析报告与职业/亲密关系避坑指南</div>
+          <div class="paywall-feature-item"><span>✓</span> 免费赠送【一子一木】4K高清绝美壁纸 + 抽大奖资格</div>
         </div>
 
         <button class="pay-btn-wechat" onclick="simulateWeChatPay('${testId}')">
@@ -1827,7 +1831,7 @@ function showPaywallModal(testId) {
         </button>
 
         <div style="margin-top:0.9rem;">
-          <span class="code-unlock-toggle" onclick="toggleCodeInput()">我有发货卡密 / 口令解锁</span>
+          <span class="code-unlock-toggle" onclick="toggleCodeInput()">🔑 我有发货卡密 / 兑换口令解锁</span>
           <div id="codeInputBox" class="code-input-group" style="display:none; margin-top:0.6rem;">
             <input type="text" id="unlockCodeInput" placeholder="输入订单发货口令 (如 VIP888)">
             <button onclick="verifyUnlockCode('${testId}')">立即验证</button>
