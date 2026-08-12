@@ -1716,7 +1716,11 @@ function getMatrixRecommendHtml(currentTestId) {
 
   var filtered = matrixList.filter(function(item) { return item.id !== currentTestId; });
 
+  var isVip = typeof localStorage !== 'undefined' && (localStorage.getItem('buyer_vip_pass') === 'true' || localStorage.getItem('unlocked_all') === 'true');
+
   var cardsHtml = filtered.map(function(item) {
+    var btnText = isVip ? "✨ VIP特权免费测试 →" : "🚀 解锁测评 (特惠 ¥1.99) →";
+    var btnStyle = isVip ? "background:linear-gradient(90deg, #10b981 0%, #059669 100%);" : "";
     return `
       <div class="matrix-mini-card">
         <div>
@@ -1726,18 +1730,22 @@ function getMatrixRecommendHtml(currentTestId) {
           </div>
           <p class="matrix-card-desc">${item.desc}</p>
         </div>
-        <button class="matrix-card-btn" onclick="checkAndStartTest('${item.id}')">
-          🚀 解锁测评 (特惠 ¥1.99) →
+        <button class="matrix-card-btn" style="${btnStyle}" onclick="checkAndStartTest('${item.id}')">
+          ${btnText}
         </button>
       </div>
     `;
   }).join('');
 
+  var subTitleText = isVip 
+    ? "✨ <strong>尊贵已购买家：您已解锁全场矩阵，可无限次免费测试！</strong>" 
+    : "买家凭闲鱼/小红书凭证购买一次，可无限次免费测试全矩阵测评；转发好友需付费；";
+
   return `
     <div class="matrix-recommend-section">
       <div class="matrix-header">
         <h3 class="matrix-title">🌌 热门测评矩阵 · 探索多维自我</h3>
-        <p class="matrix-subtitle">解锁矩阵其他核心测评，均享限时 <strong>¥ 1.99 元</strong> 专享特惠价</p>
+        <p class="matrix-subtitle">${subTitleText}</p>
       </div>
       <div class="matrix-grid">
         ${cardsHtml}
@@ -1757,22 +1765,31 @@ function isTestUnlocked(testId) {
   
   if (typeof window !== 'undefined' && window.location && window.location.search) {
     var search = window.location.search.toLowerCase();
-    // 只要 URL 带有买家发货参数（如 ?key=vip888、?token=xy99、?paid=1、?code=...）即可免密直接测试！
+    // 只要 URL 带有买家发货参数（如 ?key=vip888、?token=xy99、?paid=1、?code=...）即可免密直接测试，并永久授权该设备！
     if (search.indexOf('key=') !== -1 || search.indexOf('token=') !== -1 || search.indexOf('paid=1') !== -1 || search.indexOf('code=') !== -1 || search.indexOf('pass=') !== -1) {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('buyer_vip_pass', 'true');
+      }
       return true;
     }
   }
 
-  // 检查设备本地存储
+  // 检查买家设备本地存储：一次购买，永久无限次免费测试全场所有测评
   if (typeof localStorage !== 'undefined') {
+    if (localStorage.getItem('buyer_vip_pass') === 'true' || localStorage.getItem('unlocked_all') === 'true') {
+      return true;
+    }
     return localStorage.getItem('unlocked_' + testId) === 'true';
   }
   return false;
 }
 
 function unlockTest(testId) {
-  if (testId && typeof localStorage !== 'undefined') {
-    localStorage.setItem('unlocked_' + testId, 'true');
+  if (typeof localStorage !== 'undefined') {
+    // 标记该买家设备获得永久 VIP 特权：一次购买，全场无限次免费测试！
+    localStorage.setItem('buyer_vip_pass', 'true');
+    localStorage.setItem('unlocked_all', 'true');
+    if (testId) localStorage.setItem('unlocked_' + testId, 'true');
   }
 }
 
