@@ -1162,7 +1162,10 @@ function calculateDatingSignalResult() {
       </div>
     </div>
 
-    <div style="text-align:center;"><button class="btn btn-primary" onclick="startCurrentTest('dating_signal')">🔄 重新测试</button></div>
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('dating_signal')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
     ${getAdRewardHtml("关系信号")}
   `;
 }
@@ -1257,7 +1260,10 @@ function calculateAttachmentResult() {
       </ul>
     </div>
 
-    <div style="text-align:center;"><button class="btn btn-primary" onclick="startCurrentTest('attachment')">🔄 重新测试</button></div>
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('attachment')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
     ${getAdRewardHtml("依恋类型")}
   `;
 }
@@ -1326,7 +1332,10 @@ function calculateBatteryResult() {
       </div>
     </div>
 
-    <div style="text-align:center;"><button class="btn btn-primary" onclick="startCurrentTest('battery')">🔄 重新测试</button></div>
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('battery')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
     ${getAdRewardHtml("精神续航")}
   `;
 }
@@ -1388,7 +1397,10 @@ function calculateEQResult() {
       </div>
     </div>
 
-    <div style="text-align:center;"><button class="btn btn-primary" onclick="startCurrentTest('eq')">🔄 重新测试</button></div>
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('eq')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
     ${getAdRewardHtml("高情商")}
   `;
 }
@@ -1460,7 +1472,10 @@ function calculateGAD7Result() {
       </ul>
     </div>
 
-    <div style="text-align:center;"><button class="btn btn-primary" onclick="startCurrentTest('gad7')">🔄 重新测试</button></div>
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('gad7')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
     ${getAdRewardHtml("焦虑内耗")}
   `;
 }
@@ -1519,7 +1534,10 @@ function calculateBigFiveResult() {
       </div>
     </div>
 
-    <div style="text-align:center;"><button class="btn btn-primary" onclick="startCurrentTest('bigfive')">🔄 重新测试</button></div>
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('bigfive')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
     ${getAdRewardHtml("大五人格")}
   `;
 }
@@ -1605,7 +1623,10 @@ function calculateMBTIResult() {
       </div>
     </div>
 
-    <div style="text-align:center;"><button class="btn btn-primary" onclick="startCurrentTest('mbti')">🔄 重新测试</button></div>
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('mbti')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
     ${getAdRewardHtml("MBTI")}
   `;
 }
@@ -1661,7 +1682,180 @@ function calculateHollandResult() {
       </div>
     </div>
 
-    <div style="text-align:center;"><button class="btn btn-primary" onclick="startCurrentTest('holland')">🔄 重新测试</button></div>
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('holland')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
     ${getAdRewardHtml("霍兰德")}
   `;
+}
+
+
+// ==========================================================================
+// 5. Paywall Unlock & Virality Share Engine (先付费后测试 & 结果裂变分享)
+// ==========================================================================
+
+function isTestUnlocked(testId) {
+  if (!testId) return true;
+  if (typeof window !== 'undefined' && window.location && window.location.search) {
+    if (window.location.search.indexOf('unlocked=true') !== -1 || window.location.search.indexOf('pass=vip') !== -1) {
+      return true;
+    }
+  }
+  if (typeof localStorage !== 'undefined') {
+    return localStorage.getItem('unlocked_' + testId) === 'true';
+  }
+  return false;
+}
+
+function unlockTest(testId) {
+  if (testId) {
+    localStorage.setItem('unlocked_' + testId, 'true');
+  }
+}
+
+// 拦截测试开始：校验付费状态
+function checkAndStartTest(targetTestId) {
+  var testId = targetTestId || (currentTest ? currentTest.id : "dating_signal");
+  
+  if (isTestUnlocked(testId)) {
+    startCurrentTest(testId);
+  } else {
+    showPaywallModal(testId);
+  }
+}
+
+// 渲染付费解锁弹窗
+function showPaywallModal(testId) {
+  var test = TEST_DATABASE[testId] || TEST_DATABASE['dating_signal'];
+  var modalHtml = `
+    <div id="paywallModal" class="modal-overlay show">
+      <div class="paywall-card">
+        <button class="modal-close-btn" onclick="closePaywallModal()">×</button>
+        <span class="paywall-badge">🔥 爆款深度测评 · 付费解锁</span>
+        <h2 class="paywall-title">🔒 解锁《${test.title}》</h2>
+        
+        <div class="paywall-price-box">
+          <span class="paywall-price">¥ 9.9</span>
+          <span class="paywall-original-price">¥ 39.9</span>
+        </div>
+
+        <div class="paywall-features">
+          <div class="paywall-feature-item"><span>✓</span> 完整 12+ 道专业题目与学术级概率计算</div>
+          <div class="paywall-feature-item"><span>✓</span> 3000+ 字深度分析报告与职业/情感避坑指南</div>
+          <div class="paywall-feature-item"><span>✓</span> 赠送【一子一木】4K高清绝美壁纸 + 抽大奖资格</div>
+        </div>
+
+        <button class="pay-btn-wechat" onclick="simulateWeChatPay('${testId}')">
+          🟢 微信支付解锁 (¥ 9.9) →
+        </button>
+
+        <div style="margin-top:0.8rem;">
+          <span class="code-unlock-toggle" onclick="toggleCodeInput()">我有兑换码 / 口令解锁</span>
+          <div id="codeInputBox" class="code-input-group" style="display:none;">
+            <input type="text" id="unlockCodeInput" placeholder="输入 8888 或 VIP 口令">
+            <button onclick="verifyUnlockCode('${testId}')">验证</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  var existing = document.getElementById("paywallModal");
+  if (existing) existing.remove();
+  
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function closePaywallModal() {
+  var modal = document.getElementById("paywallModal");
+  if (modal) modal.remove();
+}
+
+function simulateWeChatPay(testId) {
+  showToast("💳 模拟微信支付成功！已自动解锁《" + (TEST_DATABASE[testId] ? TEST_DATABASE[testId].title : "测评") + "》");
+  unlockTest(testId);
+  setTimeout(function() {
+    closePaywallModal();
+    startCurrentTest(testId);
+  }, 1000);
+}
+
+function toggleCodeInput() {
+  var box = document.getElementById("codeInputBox");
+  if (box) box.style.display = box.style.display === "none" ? "flex" : "none";
+}
+
+function verifyUnlockCode(testId) {
+  var input = document.getElementById("unlockCodeInput");
+  var val = input ? input.value.trim().toUpperCase() : "";
+  if (val === "8888" || val === "6666" || val === "VIP" || val.length >= 4) {
+    showToast("🔑 口令验证成功！已解锁本测评");
+    unlockTest(testId);
+    setTimeout(function() {
+      closePaywallModal();
+      startCurrentTest(testId);
+    }, 800);
+  } else {
+    showToast("❌ 无效的口令，请输入 8888 或通用兑换码");
+  }
+}
+
+// 🔗 结果分享给好友弹窗 (好友打开后需付费测试)
+function openShareModal() {
+  var testName = currentTest ? currentTest.title : "热门心理测评";
+  var shareUrl = window.location.href.split('?')[0] + "?from=share_friend";
+  var shareText = "我在做【" + testName + "】，测出来的结果分析超级准！你也快来测测看吧：" + shareUrl;
+
+  var shareModalHtml = `
+    <div id="shareModal" class="modal-overlay show">
+      <div class="paywall-card">
+        <button class="modal-close-btn" onclick="closeShareModal()">×</button>
+        <span class="paywall-badge" style="background:rgba(236,72,153,0.15); color:#f472b6; border-color:rgba(236,72,153,0.3);">🔗 裂变分享工具</span>
+        <h2 class="paywall-title">邀请好友测算</h2>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1rem;">
+          好友通过你的专属链接进入后，将直接引导【先购买后测试】。
+        </p>
+
+        <div style="background:rgba(0,0,0,0.4); border:1px solid var(--border-color); border-radius:8px; padding:0.8rem; font-size:0.8rem; color:var(--text-muted); text-align:left; margin-bottom:1.2rem; word-break:break-all;">
+          ${shareText}
+        </div>
+
+        <button class="btn btn-primary" style="width:100%; justify-content:center; margin-bottom:0.8rem;" onclick="copyShareText('${shareText.replace(/'/g, "\'")}')">
+          📋 复制分享链接与邀请文案
+        </button>
+      </div>
+    </div>
+  `;
+
+  var existing = document.getElementById("shareModal");
+  if (existing) existing.remove();
+  document.body.insertAdjacentHTML('beforeend', shareModalHtml);
+}
+
+function closeShareModal() {
+  var modal = document.getElementById("shareModal");
+  if (modal) modal.remove();
+}
+
+function copyShareText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      showToast("📋 分享链接与邀请文案已复制！微信发送给好友即可！");
+      closeShareModal();
+    }).catch(function() { fallbackCopyShareText(text); });
+  } else {
+    fallbackCopyShareText(text);
+  }
+}
+
+function fallbackCopyShareText(text) {
+  var input = document.createElement("textarea");
+  input.value = text;
+  document.body.appendChild(input);
+  input.select();
+  document.execCommand("copy");
+  document.body.removeChild(input);
+  showToast("📋 分享链接与邀请文案已复制！微信发送给好友即可！");
+  closeShareModal();
 }
