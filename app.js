@@ -1769,7 +1769,8 @@ function isTestUnlocked(testId) {
     
     if (search.indexOf('key=') !== -1 || search.indexOf('token=') !== -1 || search.indexOf('paid=1') !== -1 || search.indexOf('code=') !== -1 || search.indexOf('pass=') !== -1) {
       // 若当前页面路径匹配该测评（如 mbti.html 解锁 mbti），则记录本地单品解锁状态
-      if (path.indexOf(testId) !== -1 || path === '/' || path.indexOf('index') !== -1) {
+      var shortId = testId.replace('_signal', '');
+      if (path.indexOf(testId) !== -1 || path.indexOf(shortId) !== -1 || path === '/' || path.indexOf('index') !== -1) {
         if (typeof localStorage !== 'undefined') {
           localStorage.setItem('unlocked_' + testId, 'true');
         }
