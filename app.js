@@ -1164,7 +1164,7 @@ function calculateDatingSignalResult() {
 
     <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
   <button class="btn btn-primary" onclick="checkAndStartTest('dating_signal')">🔄 重新测试</button>
-  <button class="btn btn-reward" style="background:linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #6366f1 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
     ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("关系信号")}
@@ -1263,7 +1263,7 @@ function calculateAttachmentResult() {
 
     <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
   <button class="btn btn-primary" onclick="checkAndStartTest('attachment')">🔄 重新测试</button>
-  <button class="btn btn-reward" style="background:linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #6366f1 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
     ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("依恋类型")}
@@ -1336,7 +1336,7 @@ function calculateBatteryResult() {
 
     <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
   <button class="btn btn-primary" onclick="checkAndStartTest('battery')">🔄 重新测试</button>
-  <button class="btn btn-reward" style="background:linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #6366f1 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
     ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("精神续航")}
@@ -1402,7 +1402,7 @@ function calculateEQResult() {
 
     <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
   <button class="btn btn-primary" onclick="checkAndStartTest('eq')">🔄 重新测试</button>
-  <button class="btn btn-reward" style="background:linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #6366f1 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
     ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("高情商")}
@@ -1478,7 +1478,7 @@ function calculateGAD7Result() {
 
     <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
   <button class="btn btn-primary" onclick="checkAndStartTest('gad7')">🔄 重新测试</button>
-  <button class="btn btn-reward" style="background:linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #6366f1 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
     ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("焦虑内耗")}
@@ -1541,7 +1541,7 @@ function calculateBigFiveResult() {
 
     <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
   <button class="btn btn-primary" onclick="checkAndStartTest('bigfive')">🔄 重新测试</button>
-  <button class="btn btn-reward" style="background:linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #6366f1 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
     ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("大五人格")}
@@ -1631,7 +1631,7 @@ function calculateMBTIResult() {
 
     <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
   <button class="btn btn-primary" onclick="checkAndStartTest('mbti')">🔄 重新测试</button>
-  <button class="btn btn-reward" style="background:linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #6366f1 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
     ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("MBTI")}
@@ -1691,7 +1691,7 @@ function calculateHollandResult() {
 
     <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
   <button class="btn btn-primary" onclick="checkAndStartTest('holland')">🔄 重新测试</button>
-  <button class="btn btn-reward" style="background:linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #6366f1 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
 </div>
     ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
     ${getAdRewardHtml("霍兰德")}

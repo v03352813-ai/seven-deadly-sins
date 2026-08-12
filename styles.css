@@ -53,7 +53,7 @@ body {
   right: 15%;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -127,7 +127,7 @@ body {
 }
 
 .hero-gradient-text {
-  background: linear-gradient(135deg, #a5b4fc 0%, #60a5fa 100%);
+  background: linear-gradient(135deg, #a5b4fc 0%, #f472b6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -140,7 +140,7 @@ body {
   line-height: 1.5;
 }
 
-/* Buttons - Elegant Indigo-Blue Gradient */
+/* Buttons - 原版高光紫粉渐变 (保持首屏与主按钮不变) */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -156,14 +156,14 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #4f46e5 0%, #6366f1 50%, #3b82f6 100%);
+  background: linear-gradient(90deg, #6366f1 0%, #818cf8 40%, #f472b6 100%);
   color: #ffffff;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 3px 10px rgba(244, 114, 182, 0.26);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 5px 14px rgba(244, 114, 182, 0.38);
   opacity: 0.96;
 }
 
@@ -302,7 +302,7 @@ body {
 .progress-bar-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #4f46e5 0%, #3b82f6 100%);
+  background: linear-gradient(90deg, #6366f1 0%, #ec4899 100%);
   transition: width 0.3s ease;
 }
 
@@ -408,9 +408,9 @@ body {
   font-weight: 700;
   padding: 4px 14px;
   border-radius: 20px;
-  background: rgba(99, 102, 241, 0.18);
-  color: #a5b4fc;
-  border: 1px solid rgba(99, 102, 241, 0.35);
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.3);
   margin-bottom: 1rem;
 }
 
@@ -487,7 +487,7 @@ body {
 
 .dimension-fill {
   height: 100%;
-  background: linear-gradient(90deg, #4f46e5 0%, #3b82f6 100%);
+  background: linear-gradient(90deg, #6366f1 0%, #ec4899 100%);
   border-radius: 10px;
 }
 
@@ -768,7 +768,7 @@ body {
   cursor: pointer;
 }
 
-/* 🌌 Test Matrix Horizontal Scroll Carousel (横向滑块布局 - 彻底消除零碎挂单 & 节约空间) */
+/* 🌌 Test Matrix Horizontal Scroll Carousel (仅作用于矩阵区) */
 .matrix-recommend-section {
   background: linear-gradient(135deg, rgba(30, 27, 75, 0.6) 0%, rgba(18, 24, 38, 0.8) 100%);
   border: 1px solid rgba(99, 102, 241, 0.25);
@@ -896,6 +896,7 @@ body {
   margin-bottom: 1rem;
 }
 
+/* 矩阵内部小卡片按钮渐变 */
 .matrix-card-btn {
   width: 100%;
   padding: 0.55rem 0.8rem;
