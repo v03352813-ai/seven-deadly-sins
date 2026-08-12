@@ -1816,12 +1816,12 @@ function showPaywallModal(testId) {
         </p>
 
         <div style="display:flex; flex-direction:column; gap:0.8rem; margin-bottom:0.4rem;">
-          <button class="pay-btn-wechat" style="margin-bottom:0;" onclick="simulateWeChatPay('${testId}')">
-            🟢 微信在线支付解锁 (特惠 ¥ 1.99) →
-          </button>
-
           <button class="btn btn-outline" style="width:100%; justify-content:center; border-radius:9999px; font-size:0.9rem; padding:0.75rem;" onclick="toggleCodeInput()">
             🔑 已有发货卡密 / 兑换口令解锁 →
+          </button>
+
+          <button class="pay-btn-wechat" style="margin-bottom:0;" onclick="simulateWeChatPay('${testId}')">
+            🟢 微信在线支付解锁 (特惠 ¥ 1.99) →
           </button>
         </div>
 
