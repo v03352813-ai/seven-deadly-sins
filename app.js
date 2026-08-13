@@ -1813,7 +1813,7 @@ function showPaywallModal(testId) {
         <h2 class="paywall-title">《${test.title}》</h2>
         
         <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.5;">
-          本测评为付费专享，解锁后当前设备永久免费自测。如果您已在平台下单，请点击下方口令解锁；未购买用户可直接微信在线支付。
+          本测评为付费专享，解锁后当前设备永久免费自测。如果您已在平台下单，请点击下方口令解锁；未购买用户可直接在线支付。
         </p>
 
         <div style="display:flex; flex-direction:column; gap:0.8rem; margin-bottom:0.4rem;">
@@ -1822,7 +1822,7 @@ function showPaywallModal(testId) {
           </button>
 
           <button class="pay-btn-wechat" style="margin-bottom:0;" onclick="simulateWeChatPay('${testId}')">
-            🟢 微信在线支付解锁 (特惠 ¥ 1.99) →
+            🟢 在线支付解锁 (特惠 ¥ 1.99) →
           </button>
         </div>
 
