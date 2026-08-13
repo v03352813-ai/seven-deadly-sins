@@ -948,3 +948,36 @@ body {
   .matrix-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   .matrix-grid { grid-template-columns: 1fr; max-height: 360px; }
 }
+
+
+/* 📱 Mobile Optimized Header Layout */
+@media (max-width: 640px) {
+  .app-header {
+    padding: 0.6rem 0.8rem !important;
+  }
+  .header-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.4rem !important;
+  }
+  .brand-logo {
+    font-size: 0.9rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 150px !important;
+    flex-shrink: 1 !important;
+  }
+  .brand-logo span {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .btn-reward {
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.78rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+}
