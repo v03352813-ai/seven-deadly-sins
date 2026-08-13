@@ -981,3 +981,46 @@ body {
     flex-shrink: 0 !important;
   }
 }
+
+
+/* 🌟 High-Impact Wallpaper Banner Card Layout */
+.ad-wallpaper-card {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(30, 27, 75, 0.45) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem 1.6rem;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1.5rem !important;
+  margin-top: 1.8rem;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(12px);
+  flex-wrap: nowrap !important;
+}
+
+.ad-wallpaper-card .ad-content-left {
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.4rem !important;
+  flex: 1;
+  min-width: 0;
+}
+
+.ad-wallpaper-card .btn-reward {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+  margin-top: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .ad-wallpaper-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1rem !important;
+  }
+  .ad-wallpaper-card .btn-reward {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
