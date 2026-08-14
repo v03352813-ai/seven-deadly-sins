@@ -39,9 +39,7 @@
         🚀 立即开始测试 →
       </button>
 
-      <!-- 免责合规说明提示词 -->
-      
-      <!-- Wallpaper Ad Banner Card -->
+      <!-- Wallpaper Ad Banner Card (ONLY ONE CARD) -->
       <div class="ad-wallpaper-card" style="margin-top: 1.8rem; margin-bottom: 1.5rem;">
         <div class="ad-content-left">
           <div class="ad-icon-badge">
@@ -56,7 +54,8 @@
         <a href="#小程序://一子一木/0JPDrt84ecI5Gwd" class="btn btn-reward" onclick="openMiniProgramAd(); return false;">🎁 免费下载壁纸/领积分/抽大奖 →</a>
       </div>
 
-      <p style="font-size:0.76rem; color:var(--text-sub); margin-top:0.9rem; margin-bottom:1.5rem;">
+      <!-- 免责声明 -->
+      <p style="font-size:0.76rem; color:var(--text-sub); margin-top:0.7rem; margin-bottom:2rem;">
         ⚖️ 免责声明：本测评结果仅供自我探索、娱乐及个人参考使用，不构成任何专业医学诊断、心理治疗或重大人生/法律决策依据。
       </p>
     </div>
@@ -84,25 +83,21 @@
       <div class="flow-controls">
         <button class="btn btn-outline" id="prevBtn" onclick="prevQuestion()">← 上一题</button>
       </div>
-
-      <div style="background:rgba(245, 158, 11, 0.06); border:1px solid rgba(245, 158, 11, 0.2); border-radius:var(--radius-md); padding:0.8rem 1.2rem; margin-top:2rem; display:flex; align-items:center; justify-content:space-between; font-size:0.85rem;">
-        <span style="color:var(--text-muted);">🎁 完成测试后自动发放【一子一木】壁纸积分兑换资格</span>
-        <a href="#小程序://一子一木/0JPDrt84ecI5Gwd" onclick="openMiniProgramAd(); return false;" style="color:#fbbf24; font-weight:600; text-decoration:none;">查看小程序 →</a>
-      </div>
     </div>
 
-    <!-- Result Container -->
-    <div id="resultView" class="result-container" style="display:none;">
-      <div id="resultContainer"></div>
+    <!-- Loading State -->
+    <div id="loadingBox" class="loading-container" style="display:none;">
+      <div class="spinner"></div>
+      <p class="loading-text">正在深度解析您的测评维度与性格特征模型...</p>
+    </div>
+
+    <!-- Result Report Container -->
+    <div id="resultContainer" class="result-container" style="display:none;">
+      <!-- Dynamically Generated Report -->
     </div>
 
   </main>
 
   <script src="app.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      initStandaloneTest("mbti");
-    });
-  </script>
 </body>
 </html>

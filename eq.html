@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>高情商与反PUA能力测评 - 独立测评</title>
-  <meta name="description" content="测测你的情绪察觉力、共情深度、反社交操控(防PUA)能力与社交心理边界感">
+  <meta name="description" content="测测你的情绪察觉力、共情沟通与社交心理界限">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -39,9 +39,7 @@
         🚀 立即开始测试 →
       </button>
 
-      <!-- 免责合规说明提示词 -->
-      
-      <!-- Wallpaper Ad Banner Card -->
+      <!-- Wallpaper Ad Banner Card (ONLY ONE CARD) -->
       <div class="ad-wallpaper-card" style="margin-top: 1.8rem; margin-bottom: 1.5rem;">
         <div class="ad-content-left">
           <div class="ad-icon-badge">
@@ -56,17 +54,10 @@
         <a href="#小程序://一子一木/0JPDrt84ecI5Gwd" class="btn btn-reward" onclick="openMiniProgramAd(); return false;">🎁 免费下载壁纸/领积分/抽大奖 →</a>
       </div>
 
+      <!-- 免责声明 -->
       <p style="font-size:0.76rem; color:var(--text-sub); margin-top:0.7rem; margin-bottom:2rem;">
         ⚖️ 免责声明：本测评基于社交心理模型，仅供个人娱乐与自我洞察参考，不作专业诊疗与决策依据。
       </p>
-
-      <!-- 🎨 CLEAN COMPACT AD CARD -->
-      
-        </div>
-        <a href="#小程序://一子一木/0JPDrt84ecI5Gwd" class="btn btn-reward" onclick="openMiniProgramAd(); return false;">
-          🎁 免费下载壁纸/领积分/抽大奖 →
-        </a>
-      </div>
     </div>
 
     <!-- Test Flow Container -->
@@ -92,25 +83,21 @@
       <div class="flow-controls">
         <button class="btn btn-outline" id="prevBtn" onclick="prevQuestion()">← 上一题</button>
       </div>
-
-      <div style="background:rgba(245, 158, 11, 0.06); border:1px solid rgba(245, 158, 11, 0.2); border-radius:var(--radius-md); padding:0.8rem 1.2rem; margin-top:2rem; display:flex; align-items:center; justify-content:space-between; font-size:0.85rem;">
-        <span style="color:var(--text-muted);">🎁 完成测试后自动发放【一子一木】壁纸积分兑换资格</span>
-        <a href="#小程序://一子一木/0JPDrt84ecI5Gwd" onclick="openMiniProgramAd(); return false;" style="color:#fbbf24; font-weight:600; text-decoration:none;">查看小程序 →</a>
-      </div>
     </div>
 
-    <!-- Result Container -->
-    <div id="resultView" class="result-container" style="display:none;">
-      <div id="resultContainer"></div>
+    <!-- Loading State -->
+    <div id="loadingBox" class="loading-container" style="display:none;">
+      <div class="spinner"></div>
+      <p class="loading-text">正在深度解析您的测评维度与性格特征模型...</p>
+    </div>
+
+    <!-- Result Report Container -->
+    <div id="resultContainer" class="result-container" style="display:none;">
+      <!-- Dynamically Generated Report -->
     </div>
 
   </main>
 
   <script src="app.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      initStandaloneTest("eq");
-    });
-  </script>
 </body>
 </html>

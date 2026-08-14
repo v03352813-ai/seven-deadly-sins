@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>恋爱依恋类型测评 - 独立测评</title>
-  <meta name="description" content="剖析你的亲密关系底色：安全型(Secure)、焦虑型(Anxious)、回避型(Avoidant)还是恐惧-回避型">
+  <meta name="description" content="测测你在亲密关系中的安全感来源与依恋模式">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -32,16 +32,14 @@
 
     <!-- Standalone Hero Intro Area -->
     <div id="heroIntro" class="hero-section">
-      <h1 class="hero-title">💕 恋爱依恋类型测评<br><span class="hero-gradient-text">你是安全型、焦虑型还是回避型？</span></h1>
-      <p class="hero-subtitle">剖析亲密关系底色 · 拆解内耗根源与破局自愈建议。</p>
+      <h1 class="hero-title">🔗 成人依恋类型 (亲密关系) 测评<br><span class="hero-gradient-text">探索你在亲密关系中的安全感密码</span></h1>
+      <p class="hero-subtitle">安全型 · 焦虑型 · 回避型 · 恐惧回避型，深入洞察你在感情中的沟通与相处模式。</p>
 
       <button class="btn btn-primary" onclick="checkAndStartTest('attachment')">
         🚀 立即开始测试 →
       </button>
 
-      <!-- 免责合规说明提示词 -->
-      
-      <!-- Wallpaper Ad Banner Card -->
+      <!-- Wallpaper Ad Banner Card (ONLY ONE CARD) -->
       <div class="ad-wallpaper-card" style="margin-top: 1.8rem; margin-bottom: 1.5rem;">
         <div class="ad-content-left">
           <div class="ad-icon-badge">
@@ -56,17 +54,10 @@
         <a href="#小程序://一子一木/0JPDrt84ecI5Gwd" class="btn btn-reward" onclick="openMiniProgramAd(); return false;">🎁 免费下载壁纸/领积分/抽大奖 →</a>
       </div>
 
+      <!-- 免责声明 -->
       <p style="font-size:0.76rem; color:var(--text-sub); margin-top:0.7rem; margin-bottom:2rem;">
-        ⚖️ 免责声明：本测评基于心理学依恋理论，仅供个人娱乐与自我探索参考，不作专业诊疗与决策依据。
+        ⚖️ 免责声明：本测评基于成人依恋理论，仅供亲密关系认知参考，不作专业诊断依据。
       </p>
-
-      <!-- 🎨 CLEAN COMPACT AD CARD -->
-      
-        </div>
-        <a href="#小程序://一子一木/0JPDrt84ecI5Gwd" class="btn btn-reward" onclick="openMiniProgramAd(); return false;">
-          🎁 免费下载壁纸/领积分/抽大奖 →
-        </a>
-      </div>
     </div>
 
     <!-- Test Flow Container -->
@@ -92,25 +83,21 @@
       <div class="flow-controls">
         <button class="btn btn-outline" id="prevBtn" onclick="prevQuestion()">← 上一题</button>
       </div>
-
-      <div style="background:rgba(245, 158, 11, 0.06); border:1px solid rgba(245, 158, 11, 0.2); border-radius:var(--radius-md); padding:0.8rem 1.2rem; margin-top:2rem; display:flex; align-items:center; justify-content:space-between; font-size:0.85rem;">
-        <span style="color:var(--text-muted);">🎁 完成测试后自动发放【一子一木】壁纸积分兑换资格</span>
-        <a href="#小程序://一子一木/0JPDrt84ecI5Gwd" onclick="openMiniProgramAd(); return false;" style="color:#fbbf24; font-weight:600; text-decoration:none;">查看小程序 →</a>
-      </div>
     </div>
 
-    <!-- Result Container -->
-    <div id="resultView" class="result-container" style="display:none;">
-      <div id="resultContainer"></div>
+    <!-- Loading State -->
+    <div id="loadingBox" class="loading-container" style="display:none;">
+      <div class="spinner"></div>
+      <p class="loading-text">正在深度解析您的测评维度与性格特征模型...</p>
+    </div>
+
+    <!-- Result Report Container -->
+    <div id="resultContainer" class="result-container" style="display:none;">
+      <!-- Dynamically Generated Report -->
     </div>
 
   </main>
 
   <script src="app.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      initStandaloneTest("attachment");
-    });
-  </script>
 </body>
 </html>
