@@ -850,7 +850,7 @@ function startCurrentTest(targetTestId) {
   var heroIntro = document.getElementById("heroIntro");
   var testFlow = document.getElementById("testFlow");
   var catalogGrid = document.querySelector(".catalog-grid");
-  var resultView = document.getElementById("resultView");
+  var resultView = document.getElementById("resultContainer") || document.getElementById("resultView");
 
   if (heroIntro) heroIntro.style.display = "none";
   if (catalogGrid) catalogGrid.style.display = "none";
@@ -1075,8 +1075,10 @@ function getAdRewardHtml(testName) {
 // ==========================================================================
 
 function calculateAndShowResult() {
-  document.getElementById("testFlow").style.display = "none";
-  document.getElementById("resultView").style.display = "block";
+  var flow = document.getElementById("testFlow");
+  if (flow) flow.style.display = "none";
+  var resultBox = document.getElementById("resultContainer") || document.getElementById("resultView");
+  if (resultBox) resultBox.style.display = "block";
 
   if (currentTest.id === "dating_signal") {
     calculateDatingSignalResult();
