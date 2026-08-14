@@ -5,7 +5,7 @@ var STORE_SHOP_LINK = "https://m.xianyu.com"; // 可替换为您的小红书/闲
  * High-Density Comprehensive Result Engine & Instant Bulletproof Runner
  */
 
-var MINI_PROGRAM_LINK = "weixin://dl/business/?appid=wx0f41b42b27cda3a9&path=pages/index/index";
+var MINI_PROGRAM_LINK = "#小程序://一子一木/0JPDrt84ecI5Gwd";
 
 // ==========================================================================
 // 1. Comprehensive Result Profiles Database
@@ -966,10 +966,8 @@ function prevQuestion() {
 
 // Mini Program Launch Function with Official QR Code Modal
 function openMiniProgramAd() {
-  try { window.location.href = MINI_PROGRAM_LINK; } catch (e) {}
-
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(MINI_PROGRAM_LINK);
+    navigator.clipboard.writeText("#小程序://一子一木/0JPDrt84ecI5Gwd");
   }
 
   var modalHtml = `
@@ -977,21 +975,21 @@ function openMiniProgramAd() {
       <div class="paywall-card" style="text-align:center; max-width:380px; padding:1.8rem 1.4rem;">
         <button class="modal-close-btn" onclick="closeQrModal()">×</button>
         <span class="paywall-badge" style="background:rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.4);">🎁 专属壁纸抽奖福利</span>
-        <h3 style="font-size:1.1rem; font-weight:700; color:#fff; margin-top:0.8rem; margin-bottom:0.4rem;">一子一木壁纸屋</h3>
+        <h3 style="font-size:1.15rem; font-weight:700; color:#fff; margin-top:0.8rem; margin-bottom:0.4rem;">一子一木壁纸屋</h3>
         <p style="font-size:0.84rem; color:var(--text-muted); line-height:1.4; margin-bottom:1rem;">
-          微信扫一扫 / 截图保存长按识别下方小程序码，即可免费兑换 4K 高清绝美壁纸！
+          在微信内<strong>长按下方小程序码</strong>，或截图扫码，即可免费兑换 4K 高清绝美壁纸与积分抽大奖！
         </p>
 
         <div style="background:#fff; padding:10px; border-radius:16px; display:inline-block; margin-bottom:1rem; box-shadow:0 6px 20px rgba(0,0,0,0.5);">
-          <img src="qrcode.png" alt="一子一木壁纸屋小程序码" style="width:200px; height:200px; display:block; border-radius:8px;">
+          <img src="qrcode.png" alt="一子一木壁纸屋小程序码" style="width:210px; height:210px; display:block; border-radius:8px;">
         </div>
 
-        <div style="background:rgba(0,0,0,0.35); border:1px dashed rgba(245,158,11,0.45); border-radius:8px; padding:0.6rem; font-size:0.78rem; color:#fcd34d; word-break:break-all; margin-bottom:1rem;">
+        <div style="background:rgba(0,0,0,0.35); border:1px dashed rgba(245,158,11,0.45); border-radius:8px; padding:0.6rem; font-size:0.8rem; color:#fcd34d; word-break:break-all; margin-bottom:1rem;">
           #小程序://一子一木/0JPDrt84ecI5Gwd
         </div>
 
         <button class="btn btn-reward" style="width:100%; justify-content:center; padding:0.75rem;" onclick="copyQrText('#小程序://一子一木/0JPDrt84ecI5Gwd')">
-          📋 自动复制小程序口令并打开微信
+          📋 复制小程序口令
         </button>
       </div>
     </div>
