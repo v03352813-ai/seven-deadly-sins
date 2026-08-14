@@ -5,7 +5,7 @@ var STORE_SHOP_LINK = "https://m.xianyu.com"; // 可替换为您的小红书/闲
  * High-Density Comprehensive Result Engine & Instant Bulletproof Runner
  */
 
-var MINI_PROGRAM_LINK = "#小程序://一子一木/0JPDrt84ecI5Gwd";
+var MINI_PROGRAM_LINK = "weixin://dl/business/?appid=wx0f41b42b27cda3a9&path=pages/index/index";
 
 // ==========================================================================
 // 1. Comprehensive Result Profiles Database
