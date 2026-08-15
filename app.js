@@ -1839,15 +1839,32 @@ function getMatrixRecommendHtml(currentTestId) {
 function isTestUnlocked(testId) {
   if (!testId) return true;
 
-  // 1. 校验 URL 发货 Key：仅自动解锁买家当前所购买的这项单品测评
+  // 1. 校验 URL 发货 Key：精确匹配当前测试专属口令或当前页面专属测评
   if (typeof window !== 'undefined' && window.location && window.location.search) {
     var search = window.location.search.toLowerCase();
     var path = window.location.pathname.toLowerCase();
+    var cfg = TEST_CODE_DATABASE[testId];
     
-    if (search.indexOf('key=') !== -1 || search.indexOf('token=') !== -1 || search.indexOf('paid=1') !== -1 || search.indexOf('code=') !== -1 || search.indexOf('pass=') !== -1) {
-      // 若当前页面路径匹配该测评（如 mbti.html 解锁 mbti），则记录本地单品解锁状态
+    // 检查 URL 是否携带专属 key 参数（如 ?key=yzym-9482）
+    if (cfg) {
+      var isKeyMatched = cfg.staticCodes.some(function(code) {
+        return search.indexOf('key=' + code.toLowerCase()) !== -1;
+      }) || cfg.prefixes.some(function(pre) {
+        return search.indexOf('key=' + pre.toLowerCase()) !== -1;
+      }) || search.indexOf('key=yzym-all-pass') !== -1;
+
+      if (isKeyMatched) {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('unlocked_' + testId, 'true');
+        }
+        return true;
+      }
+    }
+
+    // 检查通用发货参数（仅在对应单页如 mbti.html 下有效）
+    if (search.indexOf('key=') !== -1 || search.indexOf('token=') !== -1 || search.indexOf('paid=1') !== -1) {
       var shortId = testId.replace('_signal', '');
-      if (path.indexOf(testId) !== -1 || path.indexOf(shortId) !== -1 || path === '/' || path.indexOf('index') !== -1) {
+      if (path.indexOf(testId) !== -1 || path.indexOf(shortId) !== -1) {
         if (typeof localStorage !== 'undefined') {
           localStorage.setItem('unlocked_' + testId, 'true');
         }
@@ -2135,3 +2152,29 @@ function fallbackCopyShareText(text) {
   showToast("📋 链接已复制！发送给好友后，好友需付费即可开始测评！");
   closeShareModal();
 }
+
+// 🚀 自动根据当前 URL 路径初始化测评，并自动带入专属发货口令
+document.addEventListener("DOMContentLoaded", function() {
+  var path = window.location.pathname.toLowerCase();
+  var matchedId = "dating_signal";
+  if (path.indexOf("mbti") !== -1) matchedId = "mbti";
+  else if (path.indexOf("gad7") !== -1) matchedId = "gad7";
+  else if (path.indexOf("attachment") !== -1) matchedId = "attachment";
+  else if (path.indexOf("dating") !== -1) matchedId = "dating_signal";
+  else if (path.indexOf("bigfive") !== -1) matchedId = "bigfive";
+  else if (path.indexOf("battery") !== -1) matchedId = "battery";
+  else if (path.indexOf("eq") !== -1) matchedId = "eq";
+  else if (path.indexOf("holland") !== -1) matchedId = "holland";
+
+  initStandaloneTest(matchedId);
+
+  // 检查是否带有合法口令并自动放行
+  if (typeof window !== 'undefined' && window.location.search) {
+    var search = window.location.search.toLowerCase();
+    if (search.indexOf('key=') !== -1 || search.indexOf('token=') !== -1) {
+      if (isTestUnlocked(matchedId)) {
+        showToast("🎉 欢迎订购用户！已为您自动识别卡密并解锁《" + (TEST_DATABASE[matchedId] ? TEST_DATABASE[matchedId].title : "测评") + "》！");
+      }
+    }
+  }
+});
