@@ -1796,9 +1796,8 @@ function getMatrixRecommendHtml(currentTestId) {
   var filtered = matrixList.filter(function(item) { return item.id !== currentTestId; });
 
   var cardsHtml = filtered.map(function(item) {
-    var unlocked = isTestUnlocked(item.id);
-    var btnText = unlocked ? "✓ 已解锁 · 开始测试 →" : "🚀 加购测评 (特惠 ¥1.99) →";
-    var btnStyle = unlocked ? "background:linear-gradient(90deg, #10b981 0%, #059669 100%);" : "";
+    var btnText = "🚀 加购测评 (特惠 ¥1.99) →";
+    var btnStyle = "background:linear-gradient(90deg, #2563eb 0%, #7c3aed 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);";
     return `
       <div class="matrix-mini-card">
         <div>
@@ -1808,7 +1807,7 @@ function getMatrixRecommendHtml(currentTestId) {
           </div>
           <p class="matrix-card-desc">${item.desc}</p>
         </div>
-        <button class="matrix-card-btn" style="${btnStyle}" onclick="checkAndStartTest('${item.id}')">
+        <button class="matrix-card-btn" style="${btnStyle}" onclick="showPaywallModal('${item.id}')">
           ${btnText}
         </button>
       </div>
@@ -1839,51 +1838,33 @@ function getMatrixRecommendHtml(currentTestId) {
 function isTestUnlocked(testId) {
   if (!testId) return true;
 
-  // 1. 校验 URL 发货 Key：精确匹配当前测试专属口令或当前页面专属测评
+  // 1. 校验 URL 发货 Key：精确匹配当前测试专属口令
   if (typeof window !== 'undefined' && window.location && window.location.search) {
     var search = window.location.search.toLowerCase();
-    var path = window.location.pathname.toLowerCase();
     var cfg = TEST_CODE_DATABASE[testId];
     
     // 检查 URL 是否携带专属 key 参数（如 ?key=yzym-9482）
     if (cfg) {
       var isKeyMatched = cfg.staticCodes.some(function(code) {
         return search.indexOf('key=' + code.toLowerCase()) !== -1;
-      }) || cfg.prefixes.some(function(pre) {
-        return search.indexOf('key=' + pre.toLowerCase()) !== -1;
-      }) || search.indexOf('key=yzym-all-pass') !== -1;
+      }) || search.indexOf('key=' + cfg.primaryCode.toLowerCase()) !== -1 || search.indexOf('key=yzym-all-pass') !== -1;
 
       if (isKeyMatched) {
-        if (typeof localStorage !== 'undefined') {
-          localStorage.setItem('unlocked_' + testId, 'true');
-        }
-        return true;
-      }
-    }
-
-    // 检查通用发货参数（仅在对应单页如 mbti.html 下有效）
-    if (search.indexOf('key=') !== -1 || search.indexOf('token=') !== -1 || search.indexOf('paid=1') !== -1) {
-      var shortId = testId.replace('_signal', '');
-      if (path.indexOf(testId) !== -1 || path.indexOf(shortId) !== -1) {
-        if (typeof localStorage !== 'undefined') {
-          localStorage.setItem('unlocked_' + testId, 'true');
-        }
         return true;
       }
     }
   }
 
-  // 2. 检查买家设备本地存储：买家已单独加购/解锁过的单项测评可重复测试
-  if (typeof localStorage !== 'undefined') {
-    return localStorage.getItem('unlocked_' + testId) === 'true';
+  // 2. 检查买家当前会话是否已单独加购/解锁过该单项测评
+  if (typeof sessionStorage !== 'undefined') {
+    return sessionStorage.getItem('paid_' + testId) === 'true';
   }
   return false;
 }
 
 function unlockTest(testId) {
-  if (typeof localStorage !== 'undefined' && testId) {
-    // 标记买家成功解锁【当前这项测评】
-    localStorage.setItem('unlocked_' + testId, 'true');
+  if (typeof sessionStorage !== 'undefined' && testId) {
+    sessionStorage.setItem('paid_' + testId, 'true');
   }
 }
 
