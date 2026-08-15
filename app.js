@@ -838,6 +838,18 @@ function initStandaloneTest(testId) {
 
   if (heroIntro) heroIntro.style.display = "block";
   if (testFlow) testFlow.style.display = "none";
+
+  // 区分小红书已购用户与未付费散客的首页按钮状态
+  var startBtn = heroIntro ? heroIntro.querySelector("button.btn-primary") : null;
+  if (startBtn) {
+    if (isTestUnlocked(testId)) {
+      startBtn.innerHTML = "🚀 尊享通道 · 立即开始测试 (约3分钟) →";
+      startBtn.style.background = "linear-gradient(90deg, #10b981 0%, #059669 100%)";
+      startBtn.style.boxShadow = "0 4px 18px rgba(16,185,129,0.4)";
+    } else {
+      startBtn.innerHTML = "🚀 开始深度测评 (特惠 ¥1.99) →";
+    }
+  }
 }
 
 function startCurrentTest(targetTestId) {
