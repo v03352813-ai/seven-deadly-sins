@@ -1861,35 +1861,44 @@ function showPaywallModal(testId) {
   var test = TEST_DATABASE[testId] || TEST_DATABASE['dating_signal'];
   var modalHtml = `
     <div id="paywallModal" class="modal-overlay show">
-      <div class="paywall-card" style="max-width:420px; text-align:center;">
+      <div class="paywall-card" style="max-width:400px; text-align:center; padding:1.8rem 1.4rem;">
         <button class="modal-close-btn" onclick="closePaywallModal()">×</button>
-        <span class="paywall-badge">🔒 付费专享测评</span>
-        <h2 class="paywall-title" style="font-size:1.25rem; margin-top:0.4rem;">《${test.title}》</h2>
+        <span class="paywall-badge" style="background:rgba(245,158,11,0.15); color:#fbbf24; border-color:rgba(245,158,11,0.35);">☕ 赞赏解锁完整测评</span>
+        <h2 class="paywall-title" style="font-size:1.2rem; margin-top:0.5rem; margin-bottom:0.3rem;">《${test.title}》</h2>
         
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.5;">
-          本测评为付费专享内容。小红书/平台已购用户请输入发货口令直接解锁；未购买用户可前往店铺下单获取口令。
+        <div style="font-size:1.35rem; font-weight:800; color:#fbbf24; margin-bottom:0.8rem;">
+          ¥ 1.99 <span style="font-size:0.8rem; font-weight:normal; color:var(--text-sub); text-decoration:line-through;">原价 ¥9.9</span>
+        </div>
+
+        <!-- 真实微信赞赏码展示区 -->
+        <div style="background:#fff; padding:8px; border-radius:16px; display:inline-block; margin-bottom:0.8rem; box-shadow:0 6px 24px rgba(0,0,0,0.5);">
+          <img src="reward_qrcode.png" alt="一子一木心愈屋赞赏码" style="width:210px; height:210px; display:block; border-radius:8px; object-fit:contain;">
+        </div>
+
+        <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.4;">
+          📱 微信内<strong>长按识别</strong>或截图扫码，赞赏 <strong>1.99 元</strong>
         </p>
 
-        <!-- 直接展示的卡密/口令输入解锁区 -->
-        <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:12px; padding:1rem; margin-bottom:1rem; text-align:left;">
-          <label style="font-size:0.82rem; font-weight:600; color:var(--text-main); display:block; margin-bottom:0.5rem;">
-            🔑 已有订单卡密 / 发货口令：
-          </label>
-          <div style="display:flex; gap:0.5rem;">
-            <input type="text" id="unlockCodeInput" placeholder="输入发货口令 (如 VIP888)" style="flex:1; padding:0.65rem 0.8rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; font-size:0.9rem; outline:none;">
-            <button class="btn btn-primary" style="padding:0.65rem 1.1rem; font-size:0.88rem; white-space:nowrap;" onclick="verifyUnlockCode('${testId}')">
-              立即解锁
-            </button>
+        <!-- 一键放行与解锁大按钮 -->
+        <button class="btn btn-primary" style="width:100%; justify-content:center; padding:0.8rem; font-size:0.95rem; margin-bottom:0.8rem; background:linear-gradient(90deg, #10b981 0%, #059669 100%); color:#fff; border:none; box-shadow:0 4px 16px rgba(16,185,129,0.35);" onclick="confirmPayAndUnlock('${testId}')">
+          ✅ 我已赞赏完成 · 立即开始测试 →
+        </button>
+
+        <!-- 口令直接输入区（折叠/备用） -->
+        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:0.8rem; margin-top:0.4rem;">
+          <a href="javascript:void(0)" onclick="togglePaywallCodeInput()" style="font-size:0.8rem; color:var(--text-sub); text-decoration:underline;">
+            🔑 已有发货卡密/口令？点此输入
+          </a>
+          <div id="paywallCodeInputBox" style="display:none; margin-top:0.6rem;">
+            <div style="display:flex; gap:0.4rem;">
+              <input type="text" id="unlockCodeInput" placeholder="输入发货口令 (如 VIP888)" style="flex:1; padding:0.55rem 0.7rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); border-radius:6px; color:#fff; font-size:0.85rem; outline:none;">
+              <button class="btn btn-outline" style="padding:0.55rem 0.9rem; font-size:0.82rem;" onclick="verifyUnlockCode('${testId}')">验证解锁</button>
+            </div>
           </div>
         </div>
 
-        <!-- 前往小红书店铺下单入口 -->
-        <button class="btn btn-reward" style="width:100%; justify-content:center; padding:0.8rem 1rem; font-size:0.92rem; margin-bottom:0.5rem; background:linear-gradient(90deg, #ff2442 0%, #ea580c 100%); color:#fff; border:none; box-shadow:0 4px 15px rgba(255,36,66,0.35);" onclick="openXhsOrderGuide('${test.title}')">
-          🛍️ 未购买？去小红书拍下 (特惠 ¥1.99) →
-        </button>
-
-        <div style="margin-top:0.9rem; padding:0.6rem 0.8rem; background:rgba(255,255,255,0.03); border-radius:8px; border:1px dashed rgba(255,255,255,0.12); font-size:0.75rem; color:var(--text-sub); line-height:1.4; text-align:left;">
-          ⚠️ <strong>购买须知</strong>：本产品为数字化虚拟测评内容，拍下后系统自动发货发送专属口令，一经解锁不支持退款。
+        <div style="margin-top:0.8rem; font-size:0.72rem; color:var(--text-sub); line-height:1.4;">
+          ⚖️ 虚拟数字化内容，赞赏后自动解锁，感谢您的认可与支持！
         </div>
       </div>
     </div>
@@ -1906,65 +1915,20 @@ function closePaywallModal() {
   if (modal) modal.remove();
 }
 
-function openXhsOrderGuide(testTitle) {
-  var guideHtml = `
-    <div id="xhsGuideModal" class="modal-overlay show" style="z-index:99999;">
-      <div class="paywall-card" style="max-width:380px; text-align:center; padding:1.8rem 1.4rem;">
-        <button class="modal-close-btn" onclick="closeXhsGuideModal()">×</button>
-        <span class="paywall-badge" style="background:rgba(255,36,66,0.15); color:#ff2442; border-color:rgba(255,36,66,0.4);">🛍️ 小红书官方下单</span>
-        <h3 style="font-size:1.15rem; font-weight:700; color:#fff; margin-top:0.8rem; margin-bottom:0.6rem;">店铺【一子一木心愈屋】</h3>
-        
-        <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:12px; padding:1rem; font-size:0.86rem; color:var(--text-main); text-align:left; line-height:1.6; margin-bottom:1.2rem;">
-          1. 打开手机小红书 App<br>
-          2. 搜索店铺：<strong>一子一木心愈屋</strong><br>
-          3. 拍下 <strong>《${testTitle}》</strong>（¥1.99）<br>
-          4. 系统将自动私信发送解锁口令给您！
-        </div>
-
-        <button class="btn btn-primary" style="width:100%; justify-content:center; padding:0.75rem; font-size:0.92rem; margin-bottom:0.6rem;" onclick="copyShopName()">
-          📋 复制店铺名称【一子一木心愈屋】
-        </button>
-      </div>
-    </div>
-  `;
-
-  var existing = document.getElementById("xhsGuideModal");
-  if (existing) existing.remove();
-  document.body.insertAdjacentHTML('beforeend', guideHtml);
-}
-
-function closeXhsGuideModal() {
-  var modal = document.getElementById("xhsGuideModal");
-  if (modal) modal.remove();
-}
-
-function copyShopName() {
-  var text = "一子一木心愈屋";
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(function() {
-      showToast("📋 店铺名【一子一木心愈屋】已复制！打开小红书搜索即可下单！");
-    }).catch(function() {
-      fallbackCopyShopName(text);
-    });
-  } else {
-    fallbackCopyShopName(text);
+function togglePaywallCodeInput() {
+  var box = document.getElementById("paywallCodeInputBox");
+  if (box) {
+    box.style.display = box.style.display === "none" ? "block" : "none";
   }
 }
 
-function fallbackCopyShopName(text) {
-  var input = document.createElement("textarea");
-  input.value = text;
-  input.style.position = "fixed";
-  input.style.opacity = "0";
-  document.body.appendChild(input);
-  input.select();
-  try {
-    document.execCommand("copy");
-    showToast("📋 店铺名【一子一木心愈屋】已复制！打开小红书搜索即可下单！");
-  } catch (err) {
-    showToast("📋 请在小红书搜索【一子一木心愈屋】下单获取口令！");
-  }
-  document.body.removeChild(input);
+function confirmPayAndUnlock(testId) {
+  showToast("🎉 感谢您的赞赏支持！正在为您开启《" + (TEST_DATABASE[testId] ? TEST_DATABASE[testId].title : "测评") + "》...");
+  unlockTest(testId);
+  setTimeout(function() {
+    closePaywallModal();
+    startCurrentTest(testId);
+  }, 700);
 }
 
 function verifyUnlockCode(testId) {
@@ -1976,7 +1940,7 @@ function verifyUnlockCode(testId) {
     setTimeout(function() {
       closePaywallModal();
       startCurrentTest(testId);
-    }, 800);
+    }, 700);
   } else {
     showToast("❌ 请输入正确的发货口令 (如 VIP888)");
   }
