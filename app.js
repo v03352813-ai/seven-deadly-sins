@@ -1965,43 +1965,51 @@ function confirmPayAndUnlock(testId) {
 // 🔑 8 大单品专属发货口令与前缀验证矩阵（互相隔离，无法跨测试猜码）
 var TEST_CODE_DATABASE = {
   mbti: {
+    primaryCode: "YZYM-9482",
     prefixes: ["MBTI", "16P", "TYPE"],
-    staticCodes: ["MBTI888", "MBTI999", "MBTI2026", "MBTI-VIP", "MBTI666"],
+    staticCodes: ["YZYM-9482", "MBTI888", "MBTI999", "MBTI2026", "MBTI-VIP"],
     name: "MBTI 16型人格"
   },
   gad7: {
+    primaryCode: "YZYM-3715",
     prefixes: ["GAD", "CALM", "ANX"],
-    staticCodes: ["GAD888", "GAD999", "GAD2026", "CALM888", "CALM666"],
+    staticCodes: ["YZYM-3715", "GAD888", "GAD999", "GAD2026", "CALM888"],
     name: "GAD-7 焦虑自评"
   },
   attachment: {
+    primaryCode: "YZYM-8264",
     prefixes: ["LOVE", "ATTACH", "HEART"],
-    staticCodes: ["LOVE888", "ATTACH999", "LOVE2026", "ATTACH888", "HEART666"],
+    staticCodes: ["YZYM-8264", "LOVE888", "ATTACH999", "LOVE2026", "ATTACH888"],
     name: "恋爱依恋测评"
   },
   dating_signal: {
+    primaryCode: "YZYM-1937",
     prefixes: ["DATE", "MINE", "SAFE", "SIGNAL"],
-    staticCodes: ["DATE888", "SAFE999", "MINE2026", "SIGNAL888", "DATE666"],
+    staticCodes: ["YZYM-1937", "DATE888", "SAFE999", "MINE2026", "SIGNAL888"],
     name: "关系排雷测评"
   },
   bigfive: {
+    primaryCode: "YZYM-5628",
     prefixes: ["BIG5", "OCEAN", "FIVE"],
-    staticCodes: ["BIG5888", "OCEAN999", "BIG52026", "FIVE888", "BIG5666"],
+    staticCodes: ["YZYM-5628", "BIG5888", "OCEAN999", "BIG52026", "FIVE888"],
     name: "大五人格完整版"
   },
   battery: {
+    primaryCode: "YZYM-7491",
     prefixes: ["REST", "BATTERY", "ENERGY"],
-    staticCodes: ["REST888", "BATTERY999", "REST2026", "ENERGY888", "REST666"],
+    staticCodes: ["YZYM-7491", "REST888", "BATTERY999", "REST2026", "ENERGY888"],
     name: "精神续航测评"
   },
   eq: {
+    primaryCode: "YZYM-6183",
     prefixes: ["EQ", "PUA", "SMART"],
-    staticCodes: ["EQ888", "PUA999", "EQ2026", "SMART888", "EQ666"],
+    staticCodes: ["YZYM-6183", "EQ888", "PUA999", "EQ2026", "SMART888"],
     name: "高情商防PUA"
   },
   holland: {
+    primaryCode: "YZYM-2850",
     prefixes: ["CAREER", "HOLLAND", "JOB", "RIASEC"],
-    staticCodes: ["CAREER888", "HOLLAND999", "JOB2026", "RIASEC888", "HOLLAND666"],
+    staticCodes: ["YZYM-2850", "CAREER888", "HOLLAND999", "JOB2026", "RIASEC888"],
     name: "霍兰德职业兴趣"
   }
 };
