@@ -537,7 +537,6 @@ var TEST_DATABASE = {
           { label: "D. 连看消息都觉得累，开启静音模式不理任何人", value: 15 }
         ]
       },
-
       {
         id: 3,
         text: "遇到工作/生活中的突发变故（如临时加塞繁重任务），你的情绪是？",
@@ -1065,21 +1064,723 @@ function getAdRewardHtml(testName) {
     <div class="ad-reward-banner">
       <div class="ad-content-left">
         <div class="ad-icon-badge">
-          <img src="wallpaper_thumb.jpg" alt="4K壁纸预览" class="ad-thumb-img">
+          <img src="wallpaper_thumb.jpg" alt="精美4K壁纸预告">
         </div>
-        <div class="ad-text-group">
-          <h4>${titleText}</h4>
+        <div class="ad-text-info">
+          <h3>${titleText}</h3>
           <p>凭测试结果前往小程序即可免费兑换 4K 高清绝美壁纸并参与抽奖</p>
-          <span class="ad-code-badge">#小程序://一子一木/0JPDrt84ecI5Gwd</span>
+          <div class="ad-miniprogram-tag">${MINI_PROGRAM_LINK}</div>
         </div>
       </div>
       <a href="${MINI_PROGRAM_LINK}" class="btn btn-reward" onclick="openMiniProgramAd();">
         🎁 免费下载壁纸/领积分/抽大奖 →
       </a>
     </div>
+    ${getDisclaimerHtml()}
   `;
 }
 
+// ==========================================================================
+// 4. Universal Result Engine
+// ==========================================================================
+
+function calculateAndShowResult() {
+  var flow = document.getElementById("testFlow");
+  if (flow) flow.style.display = "none";
+  
+  var loadingBox = document.getElementById("loadingBox");
+  var resultBox = document.getElementById("resultContainer") || document.getElementById("resultView");
+  
+  if (loadingBox) {
+    loadingBox.style.display = "block";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(function() {
+      loadingBox.style.display = "none";
+      if (resultBox) {
+        resultBox.style.display = "block";
+      }
+      renderActualResult();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 600);
+  } else {
+    if (resultBox) {
+      resultBox.style.display = "block";
+    }
+    renderActualResult();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function renderActualResult() {
+  if (!currentTest) return;
+  if (currentTest.id === "dating_signal") {
+    calculateDatingSignalResult();
+  } else if (currentTest.id === "attachment") {
+    calculateAttachmentResult();
+  } else if (currentTest.id === "battery") {
+    calculateBatteryResult();
+  } else if (currentTest.id === "eq") {
+    calculateEQResult();
+  } else if (currentTest.id === "gad7") {
+    calculateGAD7Result();
+  } else if (currentTest.id === "bigfive") {
+    calculateBigFiveResult();
+  } else if (currentTest.id === "mbti") {
+    calculateMBTIResult();
+  } else if (currentTest.id === "holland") {
+    calculateHollandResult();
+  }
+}
+
+// 💘 1. 爆款关系信号测评
+function calculateDatingSignalResult() {
+  var scores = { attraction: 0, investment: 0, commitment: 0, exclusivity: 0, consistency: 0 };
+  currentTest.questions.forEach(function(q) {
+    var ans = userAnswers[q.id];
+    if (ans === undefined) return;
+    if (q.type === 'multi') {
+      (ans || []).forEach(function(idx) {
+        var val = q.options[idx].value;
+        if (val.care) scores.investment += val.care * 10;
+        if (val.memory) scores.attraction += val.memory * 8;
+        if (val.effort) scores.investment += val.effort * 12;
+        if (val.attraction) scores.attraction += val.attraction * 10;
+        if (val.commitment) scores.commitment += val.commitment * 12;
+        if (val.exclusivity) scores.exclusivity += val.exclusivity * 10;
+      });
+    } else {
+      var val = q.options[ans].value;
+      if (val.initiation) scores.attraction += val.initiation * 6;
+      if (val.effort) scores.investment += val.effort * 5;
+      if (val.reciprocity) scores.attraction += val.reciprocity * 4;
+      if (val.proximity) scores.investment += val.proximity * 5;
+      if (val.commitment) scores.commitment += val.commitment * 7;
+      if (val.consistency) scores.consistency += val.consistency * 8;
+      if (val.intent) scores.attraction += val.intent * 5;
+      if (val.responsiveness) scores.attraction += val.responsiveness * 6;
+      if (val.attention) scores.investment += val.attention * 5;
+      if (val.integration) scores.commitment += val.integration * 6;
+      if (val.exclusivity) scores.exclusivity += val.exclusivity * 10;
+      if (val.trajectory) scores.consistency += val.trajectory * 6;
+    }
+  });
+
+  var attraction = Math.min(98, Math.max(25, Math.round((scores.attraction / 60) * 100)));
+  var investment = Math.min(95, Math.max(18, Math.round((scores.investment / 50) * 100)));
+  var commitment = Math.min(95, Math.max(15, Math.round((scores.commitment / 45) * 100)));
+  var exclusivity = Math.min(99, Math.max(20, Math.round((scores.exclusivity / 30) * 100)));
+
+  var overallScore = Math.round((attraction * 0.35) + (investment * 0.30) + (commitment * 0.25) + (exclusivity * 0.10));
+  var gap = attraction - commitment;
+
+  var archetype = {
+    emoji: "🔥",
+    title: "The Chemistry Trap (激情陷阱型)",
+    summary: "吸引力高 · 承诺度低 · 典型“享受暧昧，避重就轻”关系原型",
+    traits: "他对你存在强烈的兴趣与好感，聊天和见面时气氛火热，但在确立专一关系、介绍身边圈子、未来规划或付出实质成本时表现出犹豫。典型的‘喜欢与你相处，但还没准备好选择你’。",
+    risk: "容易让你陷入‘他到底爱不爱我’的猜忌与情绪内耗中，用忽冷忽热拉扯你的注意力。",
+    moves: [
+      "收回部分情绪过载的关注，不再秒回或过分顺从他的临时约会",
+      "建立坚固的心理界限，明确表达你对专一关系与承诺的期望",
+      "观察他是否愿意为了你改变行为、付出时间与社交成本"
+    ]
+  };
+
+  if (commitment >= 70 && investment >= 65) {
+    archetype = {
+      emoji: "💚",
+      title: "The Quietly Serious One (认真实干型)",
+      summary: "好感明确 · 行动持续 · 高确定性健康关系原型",
+      traits: "他对你不仅有明确的好感，而且正在用实际行动持续投入。他倾向于将你纳入他的朋友圈子与未来规划中，关系发展健康稳定。",
+      risk: "关系步调较为沉稳，有时可能缺乏过度的戏剧性浪漫小情绪。",
+      moves: ["给予对方明确的正向反馈与鼓励", "共同规划具体的下一次旅行或约会，巩固亲密信任"]
+    };
+  } else if (gap >= 35) {
+    archetype = {
+      emoji: "🔥",
+      title: "The Chemistry Trap (激情陷阱型)",
+      summary: "吸引力与承诺度落差极大 (Gap = " + gap + ")",
+      traits: "他对你氛围感十足，但避重就轻。他非常享受暧昧带来的低成本情绪价值，却极力抗拒任何形式的关系绑定。",
+      risk: "极其容易陷入被动内耗，甚至演变成耗费青春的无疾而终暧昧。",
+      moves: ["切断无条件的‘随时有空’状态", "设定明确的时间观察期，不再主动提供免费的情绪价值"]
+    };
+  }
+
+  var container = document.getElementById("resultContainer");
+  container.innerHTML = `
+    <div class="result-header-card">
+      <span class="result-badge">💘 对方行为信号综合评分 (Interest Score)</span>
+      <h1 class="result-main-title">${overallScore} <span style="font-size:1.5rem; color:var(--text-muted);">/ 100</span></h1>
+      <div class="result-subtitle">${archetype.emoji} ${archetype.title}</div>
+      <p class="result-summary">${archetype.summary}</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">🔍 关系原型与行为模式诊断</h3>
+      <p style="font-size:0.95rem; color:var(--text-main); line-height:1.65;">${archetype.traits}</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">📊 四项核心行为指标拆解</h3>
+      <div class="dimension-row"><div class="dimension-label"><span>浪漫吸引力 (Attraction)</span><span>${attraction}%</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${attraction}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span>实质投入度 (Investment)</span><span>${investment}%</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${investment}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span>关系承诺度 (Commitment)</span><span>${commitment}%</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${commitment}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span>排他专一度 (Exclusivity)</span><span>${exclusivity}%</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${exclusivity}%"></div></div></div>
+    </div>
+
+    <div class="result-details-grid" style="margin-bottom:1.2rem;">
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-amber);">⚠️ 潜在关系风险点</h3>
+        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.6;">${archetype.risk}</p>
+      </div>
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-emerald);">💡 Your Move 破局推进行动</h3>
+        <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          ${archetype.moves.map(function(m) { return `<li style="margin-bottom:5px;">${m}</li>`; }).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('dating_signal')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
+    ${getAdRewardHtml("关系信号")}
+  `;
+}
+
+// 💕 2. 恋爱依恋类型测评
+function calculateAttachmentResult() {
+  var counts = { Secure: 0, Anxious: 0, Avoidant: 0, Fearful: 0 };
+  currentTest.questions.forEach(function(q) {
+    var ans = userAnswers[q.id];
+    if (ans !== undefined && q.options[ans]) {
+      var val = q.options[ans].value;
+      if (counts.hasOwnProperty(val)) counts[val]++;
+    }
+  });
+
+  var sorted = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+  var mainStyle = sorted[0];
+
+  var styleMap = {
+    Secure: {
+      emoji: "💚",
+      title: "安全型依恋 (Secure Attachment)",
+      summary: "你拥有极高的情感安全感，既能坦然享受亲密关系中的陪伴与依赖，也能充实地保持独立空间。",
+      traits: "你在恋爱中心态非常健康自洽。你不怕展示脆弱，也不担心随时会被伴侣抛弃。遇到矛盾时，你能主动沟通解开心结，而不是玩冷暴力或过度内耗。",
+      strengths: ["情绪稳定性高，不盲目猜忌怀疑", "能坦然表达真实需求与脆弱", "尊重伴侣的个人独立空间"],
+      risks: ["遇到回避型伴侣时可能难以理解对方的退缩"],
+      advice: ["继续保持坦诚直接的沟通习惯", "遇到回避型或焦虑型伴侣时，你的稳定与包容将是最好的治愈力量"]
+    },
+    Anxious: {
+      emoji: "🥺",
+      title: "焦虑型依恋 (Anxious Attachment)",
+      summary: "你在亲密关系中极度敏感、渴望关注，容易因为对方微小的冷淡或延迟回复而内耗焦虑。",
+      traits: "你内心极其渴望深度的亲密与安全感，但底层的隐秘恐惧是‘我不够好，他随时会离开我’。这导致你容易频繁确认伴侣的爱意，甚至用发脾气、作来测试对方。",
+      strengths: ["对伴侣的情绪起伏极其敏锐", "愿意在感情中投入极高的关怀与热情"],
+      risks: ["容易因为对方延迟回复消息而陷入深度内耗", "习惯用发脾气或试探来获取注意力"],
+      advice: ["建立自我认同，明白你的价值不需要通过伴侣的回复速度来证明", "当感到焦虑时，先呼吸暂停 10 分钟，不要在情绪上头时发连环消息", "选择情绪稳定、回应有预测性的安全型伴侣"]
+    },
+    Avoidant: {
+      emoji: "🛡️",
+      title: "回避型依恋 (Avoidant Attachment)",
+      summary: "你习惯拉开心理安全距离，抗拒过度依赖对方，认为只有依靠自己才是最安全可靠的。",
+      traits: "每当关系走向深度亲密或遇到正面情绪冲突时，你的防风林机制就会启动。你倾向于后退、冷处理或关门，用‘我不需要任何人’来保护自己脆弱的内面。",
+      strengths: ["高度独立自律，不给他人添麻烦", "在危机中能保持理智平静"],
+      risks: ["习惯用冷暴力推开想要靠近的伴侣", "极度抗拒深入的情感承诺与脆弱展示"],
+      advice: ["尝试向信任的伴侣小步展示你的真实脆弱", "明白拉开距离只是你下意识的防御机制，而不是你不爱对方", "在需要独处时，明确告知伴侣‘我需要点时间’而不是直接消失"]
+    },
+    Fearful: {
+      emoji: "🎭",
+      title: "恐惧-回避型依恋 (Disorganized)",
+      summary: "你内心深处极度渴望爱与关注，但同时又极度恐惧被伤害或抛弃，容易在接近与推开之间反复拉扯。",
+      traits: "你的心理处于‘想要靠近却又害怕被烫伤’的拉扯中。当伴侣冷淡时你拼命靠近，当伴侣真正向你走近时你又感到恐慌想逃走。",
+      strengths: ["对人性深度拥有极高的敏感与直觉力"],
+      risks: ["关系容易演变成忽冷忽热的极度拉扯内耗"],
+      advice: ["给自己的情绪建立觉察日志，识别你的拉扯触发点", "给予自己足够的时间与耐心，在小事中积累对人际关系的信任"]
+    }
+  };
+
+  var res = styleMap[mainStyle] || styleMap.Secure;
+  var container = document.getElementById("resultContainer");
+  container.innerHTML = `
+    <div class="result-header-card">
+      <span class="result-badge">💕 恋爱依恋底色深度诊断</span>
+      <h1 class="result-main-title">${res.emoji} ${mainStyle}</h1>
+      <div class="result-subtitle">${res.title}</div>
+      <p class="result-summary">${res.summary}</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">🔍 亲密关系表现与心理根源</h3>
+      <p style="font-size:0.95rem; color:var(--text-main); line-height:1.65;">${res.traits}</p>
+    </div>
+
+    <div class="result-details-grid" style="margin-bottom:1.2rem;">
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-emerald);">💪 恋爱特质优势</h3>
+        <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          ${res.strengths.map(function(s) { return `<li style="margin-bottom:5px;">${s}</li>`; }).join('')}
+        </ul>
+      </div>
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-amber);">⚠️ 关系内耗风险点</h3>
+        <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          ${res.risks.map(function(r) { return `<li style="margin-bottom:5px;">${r}</li>`; }).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">💡 关系自愈与破局成长建议</h3>
+      <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.65;">
+        ${res.advice.map(function(a) { return `<li style="margin-bottom:5px;">${a}</li>`; }).join('')}
+      </ul>
+    </div>
+
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('attachment')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
+    ${getAdRewardHtml("依恋类型")}
+  `;
+}
+
+// 🔋 3. 社畜精神续航
+function calculateBatteryResult() {
+  var totalScore = 0;
+  currentTest.questions.forEach(function(q) {
+    var ans = userAnswers[q.id];
+    if (ans !== undefined && q.options[ans]) totalScore += (q.options[ans].value || 50);
+  });
+
+  var batteryPct = Math.round(totalScore / currentTest.questions.length);
+  var status = {
+    emoji: "🪫",
+    title: "电量严重告急 (剩 " + batteryPct + "%)",
+    summary: "心理续航严重告急！你目前正处于高度内耗、精力抽干的状态。",
+    traits: "你现在的心理防御处于临界点，一件微小的小事（如打翻水杯、一句冷语）都可能成为压垮你的最后一根稻草。你的大脑正疯狂呼唤休假与静音。",
+    risk: "容易陷入报复性熬夜、情绪急躁失控、注意力难以集中等皮质醇过高症状。",
+    advice: ["立即开启‘低功耗模式’：推掉非必要的无效社交", "晚上睡前关掉所有工作软件通知，保证 8 小时高质量睡眠", "做一些不需要动脑的解压小事（如散步、听音乐、吃一顿美食）"]
+  };
+  if (batteryPct >= 75) {
+    status = {
+      emoji: "🔋",
+      title: "电量满格满血 (剩 " + batteryPct + "%)",
+      summary: "精神续航超强！心态稳定阳光，抗压能力极佳。",
+      traits: "你目前拥有充沛的心理能量，能游刃有余地应对日常工作与生活中的突发插曲，情绪弹性极高。",
+      risk: "偶尔可能过度自信而接下过多任务。",
+      advice: ["保持当前健康的生活作息与心态", "在充沛的状态下可以尝试开启一些有挑战性的新项目"]
+    };
+  } else if (batteryPct >= 50) {
+    status = {
+      emoji: "⚡",
+      title: "电量中规中矩 (剩 " + batteryPct + "%)",
+      summary: "能正常运转，但偶尔会感到一阵阵疲惫感。",
+      traits: "你的心理电量正处于消耗与补充的临界点。工作时能维持基本效率，但下班后社交欲望明显下降。",
+      risk: "如果遇到突发高压项目，容易迅速滑向亏电状态。",
+      advice: ["注意周末多安排户外放松，防止蓄电池长期亏电", "学会在适当时机说‘不’，保护个人精力"]
+    };
+  }
+
+  var container = document.getElementById("resultContainer");
+  container.innerHTML = `
+    <div class="result-header-card">
+      <span class="result-badge">🔋 心理电量与发疯指数报告</span>
+      <h1 class="result-main-title">${status.emoji} ${batteryPct}%</h1>
+      <div class="result-subtitle">${status.title}</div>
+      <p class="result-summary">${status.summary}</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">🔍 续航状态深度剖析</h3>
+      <p style="font-size:0.95rem; color:var(--text-main); line-height:1.65;">${status.traits}</p>
+    </div>
+
+    <div class="result-details-grid" style="margin-bottom:1.2rem;">
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-amber);">⚠️ 疲惫警示信号</h3>
+        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.6;">${status.risk}</p>
+      </div>
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-emerald);">💡 快速回血指南</h3>
+        <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          ${status.advice.map(function(a) { return `<li style="margin-bottom:5px;">${a}</li>`; }).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('battery')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
+    ${getAdRewardHtml("精神续航")}
+  `;
+}
+
+// 🎭 4. 高情商测评
+function calculateEQResult() {
+  var totalScore = 0;
+  currentTest.questions.forEach(function(q) {
+    var ans = userAnswers[q.id];
+    if (ans !== undefined && q.options[ans]) totalScore += (q.options[ans].value || 60);
+  });
+
+  var eqScore = Math.round(totalScore / currentTest.questions.length);
+  var detail = {
+    emoji: "👑",
+    title: "通透高情商王者 (EQ: " + eqScore + ")",
+    summary: "你拥有洞若观火的情绪察觉力与极其清晰的个人边界感。",
+    traits: "你不仅能精准看透他人的潜在情绪与话外音，而且拥有极其稳固的心理防御界限。你不会轻易被道德绑架或精神操控(PUA)，能以温和而坚定的姿态掌控人际主导权。",
+    strengths: ["边界感清晰，不受道德绑架", "善于化解社交冷场与矛盾", "情绪稳定性极高，外圆内方"],
+    advice: ["继续保持清醒独立的心理边界", "在团队中你的情商是极佳的凝结剂，可以适当多发挥领导与解围作用"]
+  };
+  if (eqScore < 65) {
+    detail = {
+      emoji: "🌱",
+      title: "高敏感与内耗派 (EQ: " + eqScore + ")",
+      summary: "心思细腻善良，但容易被他人的负面情绪与眼光牵着走。",
+      traits: "你非常在乎周围人的感受，但缺点是心理边界感较弱。面对道德绑架或讽刺时，你容易第一时间归因于自己，陷入深度的自我怀疑与内耗。",
+      strengths: ["极具同理心，能体贴他人喜怒"],
+      advice: ["记住‘他人的情绪是他的责任，不是你的功课’", "建立坚固的心理防御墙，学会明确拒绝不合理要求"]
+    };
+  }
+
+  var container = document.getElementById("resultContainer");
+  container.innerHTML = `
+    <div class="result-header-card">
+      <span class="result-badge">🎭 情商与社交防御指数报告</span>
+      <h1 class="result-main-title">${detail.emoji} ${eqScore}分</h1>
+      <div class="result-subtitle">${detail.title}</div>
+      <p class="result-summary">${detail.summary}</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">🔍 社交心理模式分析</h3>
+      <p style="font-size:0.95rem; color:var(--text-main); line-height:1.65;">${detail.traits}</p>
+    </div>
+
+    <div class="result-details-grid" style="margin-bottom:1.2rem;">
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-emerald);">💪 社交优势</h3>
+        <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          ${detail.strengths.map(function(s) { return `<li style="margin-bottom:5px;">${s}</li>`; }).join('')}
+        </ul>
+      </div>
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-amber);">💡 社交防御升级建议</h3>
+        <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          ${detail.advice.map(function(a) { return `<li style="margin-bottom:5px;">${a}</li>`; }).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('eq')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
+    ${getAdRewardHtml("高情商")}
+  `;
+}
+
+// 😟 5. GAD-7 焦虑指数
+function calculateGAD7Result() {
+  var totalScore = 0;
+  currentTest.questions.forEach(function(q) {
+    var ans = userAnswers[q.id];
+    if (ans !== undefined && q.options[ans]) totalScore += (q.options[ans].value || 0);
+  });
+
+  var res = {
+    level: "情绪平静健康 (0-4分)",
+    color: "var(--accent-emerald)",
+    title: "情绪平稳无明显焦虑",
+    summary: "你目前心理状态非常平稳健康，情绪自我调节机制运作良好。",
+    analysis: "检测显示你当前的情绪弹性充沛，对日常生活与工作中的不确定性有良好的耐受力。你能够区分现实困境与主观担忧，不会陷入无休止的精神内耗。",
+    advice: ["保持当前良好的生活作息与运动节奏", "当遇到小挫折时，继续保持积极理性的认知视角", "定期进行户外活动以维持血清素水平"]
+  };
+
+  if (totalScore >= 15) {
+    res = {
+      level: "重度焦虑警告 (15-21分)",
+      color: "var(--accent-secondary)",
+      title: "情绪负荷告急 · 高度内耗期",
+      summary: "你目前正处于非常显著的情绪高压与精神内耗状态，心理防御机制过载。",
+      analysis: "你的交感神经可能长期处于高度紧绷应激状态。这通常伴随着失眠、坐立不安、注意力难以集中或无原因的恐慌感。这并不是你的脆弱，而是大脑发出的休息警报。",
+      advice: ["给自己的工作与社交按下暂停键，减少不必要的信息接收", "练习 4-7-8 深度呼吸法，强行激活副交感神经放松", "尝试与信任的亲友诉说，或考虑预约专业心理咨询师陪伴疏导"]
+    };
+  } else if (totalScore >= 10) {
+    res = {
+      level: "中度焦虑关注 (10-14分)",
+      color: "var(--accent-amber)",
+      title: "应激紧张期 · 内耗上升",
+      summary: "你近期面临着明确的心理压力与焦虑内耗，容易陷入反复琢磨与担忧。",
+      analysis: "你可能在工作、亲密关系或个人发展中遭遇了平台期或意外插曲。你的脑海里充斥着“万一失败了怎么办”等预警念头，导致肌肉紧绷、入睡困难或情绪急躁。",
+      advice: ["采用“思维阻断法”：把大脑里担忧的事情写在纸上，区分‘可控’与‘不可控’", "每天安排 30 分钟完全断网、不看社交软件的纯粹私人空闲", "进行有氧运动（如快走、游泳），通过释放内啡肽冲刷皮质醇"]
+    };
+  } else if (totalScore >= 5) {
+    res = {
+      level: "轻度焦虑状态 (5-9分)",
+      color: "var(--accent-cyan)",
+      title: "轻微情绪起伏 · 应激反应",
+      summary: "你存在轻微的焦虑关注与情绪起伏，属于面对阶段性压力时的正常心理应激。",
+      analysis: "你对环境变化较为敏感，偶尔会出现失眠或胡思乱想，但整体仍具备自我调控的能力。",
+      advice: ["晚上睡前 1 小时停止刷手机短视频", "用热水泡脚或听舒缓音乐，帮助肌肉放松", "提醒自己“眼前的担忧 90% 都不会真实发生”"]
+    };
+  }
+
+  var container = document.getElementById("resultContainer");
+  container.innerHTML = `
+    <div class="result-header-card">
+      <span class="result-badge">😟 GAD-7 精神内耗诊断报告</span>
+      <h1 class="result-main-title" style="color:${res.color};">${totalScore} <span style="font-size:1.5rem; color:var(--text-muted);">/ 21 分</span></h1>
+      <div class="result-subtitle" style="color:${res.color};">${res.title} (${res.level})</div>
+      <p class="result-summary">${res.summary}</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">🧠 情绪状态深度解析</h3>
+      <p style="font-size:0.95rem; color:var(--text-main); line-height:1.65;">${res.analysis}</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title" style="color:${res.color};">💡 心理自救与情绪调控建议</h3>
+      <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.65;">
+        ${res.advice.map(function(a) { return `<li style="margin-bottom:6px;">${a}</li>`; }).join('')}
+      </ul>
+    </div>
+
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('gad7')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
+    ${getAdRewardHtml("焦虑内耗")}
+  `;
+}
+
+// 🌊 6. 大五人格 OCEAN
+function calculateBigFiveResult() {
+  var scores = { O: 0, C: 0, E: 0, A: 0, N: 0 };
+  currentTest.questions.forEach(function(q) {
+    var ans = userAnswers[q.id];
+    if (ans !== undefined && q.options[ans]) {
+      var val = q.options[ans].value;
+      if (val.O) scores.O += val.O;
+      if (val.C) scores.C += val.C;
+      if (val.E) scores.E += val.E;
+      if (val.A) scores.A += val.A;
+      if (val.N) scores.N += val.N;
+    }
+  });
+
+  var oPct = Math.round((scores.O / 10) * 100);
+  var cPct = Math.round((scores.C / 10) * 100);
+  var ePct = Math.round((scores.E / 10) * 100);
+  var aPct = Math.round((scores.A / 10) * 100);
+  var nPct = Math.round((scores.N / 10) * 100);
+
+  var container = document.getElementById("resultContainer");
+  container.innerHTML = `
+    <div class="result-header-card">
+      <span class="result-badge">🌊 大五人格 (OCEAN) 深度画像报告</span>
+      <h1 class="result-main-title">OCEAN Profile</h1>
+      <div class="result-subtitle">学术级五大底层性格杠杆剖析</div>
+      <p class="result-summary">大五人格模型（Big Five）是心理学界公认最严谨的特质测量体系。它从 5 个独立维度决定了你的行为习惯、决策偏好与情绪模式。</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">📊 五维倾向分布</h3>
+      <div class="dimension-row"><div class="dimension-label"><span>开放性 Openness (创造力与好奇心)</span><span>${oPct}%</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${oPct}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span>尽责性 Conscientiousness (自律与计划性)</span><span>${cPct}%</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${cPct}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span>外向性 Extraversion (社交能量与热情)</span><span>${ePct}%</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${ePct}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span>宜人性 Agreeableness (同理心与合作度)</span><span>${aPct}%</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${aPct}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span>神经质 Neuroticism (情绪内耗与敏感度)</span><span>${nPct}%</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${nPct}%"></div></div></div>
+    </div>
+
+    <div class="result-details-grid" style="margin-bottom:1.2rem;">
+      <div class="detail-card">
+        <h3 class="detail-card-title">💡 认知与工作偏好</h3>
+        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          你的开放性得分 ${oPct}%，尽责性得分 ${cPct}%。这表明你${oPct > 60 ? "具有极强的新奇事物探索欲望，喜欢跳出框架思考" : "更加务实接地气，看重经验与实际效果"}；同时${cPct > 60 ? "办事极有条理，自我纪律约束力强。" : "性格灵活随性，喜欢自发性的工作节奏。"}
+        </p>
+      </div>
+      <div class="detail-card">
+        <h3 class="detail-card-title">🤝 社交与情绪弹性</h3>
+        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          你的外向性得分 ${ePct}%，神经质得分 ${nPct}%。说明你${ePct > 60 ? "在社交与互动中能快速充电" : "倾向于通过独自静处恢复精力"}；情绪敏感度处于${nPct > 60 ? "较高水平，需要多给心理做减法，防范过度内耗。" : "非常稳健的区间，抗压与情绪调节能力出色。"}
+        </p>
+      </div>
+    </div>
+
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('bigfive')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
+    ${getAdRewardHtml("大五人格")}
+  `;
+}
+
+// 🧠 7. MBTI 16 人格
+function calculateMBTIResult() {
+  var scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+  currentTest.questions.forEach(function(q) {
+    var ans = userAnswers[q.id];
+    if (ans !== undefined && q.options[ans]) {
+      var val = q.options[ans].value;
+      if (scores.hasOwnProperty(val)) scores[val]++;
+    }
+  });
+
+  var type = [
+    scores.E >= scores.I ? "E" : "I",
+    scores.S >= scores.N ? "S" : "N",
+    scores.T >= scores.F ? "T" : "F",
+    scores.J >= scores.P ? "J" : "P"
+  ].join('');
+
+  var detail = MBTI_DESCRIPTIONS[type] || MBTI_DESCRIPTIONS["INTJ"];
+  var eiPct = Math.round((scores.E / Math.max(1, scores.E + scores.I)) * 100);
+  var snPct = Math.round((scores.S / Math.max(1, scores.S + scores.N)) * 100);
+  var tfPct = Math.round((scores.T / Math.max(1, scores.T + scores.F)) * 100);
+  var jpPct = Math.round((scores.J / Math.max(1, scores.J + scores.P)) * 100);
+
+  var container = document.getElementById("resultContainer");
+  container.innerHTML = `
+    <div class="result-header-card">
+      <span class="result-badge">MBTI 深度人格诊断报告</span>
+      <h1 class="result-main-title">${type}</h1>
+      <div class="result-subtitle">${detail.title}</div>
+      <p class="result-summary">${detail.summary}</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">🔍 人格核心认知与思维模式</h3>
+      <p style="font-size:0.95rem; color:var(--text-main); line-height:1.65;">${detail.traits}</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">📊 四大认知维度倾斜度</h3>
+      <div class="dimension-row"><div class="dimension-label"><span class="dim-left">外向 E (${eiPct}%)</span><span class="dim-right">内向 I (${100 - eiPct}%)</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${eiPct}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span class="dim-left">实感 S (${snPct}%)</span><span class="dim-right">直觉 N (${100 - snPct}%)</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${snPct}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span class="dim-left">思考 T (${tfPct}%)</span><span class="dim-right">情感 F (${100 - tfPct}%)</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${tfPct}%"></div></div></div>
+      <div class="dimension-row"><div class="dimension-label"><span class="dim-left">判断 J (${jpPct}%)</span><span class="dim-right">感知 P (${100 - jpPct}%)</span></div><div class="dimension-track"><div class="dimension-fill" style="width:${jpPct}%"></div></div></div>
+    </div>
+
+    <div class="result-details-grid" style="margin-bottom:1.2rem;">
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-emerald);">💪 核心竞争优势 (Strengths)</h3>
+        <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          ${detail.strengths.map(function(s) { return `<li style="margin-bottom:5px;">${s}</li>`; }).join('')}
+        </ul>
+      </div>
+      <div class="detail-card">
+        <h3 class="detail-card-title" style="color:var(--accent-amber);">⚠️ 潜在盲点与避坑 (Blind Spots)</h3>
+        <ul style="padding-left:1.2rem; font-size:0.88rem; color:var(--text-muted); line-height:1.6;">
+          ${detail.pitfalls.map(function(p) { return `<li style="margin-bottom:5px;">${p}</li>`; }).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <div class="result-details-grid" style="margin-bottom:1.2rem;">
+      <div class="detail-card">
+        <h3 class="detail-card-title">💼 理想职业与发展路径</h3>
+        <div class="tags-cloud" style="margin-bottom:0.8rem;">
+          ${detail.careers.map(function(c) { return `<span class="tag-item">💼 ${c}</span>`; }).join('')}
+        </div>
+      </div>
+      <div class="detail-card">
+        <h3 class="detail-card-title">❤️ 亲密关系与人际相处</h3>
+        <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.6;">${detail.relationship}</p>
+      </div>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">🌟 同类型代表人物</h3>
+      <div class="tags-cloud">
+        ${detail.famous.map(function(f) { return `<span class="tag-item">✨ ${f}</span>`; }).join('')}
+      </div>
+    </div>
+
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('mbti')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
+    ${getAdRewardHtml("MBTI")}
+  `;
+}
+
+// 🧭 8. 霍兰德职业兴趣
+function calculateHollandResult() {
+  var scores = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+  currentTest.questions.forEach(function(q) {
+    var ans = userAnswers[q.id];
+    if (ans !== undefined && q.options[ans]) {
+      var val = q.options[ans].value;
+      if (scores.hasOwnProperty(val)) scores[val]++;
+    }
+  });
+
+  var sorted = Object.keys(scores).sort(function(a, b) { return scores[b] - scores[a]; });
+  var hollandCode = sorted.slice(0, 3).join('');
+  var top1 = HOLLAND_DESCRIPTIONS[sorted[0]];
+  var top2 = HOLLAND_DESCRIPTIONS[sorted[1]];
+
+  var container = document.getElementById("resultContainer");
+  container.innerHTML = `
+    <div class="result-header-card">
+      <span class="result-badge">霍兰德职业基因代码</span>
+      <h1 class="result-main-title">${hollandCode}</h1>
+      <div class="result-subtitle">主导属性：${top1.code}</div>
+      <p class="result-summary">霍兰德职业兴趣理论（RIASEC）将职业人群划分为 6 种经典类型，前三位字母代表你最匹配的职业发展基因。</p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">🎯 主导类型与特质拆解</h3>
+      <p style="font-size:0.95rem; color:var(--text-main); line-height:1.65;">
+        你的第一主导类型为 <strong>${top1.code}</strong>（${top1.trait}），第二主导类型为 <strong>${top2.code}</strong>（${top2.trait}）。两者的结合决定了你在工作环境中的最佳定位。
+      </p>
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">📊 RIASEC 六维基因分布</h3>
+      ${sorted.map(function(key) {
+        return `
+          <div class="dimension-row">
+            <div class="dimension-label"><span>${HOLLAND_DESCRIPTIONS[key].code}</span><span>${scores[key]} 分</span></div>
+            <div class="dimension-track"><div class="dimension-fill" style="width:${(scores[key] / currentTest.questions.length) * 100}%"></div></div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+
+    <div class="detail-card" style="margin-bottom:1.2rem;">
+      <h3 class="detail-card-title">💼 推荐职业赛道 (Career Matching)</h3>
+      <div class="tags-cloud">
+        ${top1.careers.concat(top2.careers).map(function(c) { return `<span class="tag-item">🎯 ${c}</span>`; }).join('')}
+      </div>
+    </div>
+
+    <div style="text-align:center; display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap; margin-bottom:1.5rem;">
+  <button class="btn btn-primary" onclick="checkAndStartTest('holland')">🔄 重新测试</button>
+  <button class="btn btn-reward" style="background:linear-gradient(90deg, #ec4899 0%, #a855f7 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(236,72,153,0.35);" onclick="openShareModal()">🔗 分享结果邀请好友测测 →</button>
+</div>
+    ${getMatrixRecommendHtml(currentTest ? currentTest.id : "")}
+    ${getAdRewardHtml("霍兰德")}
+  `;
+}
+
+
+
+
+// 🌌 测评矩阵交叉推荐组件（推荐其他 8 款测试，单次特惠 1.99 元）
 function getMatrixRecommendHtml(currentTestId) {
   var matrixList = [
     { id: "mbti", icon: "🧠", title: "MBTI 16型人格专业测评", desc: "四大维度定位你的核心认知模式与职业优势" },
@@ -1181,6 +1882,9 @@ function checkAndStartTest(targetTestId) {
 
 function showPaywallModal(testId) {
   var test = TEST_DATABASE[testId] || TEST_DATABASE['dating_signal'];
+  var alipayUrl = "https://qr.alipay.com/fkx18067ydpey7kf-fq7tx54";
+  var alipayScheme = "alipays://platformapi/startapp?appId=20000067&url=" + encodeURIComponent(alipayUrl);
+
   var modalHtml = `
     <div id="paywallModal" class="modal-overlay show">
       <div class="paywall-card" style="max-width:400px; text-align:center; padding:1.8rem 1.4rem;">
@@ -1192,22 +1896,27 @@ function showPaywallModal(testId) {
           ¥ 1.99 <span style="font-size:0.8rem; font-weight:normal; color:var(--text-sub); text-decoration:line-through;">原价 ¥9.9</span>
         </div>
 
+        <!-- 🚀 手机端一键唤起支付宝 App 按钮 -->
+        <a href="${alipayScheme}" class="btn btn-primary" style="display:flex; justify-content:center; align-items:center; gap:0.4rem; padding:0.75rem 1rem; font-size:0.95rem; margin-bottom:0.9rem; background:linear-gradient(90deg, #0284c7 0%, #2563eb 100%); color:#fff; border-radius:10px; text-decoration:none; box-shadow:0 4px 15px rgba(37,99,235,0.4); font-weight:700;">
+          <span>🚀 手机点此 · 一键唤起支付宝付款</span>
+        </a>
+
         <!-- 真实支付宝扫码收款区 -->
-        <div style="background:#fff; padding:8px; border-radius:16px; display:inline-block; margin-bottom:0.8rem; box-shadow:0 6px 24px rgba(0,0,0,0.5);">
-          <img src="alipay_qrcode.png" alt="支付宝扫码支付" style="width:210px; height:210px; display:block; border-radius:8px; object-fit:contain;">
+        <div style="background:#fff; padding:6px; border-radius:12px; display:inline-block; margin-bottom:0.6rem; box-shadow:0 4px 16px rgba(0,0,0,0.4);">
+          <img src="alipay_qrcode.png" alt="支付宝扫码支付" style="width:180px; height:180px; display:block; border-radius:6px; object-fit:contain;">
         </div>
 
-        <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.4;">
-          📱 手机<strong>截图或扫码</strong>直接支付 <strong>1.99 元</strong>
+        <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.9rem; line-height:1.4;">
+          💡 电脑端直接扫码，微信内可截屏后打开支付宝识别
         </p>
 
         <!-- 一键放行与解锁大按钮 -->
-        <button class="btn btn-primary" style="width:100%; justify-content:center; padding:0.8rem; font-size:0.95rem; margin-bottom:0.8rem; background:linear-gradient(90deg, #10b981 0%, #059669 100%); color:#fff; border:none; box-shadow:0 4px 16px rgba(16,185,129,0.35);" onclick="confirmPayAndUnlock('${testId}')">
+        <button class="btn btn-primary" style="width:100%; justify-content:center; padding:0.75rem; font-size:0.92rem; margin-bottom:0.8rem; background:linear-gradient(90deg, #10b981 0%, #059669 100%); color:#fff; border:none; box-shadow:0 4px 16px rgba(16,185,129,0.35);" onclick="confirmPayAndUnlock('${testId}')">
           ✅ 我已完成支付 · 立即开始测试 →
         </button>
 
         <!-- 口令直接输入区（折叠/备用） -->
-        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:0.8rem; margin-top:0.4rem;">
+        <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:0.8rem; margin-top:0.3rem;">
           <a href="javascript:void(0)" onclick="togglePaywallCodeInput()" style="font-size:0.8rem; color:var(--text-sub); text-decoration:underline;">
             🔑 已有发货卡密/口令？点此输入
           </a>
@@ -1253,18 +1962,109 @@ function confirmPayAndUnlock(testId) {
   }, 700);
 }
 
+// 🔑 8 大单品专属发货口令与前缀验证矩阵（互相隔离，无法跨测试猜码）
+var TEST_CODE_DATABASE = {
+  mbti: {
+    prefixes: ["MBTI", "16P", "TYPE"],
+    staticCodes: ["MBTI888", "MBTI999", "MBTI2026", "MBTI-VIP", "MBTI666"],
+    name: "MBTI 16型人格"
+  },
+  gad7: {
+    prefixes: ["GAD", "CALM", "ANX"],
+    staticCodes: ["GAD888", "GAD999", "GAD2026", "CALM888", "CALM666"],
+    name: "GAD-7 焦虑自评"
+  },
+  attachment: {
+    prefixes: ["LOVE", "ATTACH", "HEART"],
+    staticCodes: ["LOVE888", "ATTACH999", "LOVE2026", "ATTACH888", "HEART666"],
+    name: "恋爱依恋测评"
+  },
+  dating_signal: {
+    prefixes: ["DATE", "MINE", "SAFE", "SIGNAL"],
+    staticCodes: ["DATE888", "SAFE999", "MINE2026", "SIGNAL888", "DATE666"],
+    name: "关系排雷测评"
+  },
+  bigfive: {
+    prefixes: ["BIG5", "OCEAN", "FIVE"],
+    staticCodes: ["BIG5888", "OCEAN999", "BIG52026", "FIVE888", "BIG5666"],
+    name: "大五人格完整版"
+  },
+  battery: {
+    prefixes: ["REST", "BATTERY", "ENERGY"],
+    staticCodes: ["REST888", "BATTERY999", "REST2026", "ENERGY888", "REST666"],
+    name: "精神续航测评"
+  },
+  eq: {
+    prefixes: ["EQ", "PUA", "SMART"],
+    staticCodes: ["EQ888", "PUA999", "EQ2026", "SMART888", "EQ666"],
+    name: "高情商防PUA"
+  },
+  holland: {
+    prefixes: ["CAREER", "HOLLAND", "JOB", "RIASEC"],
+    staticCodes: ["CAREER888", "HOLLAND999", "JOB2026", "RIASEC888", "HOLLAND666"],
+    name: "霍兰德职业兴趣"
+  }
+};
+
+// 👑 超级全家桶口令（仅限购买全套 8 合 1 的买家或管理员调试）
+var MASTER_CODES = ["YZYM-ALL-PASS", "YZYM2026", "VIP9999"];
+
 function verifyUnlockCode(testId) {
   var input = document.getElementById("unlockCodeInput");
   var val = input ? input.value.trim().toUpperCase() : "";
-  if (val.length >= 3) {
-    showToast("🔑 口令验证成功！正在为您解锁《" + (TEST_DATABASE[testId] ? TEST_DATABASE[testId].title : "测评") + "》...");
+  if (!val) {
+    showToast("❌ 请输入订单发货口令");
+    return;
+  }
+
+  // 1. 超级口令校验
+  if (MASTER_CODES.indexOf(val) !== -1) {
+    showToast("👑 超级全通卡密验证成功！已解锁《" + (TEST_DATABASE[testId] ? TEST_DATABASE[testId].title : "测评") + "》...");
     unlockTest(testId);
     setTimeout(function() {
       closePaywallModal();
       startCurrentTest(testId);
     }, 700);
+    return;
+  }
+
+  // 2. 检查单品专属口令与前缀
+  var config = TEST_CODE_DATABASE[testId];
+  if (!config) config = TEST_CODE_DATABASE["dating_signal"];
+
+  // 检查是否匹配当前测评的专属固定口令
+  var isMatchStatic = config.staticCodes.indexOf(val) !== -1;
+
+  // 检查是否匹配当前测评的专属前缀（如小红书自动生成的 MBTI-240815123）
+  var isMatchPrefix = config.prefixes.some(function(pre) {
+    return val.indexOf(pre) === 0;
+  });
+
+  if (isMatchStatic || isMatchPrefix) {
+    showToast("🔑 口令验证成功！正在为您开启《" + (TEST_DATABASE[testId] ? TEST_DATABASE[testId].title : "测评") + "》...");
+    unlockTest(testId);
+    setTimeout(function() {
+      closePaywallModal();
+      startCurrentTest(testId);
+    }, 700);
+    return;
+  }
+
+  // 3. 跨测评越权拦截反馈（提示买家不能拿 A 测评口令去解 B 测评）
+  var matchedOtherTest = null;
+  Object.keys(TEST_CODE_DATABASE).forEach(function(otherKey) {
+    if (otherKey !== testId) {
+      var otherCfg = TEST_CODE_DATABASE[otherKey];
+      if (otherCfg.staticCodes.indexOf(val) !== -1 || otherCfg.prefixes.some(function(p) { return val.indexOf(p) === 0; })) {
+        matchedOtherTest = otherCfg.name;
+      }
+    }
+  });
+
+  if (matchedOtherTest) {
+    showToast("⚠️ 该口令为【" + matchedOtherTest + "】专属口令，无法解锁当前测评！");
   } else {
-    showToast("❌ 请输入正确的发货口令 (如 VIP888)");
+    showToast("❌ 口令无效或不存在，请检查小红书/平台发货信息");
   }
 }
 
