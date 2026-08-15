@@ -1884,6 +1884,12 @@ function showPaywallModal(testId) {
           <input type="text" id="unlockCodeInput" placeholder="输入订单发货口令 (如 VIP888)">
           <button onclick="verifyUnlockCode('${testId}')">立即验证</button>
         </div>
+
+        <div style="margin-top:1rem; padding:0.6rem 0.8rem; background:rgba(255,255,255,0.04); border-radius:8px; border:1px dashed rgba(255,255,255,0.15); font-size:0.75rem; color:var(--text-muted); line-height:1.4; text-align:left;">
+          ⚠️ <strong>购买与服务须知</strong>：<br>
+          1. 本产品为数字化虚拟测评内容，一经解锁/发货不支持退款，请确认需求后购买。<br>
+          2. 测评结果基于心理学模型生成，供自我探索参考，非临床医疗诊断凭证。
+        </div>
       </div>
     </div>
   `;
