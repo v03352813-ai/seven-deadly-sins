@@ -1944,11 +1944,27 @@ function copyShopName() {
     navigator.clipboard.writeText(text).then(function() {
       showToast("📋 店铺名【一子一木心愈屋】已复制！打开小红书搜索即可下单！");
     }).catch(function() {
-      showToast("📋 请在小红书搜索【一子一木心愈屋】下单获取口令！");
+      fallbackCopyShopName(text);
     });
   } else {
+    fallbackCopyShopName(text);
+  }
+}
+
+function fallbackCopyShopName(text) {
+  var input = document.createElement("textarea");
+  input.value = text;
+  input.style.position = "fixed";
+  input.style.opacity = "0";
+  document.body.appendChild(input);
+  input.select();
+  try {
+    document.execCommand("copy");
+    showToast("📋 店铺名【一子一木心愈屋】已复制！打开小红书搜索即可下单！");
+  } catch (err) {
     showToast("📋 请在小红书搜索【一子一木心愈屋】下单获取口令！");
   }
+  document.body.removeChild(input);
 }
 
 function verifyUnlockCode(testId) {
