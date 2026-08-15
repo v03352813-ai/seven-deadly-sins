@@ -1861,34 +1861,35 @@ function showPaywallModal(testId) {
   var test = TEST_DATABASE[testId] || TEST_DATABASE['dating_signal'];
   var modalHtml = `
     <div id="paywallModal" class="modal-overlay show">
-      <div class="paywall-card">
+      <div class="paywall-card" style="max-width:420px; text-align:center;">
         <button class="modal-close-btn" onclick="closePaywallModal()">×</button>
-        <span class="paywall-badge">🔒 付费解锁测评</span>
-        <h2 class="paywall-title">《${test.title}》</h2>
+        <span class="paywall-badge">🔒 付费专享测评</span>
+        <h2 class="paywall-title" style="font-size:1.25rem; margin-top:0.4rem;">《${test.title}》</h2>
         
-        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.5;">
-          本测评为付费专享，解锁后当前设备永久免费自测。如果您已在平台下单，请点击下方口令解锁；未购买用户可直接在线支付。
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.2rem; line-height:1.5;">
+          本测评为付费专享内容。小红书/平台已购用户请输入发货口令直接解锁；未购买用户可前往店铺下单获取口令。
         </p>
 
-        <div style="display:flex; flex-direction:column; gap:0.8rem; margin-bottom:0.4rem;">
-          <button class="btn btn-outline" style="width:100%; justify-content:center; border-radius:9999px; font-size:0.9rem; padding:0.75rem;" onclick="toggleCodeInput()">
-            🔑 已有发货卡密 / 兑换口令解锁 →
-          </button>
-
-          <button class="pay-btn-wechat" style="margin-bottom:0;" onclick="simulateWeChatPay('${testId}')">
-            🟢 在线支付解锁 (特惠 ¥ 1.99) →
-          </button>
+        <!-- 直接展示的卡密/口令输入解锁区 -->
+        <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:12px; padding:1rem; margin-bottom:1rem; text-align:left;">
+          <label style="font-size:0.82rem; font-weight:600; color:var(--text-main); display:block; margin-bottom:0.5rem;">
+            🔑 已有订单卡密 / 发货口令：
+          </label>
+          <div style="display:flex; gap:0.5rem;">
+            <input type="text" id="unlockCodeInput" placeholder="输入发货口令 (如 VIP888)" style="flex:1; padding:0.65rem 0.8rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; font-size:0.9rem; outline:none;">
+            <button class="btn btn-primary" style="padding:0.65rem 1.1rem; font-size:0.88rem; white-space:nowrap;" onclick="verifyUnlockCode('${testId}')">
+              立即解锁
+            </button>
+          </div>
         </div>
 
-        <div id="codeInputBox" class="code-input-group" style="display:none; margin-top:0.8rem;">
-          <input type="text" id="unlockCodeInput" placeholder="输入订单发货口令 (如 VIP888)">
-          <button onclick="verifyUnlockCode('${testId}')">立即验证</button>
-        </div>
+        <!-- 前往小红书店铺下单入口 -->
+        <button class="btn btn-reward" style="width:100%; justify-content:center; padding:0.8rem 1rem; font-size:0.92rem; margin-bottom:0.5rem; background:linear-gradient(90deg, #ff2442 0%, #ea580c 100%); color:#fff; border:none; box-shadow:0 4px 15px rgba(255,36,66,0.35);" onclick="openXhsOrderGuide('${test.title}')">
+          🛍️ 未购买？去小红书拍下 (特惠 ¥1.99) →
+        </button>
 
-        <div style="margin-top:1rem; padding:0.6rem 0.8rem; background:rgba(255,255,255,0.04); border-radius:8px; border:1px dashed rgba(255,255,255,0.15); font-size:0.75rem; color:var(--text-muted); line-height:1.4; text-align:left;">
-          ⚠️ <strong>购买与服务须知</strong>：<br>
-          1. 本产品为数字化虚拟测评内容，一经解锁/发货不支持退款，请确认需求后购买。<br>
-          2. 测评结果基于心理学模型生成，供自我探索参考，非临床医疗诊断凭证。
+        <div style="margin-top:0.9rem; padding:0.6rem 0.8rem; background:rgba(255,255,255,0.03); border-radius:8px; border:1px dashed rgba(255,255,255,0.12); font-size:0.75rem; color:var(--text-sub); line-height:1.4; text-align:left;">
+          ⚠️ <strong>购买须知</strong>：本产品为数字化虚拟测评内容，拍下后系统自动发货发送专属口令，一经解锁不支持退款。
         </div>
       </div>
     </div>
@@ -1905,27 +1906,63 @@ function closePaywallModal() {
   if (modal) modal.remove();
 }
 
-function simulateWeChatPay(testId) {
-  showToast("💳 在线支付成功！已为您自动解锁本测评");
-  unlockTest(testId);
-  setTimeout(function() {
-    closePaywallModal();
-    startCurrentTest(testId);
-  }, 1000);
+function openXhsOrderGuide(testTitle) {
+  var guideHtml = `
+    <div id="xhsGuideModal" class="modal-overlay show" style="z-index:99999;">
+      <div class="paywall-card" style="max-width:380px; text-align:center; padding:1.8rem 1.4rem;">
+        <button class="modal-close-btn" onclick="closeXhsGuideModal()">×</button>
+        <span class="paywall-badge" style="background:rgba(255,36,66,0.15); color:#ff2442; border-color:rgba(255,36,66,0.4);">🛍️ 小红书官方下单</span>
+        <h3 style="font-size:1.15rem; font-weight:700; color:#fff; margin-top:0.8rem; margin-bottom:0.6rem;">店铺【一子一木心愈屋】</h3>
+        
+        <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:12px; padding:1rem; font-size:0.86rem; color:var(--text-main); text-align:left; line-height:1.6; margin-bottom:1.2rem;">
+          1. 打开手机小红书 App<br>
+          2. 搜索店铺：<strong>一子一木心愈屋</strong><br>
+          3. 拍下 <strong>《${testTitle}》</strong>（¥1.99）<br>
+          4. 系统将自动私信发送解锁口令给您！
+        </div>
+
+        <button class="btn btn-primary" style="width:100%; justify-content:center; padding:0.75rem; font-size:0.92rem; margin-bottom:0.6rem;" onclick="copyShopName()">
+          📋 复制店铺名称【一子一木心愈屋】
+        </button>
+      </div>
+    </div>
+  `;
+
+  var existing = document.getElementById("xhsGuideModal");
+  if (existing) existing.remove();
+  document.body.insertAdjacentHTML('beforeend', guideHtml);
+}
+
+function closeXhsGuideModal() {
+  var modal = document.getElementById("xhsGuideModal");
+  if (modal) modal.remove();
+}
+
+function copyShopName() {
+  var text = "一子一木心愈屋";
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
+      showToast("📋 店铺名【一子一木心愈屋】已复制！打开小红书搜索即可下单！");
+    }).catch(function() {
+      showToast("📋 请在小红书搜索【一子一木心愈屋】下单获取口令！");
+    });
+  } else {
+    showToast("📋 请在小红书搜索【一子一木心愈屋】下单获取口令！");
+  }
 }
 
 function verifyUnlockCode(testId) {
   var input = document.getElementById("unlockCodeInput");
   var val = input ? input.value.trim().toUpperCase() : "";
   if (val.length >= 3) {
-    showToast("🔑 卡密验证成功！欢迎咸鱼/小红书贵宾用户");
+    showToast("🔑 口令验证成功！正在为您解锁《" + (TEST_DATABASE[testId] ? TEST_DATABASE[testId].title : "测评") + "》...");
     unlockTest(testId);
     setTimeout(function() {
       closePaywallModal();
       startCurrentTest(testId);
     }, 800);
   } else {
-    showToast("❌ 请输入闲鱼/小红书发送给您的卡密口令");
+    showToast("❌ 请输入正确的发货口令 (如 VIP888)");
   }
 }
 
