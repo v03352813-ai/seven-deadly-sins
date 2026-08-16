@@ -1912,7 +1912,7 @@ function showPaywallModal(testId) {
             🔑 请输入专属发货口令解锁：
           </label>
           <div style="display:flex; gap:0.4rem; margin-bottom:0.4rem;">
-            <input type="text" id="unlockCodeInput" placeholder="输入口令 (如 YZYM-9482)" style="flex:1; padding:0.6rem 0.8rem; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); border-radius:8px; color:#fff; font-size:0.9rem; outline:none; text-transform:uppercase;">
+            <input type="text" id="unlockCodeInput" placeholder="输入您的8位专属口令 (如 YZYM-XXXX)" style="flex:1; padding:0.6rem 0.8rem; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); border-radius:8px; color:#fff; font-size:0.9rem; outline:none; text-transform:uppercase;">
             <button class="btn btn-primary" style="padding:0.6rem 1rem; font-size:0.88rem; background:linear-gradient(90deg, #10b981 0%, #059669 100%); border:none; box-shadow:0 4px 14px rgba(16,185,129,0.35);" onclick="verifyUnlockCode('${testId}')">验证解锁</button>
           </div>
           <div style="font-size:0.72rem; color:var(--text-muted);">
