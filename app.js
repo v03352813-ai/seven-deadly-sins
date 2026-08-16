@@ -1952,12 +1952,6 @@ function showPaywallModal(testId) {
   document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-  var existing = document.getElementById("paywallModal");
-  if (existing) existing.remove();
-  
-  document.body.insertAdjacentHTML('beforeend', modalHtml);
-}
-
 function closePaywallModal() {
   var modal = document.getElementById("paywallModal");
   if (modal) modal.remove();
