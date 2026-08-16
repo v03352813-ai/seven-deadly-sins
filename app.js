@@ -1898,7 +1898,7 @@ var XIANYU_PRODUCT_MAP = {
   holland: "1715536481945541",
   eq: "1715529198897733",
   battery: "1715523867789893",
-  bigfive: ""
+  bigfive: "1715515799029701"
 };
 
 function showPaywallModal(testId) {
