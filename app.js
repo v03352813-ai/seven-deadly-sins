@@ -366,7 +366,7 @@ var TEST_DATABASE = {
 
   dating_signal: {
     id: "dating_signal",
-    title: "他到底喜不喜欢你？关系信号深度拆解",
+    title: "他到底喜不喜欢你？关系信号拆解",
     subtitle: "8道题拆解他没说出口的关系信号",
     questions: [
       {
@@ -847,7 +847,7 @@ function initStandaloneTest(testId) {
       startBtn.style.background = "linear-gradient(90deg, #10b981 0%, #059669 100%)";
       startBtn.style.boxShadow = "0 4px 18px rgba(16,185,129,0.4)";
     } else {
-      startBtn.innerHTML = "🚀 立即开始深度测评 →";
+      startBtn.innerHTML = "🚀 立即开始测评 →";
     }
   }
 }
@@ -1319,7 +1319,7 @@ function calculateAttachmentResult() {
   var container = document.getElementById("resultContainer");
   container.innerHTML = `
     <div class="result-header-card">
-      <span class="result-badge">💕 恋爱依恋底色深度诊断</span>
+      <span class="result-badge">💕 恋爱依恋底色诊断</span>
       <h1 class="result-main-title">${res.emoji} ${mainStyle}</h1>
       <div class="result-subtitle">${res.title}</div>
       <p class="result-summary">${res.summary}</p>
@@ -1408,7 +1408,7 @@ function calculateBatteryResult() {
     </div>
 
     <div class="detail-card" style="margin-bottom:1.2rem;">
-      <h3 class="detail-card-title">🔍 续航状态深度剖析</h3>
+      <h3 class="detail-card-title">🔍 续航状态剖析</h3>
       <p style="font-size:0.95rem; color:var(--text-main); line-height:1.65;">${status.traits}</p>
     </div>
 
@@ -1556,7 +1556,7 @@ function calculateGAD7Result() {
     </div>
 
     <div class="detail-card" style="margin-bottom:1.2rem;">
-      <h3 class="detail-card-title">🧠 情绪状态深度解析</h3>
+      <h3 class="detail-card-title">🧠 情绪状态解析</h3>
       <p style="font-size:0.95rem; color:var(--text-main); line-height:1.65;">${res.analysis}</p>
     </div>
 
@@ -1600,7 +1600,7 @@ function calculateBigFiveResult() {
   var container = document.getElementById("resultContainer");
   container.innerHTML = `
     <div class="result-header-card">
-      <span class="result-badge">🌊 大五人格 (OCEAN) 深度画像报告</span>
+      <span class="result-badge">🌊 大五人格 (OCEAN) 画像报告</span>
       <h1 class="result-main-title">OCEAN Profile</h1>
       <div class="result-subtitle">学术级五大底层性格杠杆剖析</div>
       <p class="result-summary">大五人格模型（Big Five）是心理学界公认最严谨的特质测量体系。它从 5 个独立维度决定了你的行为习惯、决策偏好与情绪模式。</p>
@@ -1666,7 +1666,7 @@ function calculateMBTIResult() {
   var container = document.getElementById("resultContainer");
   container.innerHTML = `
     <div class="result-header-card">
-      <span class="result-badge">MBTI 深度人格诊断报告</span>
+      <span class="result-badge">MBTI 人格诊断报告</span>
       <h1 class="result-main-title">${type}</h1>
       <div class="result-subtitle">${detail.title}</div>
       <p class="result-summary">${detail.summary}</p>
@@ -1797,7 +1797,7 @@ function getMatrixRecommendHtml(currentTestId) {
   var matrixList = [
     { id: "mbti", icon: "🧠", title: "MBTI 16型人格专业测评", desc: "四大维度定位你的核心认知模式与职业优势" },
     { id: "gad7", icon: "😟", title: "GAD-7 焦虑与内耗测评", desc: "评估近两周情绪负荷、压力与内耗等级" },
-    { id: "dating_signal", icon: "💘", title: "关系信号深度拆解", desc: "拆解他没说出口的好感、投入度与关系承诺" },
+    { id: "dating_signal", icon: "💘", title: "关系信号拆解", desc: "拆解他没说出口的好感、投入度与关系承诺" },
     { id: "attachment", icon: "💕", title: "恋爱依恋类型测评", desc: "剖析你的亲密关系底色：安全型还是回避型" },
     { id: "bigfive", icon: "🌊", title: "大五人格专业测评", desc: "学术级 OCEAN 五大核心性格杠杆剖析" },
     { id: "battery", icon: "🔋", title: "社畜精神续航与发疯指数", desc: "测测心理剩余电量与抗压发疯极限" },
