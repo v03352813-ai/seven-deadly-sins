@@ -1894,7 +1894,11 @@ var XIANYU_PRODUCT_MAP = {
   mbti: "1076589148109",
   attachment: "1073724455977",
   dating_signal: "1075604557631",
-  gad7: "1073723455394"
+  gad7: "1073723455394",
+  holland: "1715536481945541",
+  eq: "1715529198897733",
+  battery: "1715523867789893",
+  bigfive: ""
 };
 
 function showPaywallModal(testId) {
