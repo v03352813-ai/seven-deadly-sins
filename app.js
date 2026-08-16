@@ -843,11 +843,11 @@ function initStandaloneTest(testId) {
   var startBtn = heroIntro ? heroIntro.querySelector("button.btn-primary") : null;
   if (startBtn) {
     if (isTestUnlocked(testId)) {
-      startBtn.innerHTML = "🚀 尊享通道 · 立即开始测试 (约3分钟) →";
+      startBtn.innerHTML = "🚀 尊享通道 · 立即开始测试 →";
       startBtn.style.background = "linear-gradient(90deg, #10b981 0%, #059669 100%)";
       startBtn.style.boxShadow = "0 4px 18px rgba(16,185,129,0.4)";
     } else {
-      startBtn.innerHTML = "🚀 开始深度测评 (特惠 ¥1.99) →";
+      startBtn.innerHTML = "🚀 立即开始深度测评 →";
     }
   }
 }
