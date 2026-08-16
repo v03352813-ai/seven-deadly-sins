@@ -1890,10 +1890,19 @@ function checkAndStartTest(targetTestId) {
   }
 }
 
+var XIANYU_PRODUCT_MAP = {
+  mbti: "1076589148109",
+  attachment: "1073724455977",
+  dating_signal: "1075604557631",
+  gad7: "1073723455394"
+};
+
 function showPaywallModal(testId) {
   var test = TEST_DATABASE[testId] || TEST_DATABASE['dating_signal'];
   var alipayUrl = "https://qr.alipay.com/fkx18067ydpey7kf-fq7tx54";
   var alipayScheme = "alipays://platformapi/startapp?appId=20000067&url=" + encodeURIComponent(alipayUrl);
+  var xianyuId = XIANYU_PRODUCT_MAP[testId];
+  var xianyuUrl = xianyuId ? "https://h5.m.goofish.com/item?id=" + xianyuId : alipayScheme;
 
   var modalHtml = `
     <div id="paywallModal" class="modal-overlay show">
@@ -1926,8 +1935,8 @@ function showPaywallModal(testId) {
             尚未获取口令？请通过下方付款获取：
           </p>
           
-          <a href="${alipayScheme}" class="btn btn-primary" style="display:flex; justify-content:center; align-items:center; gap:0.4rem; padding:0.7rem 1rem; font-size:0.9rem; margin-bottom:0.6rem; background:linear-gradient(90deg, #0284c7 0%, #2563eb 100%); color:#fff; border-radius:8px; text-decoration:none; box-shadow:0 4px 15px rgba(37,99,235,0.35); font-weight:700;">
-            <span>🚀 手机点此 · 一键唤起支付宝付款</span>
+          <a href="${xianyuUrl}" target="_blank" class="btn btn-primary" style="display:flex; justify-content:center; align-items:center; gap:0.4rem; padding:0.7rem 1rem; font-size:0.9rem; margin-bottom:0.6rem; background:linear-gradient(90deg, #0284c7 0%, #2563eb 100%); color:#fff; border-radius:8px; text-decoration:none; box-shadow:0 4px 15px rgba(37,99,235,0.35); font-weight:700;">
+            <span>🛍️ 点此拍下获取口令 (¥1.99 自动秒发)</span>
           </a>
 
           <!-- 真实支付宝扫码收款区 -->
@@ -1935,7 +1944,7 @@ function showPaywallModal(testId) {
             <img src="alipay_qrcode.png" alt="支付宝扫码支付" style="width:130px; height:130px; display:block; border-radius:6px; object-fit:contain;">
           </div>
           <p style="font-size:0.72rem; color:var(--text-muted); margin-top:0.3rem;">
-            电脑端直接扫码支付 1.99 元
+            电脑端扫码支付 1.99 元
           </p>
         </div>
 
