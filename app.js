@@ -1846,11 +1846,21 @@ function getMatrixRecommendHtml(currentTestId) {
 // 5. 咸鱼/小红书 自动发卡密钥 & 好友付费防护引擎
 // ==========================================================================
 
-// 判断当前是否具备有效付费凭证（带 ?key=... 参数、卡密或已验证）
+// 判断当前是否具备有效付费凭证（带 ?key=... 参数、卡密或已验证永久解锁）
 function isTestUnlocked(testId) {
   if (!testId) return true;
 
-  // 1. 校验 URL 发货 Key：精确匹配当前测试专属口令
+  // 1. 检查买家设备/浏览器是否已永久解锁该单项测评 (localStorage + sessionStorage 双重保障)
+  try {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('paid_' + testId) === 'true') {
+      return true;
+    }
+    if (typeof sessionStorage !== 'undefined' && sessionStorage.getItem('paid_' + testId) === 'true') {
+      return true;
+    }
+  } catch (e) {}
+
+  // 2. 校验 URL 发货 Key：精确匹配当前测试专属口令
   if (typeof window !== 'undefined' && window.location && window.location.search) {
     var search = window.location.search.toLowerCase();
     var cfg = TEST_CODE_DATABASE[testId];
@@ -1862,22 +1872,28 @@ function isTestUnlocked(testId) {
       }) || search.indexOf('key=' + cfg.primaryCode.toLowerCase()) !== -1 || search.indexOf('key=yzym-all-pass') !== -1;
 
       if (isKeyMatched) {
+        // 首次通过口令链接进入，自动永久记忆解锁状态，以后反复测试均无需再输口令
+        unlockTest(testId);
         return true;
       }
     }
   }
 
-  // 2. 检查买家当前会话是否已单独加购/解锁过该单项测评
-  if (typeof sessionStorage !== 'undefined') {
-    return sessionStorage.getItem('paid_' + testId) === 'true';
-  }
   return false;
 }
 
 function unlockTest(testId) {
-  if (typeof sessionStorage !== 'undefined' && testId) {
-    sessionStorage.setItem('paid_' + testId, 'true');
-  }
+  if (!testId) return;
+  try {
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('paid_' + testId, 'true');
+    }
+  } catch (e) {}
+  try {
+    if (typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('paid_' + testId, 'true');
+    }
+  } catch (e) {}
 }
 
 function checkAndStartTest(targetTestId) {
