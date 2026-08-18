@@ -2088,10 +2088,13 @@ function verifyUnlockCode(testId) {
     return;
   }
 
-  // 1. 超级口令校验
+  // 1. 超级口令校验（全套8合1一键永久全解锁）
   if (MASTER_CODES.indexOf(val) !== -1) {
-    showToast("👑 超级全通卡密验证成功！已解锁《" + (TEST_DATABASE[testId] ? TEST_DATABASE[testId].title : "测评") + "》...");
-    unlockTest(testId);
+    showToast("👑 超级全通卡密验证成功！已解锁全部 8 款测评矩阵...");
+    var allIds = ["mbti", "gad7", "attachment", "dating_signal", "bigfive", "battery", "eq", "holland"];
+    allIds.forEach(function(id) {
+      unlockTest(id);
+    });
     setTimeout(function() {
       closePaywallModal();
       startCurrentTest(testId);
