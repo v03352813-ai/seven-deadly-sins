@@ -1792,7 +1792,27 @@ function calculateHollandResult() {
 
 
 
-// 🌌 测评矩阵交叉推荐组件（推荐其他 8 款测试，单次特惠 1.99 元）
+var PAGE_URL_MAP = {
+  mbti: "mbti.html",
+  gad7: "gad7.html",
+  dating_signal: "dating.html",
+  attachment: "attachment.html",
+  bigfive: "bigfive.html",
+  battery: "battery.html",
+  eq: "eq.html",
+  holland: "holland.html"
+};
+
+function openMatrixTest(targetTestId) {
+  if (isTestUnlocked(targetTestId)) {
+    var targetPage = PAGE_URL_MAP[targetTestId] || "mbti.html";
+    window.location.href = targetPage;
+  } else {
+    showPaywallModal(targetTestId);
+  }
+}
+
+// 🌌 测评矩阵交叉推荐组件（已购买用户自动显示已解锁并可直接测试，未购买提示加购）
 function getMatrixRecommendHtml(currentTestId) {
   var matrixList = [
     { id: "mbti", icon: "🧠", title: "MBTI 16型人格专业测评", desc: "四大维度定位你的核心认知模式与职业优势" },
@@ -1801,15 +1821,18 @@ function getMatrixRecommendHtml(currentTestId) {
     { id: "attachment", icon: "💕", title: "恋爱依恋类型测评", desc: "剖析你的亲密关系底色：安全型还是回避型" },
     { id: "bigfive", icon: "🌊", title: "大五人格专业测评", desc: "学术级 OCEAN 五大核心性格杠杆剖析" },
     { id: "battery", icon: "🔋", title: "社畜精神续航与发疯指数", desc: "测测心理剩余电量与抗压发疯极限" },
-    { id: "eq", icon: "🎭", title: "高情商与防PUA测评", desc: "评估同理心深度、社交边界感与防操控能力" },
+    { id: "eq", icon: "🎭", title: "高情商与防PUA测评", desc: "评估同理心、社交边界感与防操控能力" },
     { id: "holland", icon: "🧭", title: "霍兰德职业兴趣测评", desc: "RIASEC 六维代码定位你的理想职业赛道" }
   ];
 
   var filtered = matrixList.filter(function(item) { return item.id !== currentTestId; });
 
   var cardsHtml = filtered.map(function(item) {
-    var btnText = "🚀 加购测评 (特惠 ¥1.99) →";
-    var btnStyle = "background:linear-gradient(90deg, #2563eb 0%, #7c3aed 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);";
+    var isUnlocked = isTestUnlocked(item.id);
+    var btnText = isUnlocked ? "🚀 已解锁 · 立即开始测试 →" : "🚀 加购测评 (特惠 ¥1.99) →";
+    var btnStyle = isUnlocked 
+      ? "background:linear-gradient(90deg, #10b981 0%, #059669 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(16,185,129,0.4);" 
+      : "background:linear-gradient(90deg, #2563eb 0%, #7c3aed 100%); color:#fff; border:none; box-shadow:0 4px 14px rgba(37,99,235,0.35);";
     return `
       <div class="matrix-mini-card">
         <div>
@@ -1819,7 +1842,7 @@ function getMatrixRecommendHtml(currentTestId) {
           </div>
           <p class="matrix-card-desc">${item.desc}</p>
         </div>
-        <button class="matrix-card-btn" style="${btnStyle}" onclick="showPaywallModal('${item.id}')">
+        <button class="matrix-card-btn" style="${btnStyle}" onclick="openMatrixTest('${item.id}')">
           ${btnText}
         </button>
       </div>
