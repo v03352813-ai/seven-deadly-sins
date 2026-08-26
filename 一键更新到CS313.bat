@@ -1,12 +1,12 @@
-﻿@echo off
-chcp 65001 >nul
+@echo off
+cls
 echo =======================================================
-echo     正在一键同步《七宗罪》到 cs313.cn 主站...
+echo          Syncing Seven Deadly Sins to cs313.cn...
 echo =======================================================
 echo.
 git push quiz-online main
 echo.
 echo =======================================================
-echo 提示：若上方显示成功，访问 https://cs313.cn/sin 即可生效！
+echo  Done! Visit: https://cs313.cn/sin
 echo =======================================================
 pause

@@ -221,28 +221,34 @@ body {
 }
 
 .viral-sticker-box {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.18) 0%, rgba(15, 10, 20, 0.92) 100%);
+    border: 1.5px solid rgba(220, 38, 38, 0.55);
+    border-radius: 14px;
+    padding: 10px 12px;
     text-align: center;
-    padding: 12px 10px;
-    margin: 6px 0 10px;
-    background: rgba(5, 3, 7, 0.92);
-    border-radius: 12px;
-    border: 1.5px solid rgba(220, 38, 38, 0.5);
     box-shadow: 0 0 25px rgba(220, 38, 38, 0.3), inset 0 0 15px rgba(220, 38, 38, 0.2);
     animation: stamp-slam 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     transform-origin: center center;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .viral-sticker-title {
     font-family: var(--font-serif);
-    font-size: 1.65rem;
+    font-size: clamp(1.02rem, 5vw, 1.45rem);
     font-weight: 900;
     color: #ffffff;
     text-shadow: 0 0 15px rgba(220, 38, 38, 0.9), 2px 2px 0px #000;
-    letter-spacing: 1.5px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100%;
 }
 
 .viral-sticker-subtitle {
-    font-size: 0.84rem;
     color: var(--gold-bright);
     margin-top: 6px;
     font-weight: 600;
@@ -685,11 +691,16 @@ body {
 .showcase-sub-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .showcase-sub-slot {
     position: relative;
+    width: 100%;
+    min-width: 0; /* 关键：防止 grid 子项被子内容撑破超框 */
+    box-sizing: border-box;
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
 }
 
@@ -699,28 +710,29 @@ body {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1.5px solid var(--border-color);
-    border-radius: 16px;
+    border-radius: 14px;
     position: relative;
     overflow: hidden;
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     box-sizing: border-box;
 }
 
-/* 置顶角标（仅副舞台显示） */
+/* 置顶角标（仅副舞台显示，超小精致防超框） */
 .card-pin-badge {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 4px;
+    right: 4px;
     z-index: 10;
     background: rgba(220, 38, 38, 0.92);
     color: #ffffff;
-    font-size: 0.6rem;
+    font-size: 0.52rem;
     font-weight: 800;
-    padding: 1px 6px;
-    border-radius: 99px;
+    padding: 1px 4px;
+    border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.45);
-    box-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
+    box-shadow: 0 0 6px rgba(220, 38, 38, 0.8);
     pointer-events: none;
+    line-height: 1.2;
     animation: pin-pulse 2s infinite ease-in-out;
 }
 
@@ -733,7 +745,7 @@ body {
 .showcase-hero-slot .showcase-card {
     border-color: rgba(212, 175, 55, 0.55);
     box-shadow: 0 0 35px rgba(220, 38, 38, 0.25), 0 10px 30px rgba(0, 0, 0, 0.8);
-    padding: 16px 14px;
+    padding: 14px 12px;
     text-align: center;
 }
 
@@ -745,18 +757,22 @@ body {
 .showcase-sub-slot .showcase-card {
     border-color: rgba(212, 175, 55, 0.25);
     background: rgba(14, 9, 18, 0.92);
-    padding: 10px 8px;
+    padding: 8px 6px;
     cursor: pointer;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .showcase-sub-slot .showcase-card:hover {
     border-color: var(--gold-bright);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 8px 24px rgba(220, 38, 38, 0.35), 0 0 15px rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
 }
 
 .showcase-sub-slot .showcase-card:active {
@@ -765,7 +781,7 @@ body {
 
 /* 模块 1：立绘在小画框中的自适应 */
 .showcase-sub-slot .mod-card-avatar .demon-lord-title-text {
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -773,15 +789,15 @@ body {
 }
 
 .showcase-sub-slot .mod-card-avatar .demon-lord-img-wrapper {
-    max-width: 110px;
+    max-width: 90px;
     margin: 4px auto 6px;
     border-radius: 8px;
 }
 
 .showcase-sub-slot .mod-card-avatar .demon-lord-motto-text {
-    font-size: 0.68rem;
-    line-height: 1.35;
-    padding: 0 4px;
+    font-size: 0.65rem;
+    line-height: 1.3;
+    padding: 0 2px;
     margin-bottom: 2px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -790,10 +806,10 @@ body {
 }
 
 .showcase-sub-slot .viral-section-title {
-    font-size: 0.72rem;
-    letter-spacing: 0.5px;
+    font-size: 0.66rem;
+    letter-spacing: 0.2px;
     margin-bottom: 4px;
-    padding: 0 40px 0 6px;
+    padding: 0 24px 0 2px;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
@@ -808,46 +824,67 @@ body {
 .showcase-sub-slot .radar-display-box {
     margin: 0;
     width: 100%;
+    min-width: 0;
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 200px;
+    min-height: 140px;
+    overflow: hidden;
 }
 
-/* 模块 3：排行榜在不同插槽的自适应 */
+.showcase-sub-slot .radar-display-box canvas {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 150px !important;
+    display: block;
+}
+
+/* 模块 3：排行榜在不同插槽的自适应（防止超框） */
 .showcase-hero-slot .rank-list {
     gap: 10px;
     margin-top: 10px;
 }
 
 .showcase-sub-slot .rank-list {
-    gap: 5px;
-    margin-top: 4px;
+    gap: 3px;
+    margin-top: 2px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .showcase-sub-slot .rank-item {
-    gap: 6px;
+    gap: 3px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .showcase-sub-slot .rank-badge {
-    width: 20px;
-    height: 20px;
-    font-size: 0.6rem;
+    width: 16px;
+    height: 16px;
+    font-size: 0.5rem;
+    flex-shrink: 0;
 }
 
 .showcase-sub-slot .rank-name {
-    width: 28px;
-    font-size: 0.74rem;
+    width: 22px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .showcase-sub-slot .rank-bar-bg {
-    height: 8px;
+    height: 5px;
+    flex: 1;
+    min-width: 20px;
 }
 
 .showcase-sub-slot .rank-score {
-    font-size: 0.8rem;
-    width: 28px;
+    font-size: 0.68rem;
+    width: 20px;
+    text-align: right;
+    flex-shrink: 0;
 }
 
 /* 海报弹窗 Tab 样式 */
@@ -1017,6 +1054,42 @@ body {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
     pointer-events: auto;
+}
+
+/* ==========================================================================
+   移动端专属全屏响应与防超框排版 (Mobile Responsive)
+   ========================================================================== */
+@media (max-width: 600px) {
+    .ad-reward-banner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .ad-reward-banner .btn-reward {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 0.84rem;
+        box-sizing: border-box;
+        border-radius: 99px;
+    }
+
+    .ad-code-badge {
+        word-break: break-all;
+        overflow-wrap: anywhere;
+        white-space: normal;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .app-header .btn-reward {
+        padding: 3px 6px !important;
+        font-size: 0.68rem !important;
+    }
 }
 
 /* ==========================================================================

@@ -18,8 +18,8 @@ const DEFAULT_CONFIG = {
     buyTip: '测试完整版包含 1000+ 字深层潜意识剖析、暗面爆发诱因、灵魂相吸相克与救赎指南',
     buyUrl: 'https://xhslink.com',
     serviceWx: 'soul_test_vip',
-    universalKey: 'YZYM20268888', // 12位小红书专属标准交付密码
-    masterKeys: ['YZYM20268888', 'YZYM-2026-8888', 'SIN88996688AA', 'DARK20268888'],
+    universalKey: '8F2K9M7Q3X5W', // 12位小红书专属无规律高强度密码
+    masterKeys: ['8F2K9M7Q3X5W', '7B9N2X4R8K6C', '9K3M7P2X8W5Q', '4M8Q2X9B7K3P', 'YZYM20268888'],
     // 免费云端核销配置 (LeanCloud)
     cloud: {
         enabled: false,

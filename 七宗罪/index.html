@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>七宗罪·灵魂暗面深度测验 | 地狱来客神级审判</title>
     <meta name="description" content="直面你人前伪装的七美德，与深渊深处真实的七宗罪。测出你的地狱审判神级称号！">
+    <script>
+        // 动态智能定位基准路径，彻底解决 /sin 无斜杠时样式丢失问题，同时完美兼容本地测试
+        (function() {
+            var base = document.createElement('base');
+            if (window.location.pathname.indexOf('/sin') !== -1) {
+                base.href = '/sin/';
+            } else if (window.location.pathname.indexOf('/%E4%B8%83%E5%AE%97%E7%BD%AA') !== -1 || window.location.pathname.indexOf('/七宗罪') !== -1) {
+                base.href = '/' + encodeURIComponent('七宗罪') + '/';
+            } else {
+                base.href = './';
+            }
+            document.head.appendChild(base);
+        })();
+    </script>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -102,6 +116,16 @@
             </ul>
         </div>
 
+        <!-- 历史卷宗恢复条 (如果有未过期的测试记录) -->
+        <div id="box-restore-result" style="display: none; background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.4); padding: 10px 14px; border-radius: 12px; margin-bottom: 16px; justify-content: space-between; align-items: center;">
+            <div style="font-size: 0.82rem; color: #fde68a;">
+                <span>📜 检测到您有已完成的测试卷宗</span>
+            </div>
+            <button id="btn-restore-result" type="button" style="background: linear-gradient(135deg, #d4af37, #b8860b); color: #08060a; font-size: 0.76rem; font-weight: 700; border: none; padding: 5px 14px; border-radius: 99px; cursor: pointer; box-shadow: 0 0 10px rgba(212,175,55,0.4);">
+                查看卷宗 ➔
+            </button>
+        </div>
+
         <!-- 3. 核心开测 CTA 按钮 -->
         <button id="btn-start-quiz" class="btn-mystic">
             <span>开启灵魂过堂 ➔</span>
@@ -184,8 +208,8 @@
 
             <!-- 盲盒爆款倾斜印章（固定居中核心爆点） -->
             <div class="viral-sticker-box" style="margin: 6px 0 12px;">
-                <div id="res-hell-title" class="viral-sticker-title">地狱来了一位【笑面虎】</div>
-                <div id="res-hell-tagline" class="viral-sticker-subtitle">“表面人畜无害佛系摆烂，暗地里精算利益寸步不让”</div>
+                <div id="res-hell-title" class="viral-sticker-title">地狱来了一位【深渊主宰】</div>
+                <div id="res-hell-tagline" class="viral-sticker-subtitle">“直面灵魂真实罪印”</div>
             </div>
 
             <!-- 底部两个副舞台 (Sub Slots) -->
@@ -236,13 +260,22 @@
         </div>
 
         <!-- 七美德镜面对照卡片 (置于生成海报按钮上方) -->
-        <div id="card-virtue-mirror" class="glass-card" style="margin-bottom: 16px; border-left: 3px solid #10b981;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <h3 style="font-size: 0.95rem; font-weight: 700; color: #10b981;">🕊️ 光暗双生：七美德伪装镜像</h3>
-                <span id="res-virtue-sublabel" style="font-size: 0.75rem; color: var(--text-dim);">人前伪装 vs 深渊本色</span>
+        <div id="card-virtue-mirror" class="glass-card" style="margin-bottom: 16px; border-left: 3px solid #10b981; padding: 12px 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div style="font-size: 0.92rem; font-weight: 800; color: #10b981; display: flex; align-items: center; gap: 4px;">
+                    <span>🕊️</span> <span>光暗双生 · 七美德镜像</span>
+                </div>
+                <div style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-size: 0.72rem; padding: 2px 8px; border-radius: 99px; font-weight: 700; white-space: nowrap;">
+                    伪装度 <span id="res-virtue-score">88%</span>
+                </div>
             </div>
-            <p style="color: #9ca3af; font-size: 0.84rem; line-height: 1.5;">
-                你在人前展现的伪装指数：<strong style="color: #ffffff;" id="res-virtue-score">88%</strong>。<span id="res-virtue-detail">你在世俗社交中极擅长用理智和温和掩盖内心的暗黑火焰。</span>
+            
+            <div id="res-virtue-sublabel" style="font-size: 0.78rem; color: #a7f3d0; background: rgba(16, 185, 129, 0.08); border-left: 2px solid #10b981; padding: 4px 8px; border-radius: 4px; margin-bottom: 8px; line-height: 1.4;">
+                人前伪装 vs 深渊本色
+            </div>
+
+            <p id="res-virtue-detail" style="color: #9ca3af; font-size: 0.82rem; line-height: 1.55; margin: 0;">
+                你在世俗社交中极擅长用理智和温和掩盖内心的暗黑火焰。
             </p>
         </div>
 
@@ -255,12 +288,12 @@
 
         <!-- 深度千字长文报告（卡密解锁） -->
         <div class="glass-card" style="margin-bottom: 24px; position: relative;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-                <h3 style="font-family: var(--font-serif); font-size: 1.05rem; color: var(--gold); font-weight: 800;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <h3 style="font-family: var(--font-serif); font-size: 0.96rem; color: var(--gold); font-weight: 800; margin: 0;">
                     📜 地狱判官 · 千字深度审判卷宗
                 </h3>
-                <button id="btn-export-pdf" onclick="exportReportPdf();" class="btn-secondary" style="width: auto; padding: 4px 11px; font-size: 0.74rem; border-color: rgba(212,175,55,0.5); color: #fbbf24; cursor: pointer; font-weight: 700; background: rgba(212,175,55,0.1); border-radius: 6px; transition: all 0.2s;">
-                    📥 导出 PDF深度完整卷宗
+                <button id="btn-export-pdf" onclick="exportReportPdf();" class="btn-secondary" style="width: auto; padding: 4px 10px; font-size: 0.72rem; border-color: rgba(212,175,55,0.5); color: #fbbf24; cursor: pointer; font-weight: 700; background: rgba(212,175,55,0.1); border-radius: 6px; white-space: nowrap;">
+                    📥 导出/打印 PDF卷宗
                 </button>
             </div>
 
@@ -326,7 +359,7 @@
         </p>
 
         <div style="margin-bottom: 12px;">
-            <input type="text" id="input-license-key" placeholder="请输入卡密 (如 SIN-XXXX 或 VIP888)"
+            <input type="text" id="input-license-key" placeholder="请输入卡密"
                 style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; padding: 12px 14px; color: #ffffff; font-family: var(--font-mono); font-size: 0.95rem; outline: none;">
             <div id="license-error-tip" style="color: #ef4444; font-size: 0.8rem; margin-top: 4px; min-height: 16px;"></div>
         </div>

@@ -369,67 +369,10 @@ const QUESTIONS = [
 ];
 
 function getHellVisitorTitle(percentages, ranking) {
-    const p = percentages;
     const dom1 = ranking[0].id;
     const dom2 = ranking[1].id;
-    const minSin = ranking[ranking.length - 1].id;
 
-    // 1. 特殊极值隐藏彩蛋 (需与主罪或次罪气质相符，避免人设割裂)
-    if (minSin === 'lust' && p.lust <= 30 && (dom1 === 'wrath' || dom2 === 'wrath') && p.wrath >= 65) {
-        return {
-            title: '地狱来了一位【修罗狂僧】',
-            tagline: '色欲清零杀心拉满，阎王看了都直呼功德无量但命犯修罗'
-        };
-    }
-    if ((dom1 === 'greed' || dom1 === 'sloth') && p.greed >= 65 && p.sloth >= 60) {
-        return {
-            title: '地狱来了一位【笑面虎】',
-            tagline: '表面人畜无害佛系摆烂，暗地里精算利益寸步不让'
-        };
-    }
-    if ((dom1 === 'lust' || dom2 === 'lust') && p.lust >= 70 && p.pride >= 65) {
-        return {
-            title: '地狱来了一位【纯血魅魔】',
-            tagline: '高不可攀的极度魅惑，视人间情感为掌中玩物'
-        };
-    }
-    if ((dom1 === 'wrath' || dom2 === 'wrath') && p.wrath >= 70 && p.pride >= 65) {
-        return {
-            title: '地狱来了一位【暴君阎罗】',
-            tagline: '谁动谁死绝不妥协，连地府小鬼见了都要排队递烟'
-        };
-    }
-    if ((dom1 === 'greed' || dom1 === 'gluttony') && p.greed >= 70 && p.gluttony >= 65) {
-        return {
-            title: '地狱来了一位【吞金巨兽】',
-            tagline: '既要富可敌国又要吃尽人间美味，物质与感官的双重饕餮'
-        };
-    }
-    if ((dom1 === 'sloth' || dom2 === 'sloth') && p.sloth >= 70 && p.pride >= 65) {
-        return {
-            title: '地狱来了一位【厌世神明】',
-            tagline: '看透世俗愚昧直接摆烂，躺在地府门口睡觉的避世魔尊'
-        };
-    }
-    if ((dom1 === 'envy' || dom2 === 'envy') && p.envy >= 70 && p.greed >= 60) {
-        return {
-            title: '地狱来了一位【卷王猎手】',
-            tagline: '只要看到别人过得好就浑身难受，化嫉妒为搞钱终极燃料'
-        };
-    }
-    if ((dom1 === 'sloth' || dom2 === 'sloth') && p.sloth >= 70 && p.gluttony >= 65) {
-        return {
-            title: '地狱来了一位【极乐肥宅】',
-            tagline: '只要美食与被窝管够，三界兴亡与我毫无瓜葛'
-        };
-    }
-    if ((dom1 === 'lust' || dom2 === 'lust') && p.lust >= 70 && p.wrath >= 60) {
-        return {
-            title: '地狱来了一位【病娇狂徒】',
-            tagline: '爱到极致便是毁灭，宁可同归于尽也绝不放手'
-        };
-    }
-
+    // 精准双罪印复合称号矩阵 (42 种主次组合，千人千面绝不重样)
     const comboTitles = {
         // --- 1. 傲慢为主 (Pride Dominant: 路西法) ---
         'pride_greed': { title: '地狱来了一位【帝国执政官】', tagline: '“既要无上的尊严名望，又要实打实的资本江山”' },

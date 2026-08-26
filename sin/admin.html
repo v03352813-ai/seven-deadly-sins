@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>七宗罪系统 - 商业化运营与多渠道卡密管理后台</title>
+    <script>
+        (function() {
+            var base = document.createElement('base');
+            if (window.location.pathname.indexOf('/sin') !== -1) {
+                base.href = '/sin/';
+            } else if (window.location.pathname.indexOf('/%E4%B8%83%E5%AE%97%E7%BD%AA') !== -1 || window.location.pathname.indexOf('/七宗罪') !== -1) {
+                base.href = '/' + encodeURIComponent('七宗罪') + '/';
+            } else {
+                base.href = './';
+            }
+            document.head.appendChild(base);
+        })();
+    </script>
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
         .admin-box {
@@ -140,8 +153,11 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
             <div class="form-group">
-                <label style="color: #fbbf24;">🔑 小红书/私域通用专属密码（12位）：</label>
-                <input type="text" id="cfg-universal-key" class="form-control" placeholder="默认12位: YZYM20268888" style="font-family: var(--font-mono); color: #fbbf24; border-color: rgba(212,175,55,0.5);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <label style="color: #fbbf24; margin-bottom: 0;">🔑 小红书/私域专属密码（12位无规律）：</label>
+                    <button type="button" id="btn-rand-key" style="background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4); color: #fbbf24; font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; cursor: pointer;">🎲 随机生成</button>
+                </div>
+                <input type="text" id="cfg-universal-key" class="form-control" placeholder="如: 8F2K9M7Q3X5W" style="font-family: var(--font-mono); color: #fbbf24; border-color: rgba(212,175,55,0.5);">
             </div>
             <div class="form-group">
                 <label>客服微信 / 公众号提示：</label>
@@ -341,6 +357,19 @@
         document.getElementById('stat-used-keys').textContent = used;
         const rate = total > 0 ? Math.round((used / total) * 100) : 0;
         document.getElementById('stat-used-rate').textContent = `${rate}%`;
+    }
+
+    // 随机生成 12 位无规律高强度口令
+    const btnRand = document.getElementById('btn-rand-key');
+    if (btnRand) {
+        btnRand.addEventListener('click', () => {
+            const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+            let key = '';
+            for (let i = 0; i < 12; i++) {
+                key += chars[Math.floor(Math.random() * chars.length)];
+            }
+            document.getElementById('cfg-universal-key').value = key;
+        });
     }
 
     // 保存基础配置

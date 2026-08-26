@@ -70,6 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initEvents() {
     dom.btnStart.addEventListener('click', () => {
+        // 严格前置门票制：未付款/无密钥时，点击开始直接拦截并弹出购买/输入密钥弹窗！
+        if (!isReportUnlocked()) {
+            if (dom.modalLicense) {
+                dom.modalLicense.classList.add('active');
+                if (dom.licenseErrorTip) {
+                    dom.licenseErrorTip.textContent = '🔒 本测验为专属付费档案，请先输入密钥或前往小红书购买！';
+                }
+            }
+            return;
+        }
+
         const nameVal = dom.inputUserName.value.trim();
         state.userName = nameVal || '探索者';
         switchView('quiz');
@@ -85,15 +96,21 @@ function initEvents() {
 
     if (dom.btnRestartQuiz) {
         dom.btnRestartQuiz.addEventListener('click', () => {
-            if (confirm('确定要重新过堂审判吗？已答卷宗将被重置。')) {
+            if (confirm('确定要重新过堂审判吗？已答卷宗将被重置并开启全新测试。')) {
+                localStorage.removeItem('sin_saved_result_v1');
                 state.currentQuestionIndex = 0;
                 state.answers = [];
                 state.currentShowcaseTheme = 'avatar';
                 state.currentPosterTheme = 'avatar';
+                const restoreBox = document.getElementById('box-restore-result');
+                if (restoreBox) restoreBox.style.display = 'none';
                 switchView('welcome');
             }
         });
     }
+
+    // 检查是否有已保存的历史卷宗
+    checkSavedHistoryResult();
 
     // 顶部 Tab 切换 C 位
     if (dom.showcaseTabsBar) {
@@ -412,6 +429,18 @@ function renderResultView() {
 
         // 7. 检查卡密解锁状态
         checkReportLockStatus();
+
+        // 8. 自动缓存测试卷宗记录至本地，防止误刷新或切出导致数据丢失
+        try {
+            localStorage.setItem('sin_saved_result_v1', JSON.stringify({
+                answers: state.answers,
+                userName: state.userName,
+                dominantId: dominantId,
+                timestamp: Date.now()
+            }));
+        } catch (storageErr) {
+            console.warn('缓存测试记录失败', storageErr);
+        }
     } catch (e) {
         console.error('renderResultView 异常', e);
     }
@@ -765,9 +794,15 @@ async function handleVerifyLicense() {
     try {
         const res = await verifyLicenseKey(key);
         if (res.success) {
-            alert(res.message);
+            showToast('✨ 密钥验证成功！已解锁测试权限');
             dom.modalLicense.classList.remove('active');
             checkReportLockStatus();
+            if (state.currentStep === 'welcome') {
+                const nameVal = dom.inputUserName.value.trim();
+                state.userName = nameVal || '探索者';
+                switchView('quiz');
+                renderQuestion(0);
+            }
         } else {
             dom.licenseErrorTip.textContent = res.message;
         }
@@ -931,5 +966,49 @@ function fallbackCopyText(text, withAlert) {
         if (withAlert) alert('复制口令失败，请手动长按复制：' + text);
     }
     document.body.removeChild(input);
+}
+
+// ==========================================================================
+// 历史测试卷宗自动恢复与智能导出模块
+// ==========================================================================
+
+function checkSavedHistoryResult() {
+    try {
+        const saved = localStorage.getItem('sin_saved_result_v1');
+        const restoreBox = document.getElementById('box-restore-result');
+        const btnRestore = document.getElementById('btn-restore-result');
+        if (saved && restoreBox && btnRestore) {
+            const data = JSON.parse(saved);
+            if (data && data.answers && data.answers.length === QUESTIONS.length) {
+                restoreBox.style.display = 'flex';
+                btnRestore.onclick = () => {
+                    state.answers = data.answers;
+                    state.userName = data.userName || '探索者';
+                    state.calculationResult = calculateSinResults(state.answers);
+                    switchView('result');
+                    renderResultView();
+                };
+            }
+        }
+    } catch (e) {
+        console.warn('解析历史卷宗异常', e);
+    }
+}
+
+function exportReportPdf() {
+    const isMobileOrWeChat = /MicroMessenger|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobileOrWeChat) {
+        // 手机/微信端最佳体验：直接生成 3:4 超清海报长图，长按直接保存到相册，绝不跳转、绝不丢数据！
+        handleGeneratePoster();
+    } else {
+        // 电脑端：直接调起系统打印/保存为 PDF
+        try {
+            window.print();
+        } catch (e) {
+            console.warn('调用系统打印异常', e);
+            alert('提示：请使用浏览器菜单中的「打印/保存为PDF」导出卷宗');
+        }
+    }
 }
 
