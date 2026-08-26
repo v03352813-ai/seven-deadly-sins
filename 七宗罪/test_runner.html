@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>七宗罪系统全功能与安全性自动化测试套件</title>
+    <style>
+        body { font-family: monospace; background: #111; color: #eee; padding: 20px; }
+        .pass { color: #10b981; }
+        .fail { color: #ef4444; font-weight: bold; }
+        .warn { color: #f59e0b; }
+        .section { margin-top: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        pre { background: #1e1e1e; padding: 10px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <h2>七宗罪系统多渠道与设备防刷全自动测试</h2>
+    <div id="test-output"></div>
+
+    <script src="assets/js/questions.js"></script>
+    <script src="assets/js/reports.js"></script>
+    <script src="assets/js/license.js"></script>
+    <script src="assets/js/poster.js"></script>
+
+    <script>
+        const out = document.getElementById('test-output');
+        function log(msg, cls = '') {
+            const div = document.createElement('div');
+            div.className = cls;
+            div.innerHTML = msg;
+            out.appendChild(div);
+        }
+
+        const stats = { total: 0, passed: 0, failed: 0 };
+        function assert(cond, name, details = '') {
+            stats.total++;
+            if (cond) {
+                stats.passed++;
+                log(`[PASS] ${name}`, 'pass');
+            } else {
+                stats.failed++;
+                log(`[FAIL] ${name} ${details}`, 'fail');
+            }
+        }
+
+        async function runTests() {
+            log('<h3>1. 题库与算法完整性测试 (Questions & Scoring)</h3>', 'section');
+            assert(Array.isArray(QUESTIONS) && QUESTIONS.length === 21, '题库题量必须为 21 道', `当前: ${QUESTIONS?.length}`);
+            
+            let optionsValid = true;
+            QUESTIONS.forEach((q, idx) => {
+                if (!q.title || !Array.isArray(q.options) || q.options.length !== 4) {
+                    optionsValid = false;
+                }
+            });
+            assert(optionsValid, '所有 21 道题必须包含完整标题与 4 个选项');
+
+            // 500 次随机答题
+            let calcSuccess = true;
+            for (let i = 0; i < 500; i++) {
+                const ans = QUESTIONS.map(q => Math.floor(Math.random() * q.options.length));
+                const res = calculateSinResults(ans);
+                if (!res || !res.dominant || !res.dominant.id || !res.ranking || res.ranking.length !== 7) {
+                    calcSuccess = false;
+                }
+            }
+            assert(calcSuccess, '500 次随机答题计算均正常');
+
+            log('<h3>2. 深度报告卷宗数据完整性测试 (Reports Data Integrity)</h3>', 'section');
+            const sins = ['pride', 'greed', 'lust', 'envy', 'wrath', 'gluttony', 'sloth'];
+            let allReportsValid = true;
+            sins.forEach(sin => {
+                const r = REPORTS_DATA[sin];
+                if (!r || !r.id || !r.name || !r.coreMotto || !r.coreAnalysis || !r.behaviorTraits || !r.triggerPoints || !r.lightGift || !r.soulChemistry || !r.healingAdvice) {
+                    allReportsValid = false;
+                }
+            });
+            assert(allReportsValid, '七大罪名完整千字报告结构全部齐备');
+
+            log('<h3>3. 多渠道卡密隔离与防伪算法测试 (Multi-Channel License Engine)</h3>', 'section');
+            // 生成小红书渠道
+            const xhsKeys = generateBatchKeys(50, 'XHS');
+            assert(xhsKeys.length === 50 && xhsKeys.every(k => k.startsWith('XHS-')), '小红书专属卡密 (XHS-) 批量生成正确');
+            assert(xhsKeys.every(k => validateAlgorithmKey(k)), '小红书卡密 100% 通过防伪哈希校验');
+
+            // 生成闲鱼渠道
+            const xyKeys = generateBatchKeys(50, 'XY');
+            assert(xyKeys.length === 50 && xyKeys.every(k => k.startsWith('XY-')), '闲鱼专属卡密 (XY-) 批量生成正确');
+            assert(xyKeys.every(k => validateAlgorithmKey(k)), '闲鱼卡密 100% 通过防伪哈希校验');
+
+            // 生成通用渠道
+            const sinKeys = generateBatchKeys(50, 'SIN');
+            assert(sinKeys.length === 50 && sinKeys.every(k => k.startsWith('SIN-')), '通用专属卡密 (SIN-) 批量生成正确');
+            assert(sinKeys.every(k => validateAlgorithmKey(k)), '通用卡密 100% 通过防伪哈希校验');
+
+            log('<h3>4. 2~3 台设备指纹防刷与拦截测试 (Multi-Device Binding Limits)</h3>', 'section');
+            // 测试单卡密 3 台设备限制
+            const testKey = generateSingleKey('XY');
+            const pool = getGeneratedKeysPool();
+            pool[testKey] = {
+                key: testKey,
+                channel: 'XY',
+                createdAt: new Date().toISOString(),
+                used: false,
+                boundDevices: []
+            };
+            localStorage.setItem(USED_KEYS_STORAGE_KEY, JSON.stringify(pool));
+
+            // 设备 1 核销
+            localStorage.setItem(DEVICE_ID_KEY, 'DEV_PHONE_01');
+            const v1 = await verifyLicenseKey(testKey);
+            assert(v1.success, '设备 1 (买家手机) 激活成功');
+
+            // 设备 2 核销
+            localStorage.setItem(DEVICE_ID_KEY, 'DEV_IPAD_02');
+            const v2 = await verifyLicenseKey(testKey);
+            assert(v2.success, '设备 2 (买家 iPad) 激活成功');
+
+            // 设备 3 核销
+            localStorage.setItem(DEVICE_ID_KEY, 'DEV_PC_03');
+            const v3 = await verifyLicenseKey(testKey);
+            assert(v3.success, '设备 3 (买家电脑) 激活成功');
+
+            // 设备 1 再次打开（无感直通）
+            localStorage.setItem(DEVICE_ID_KEY, 'DEV_PHONE_01');
+            const v1_again = await verifyLicenseKey(testKey);
+            assert(v1_again.success, '已绑定设备 1 再次打开直接解锁 (不占新名额)');
+
+            // 设备 4 尝试使用 (群友/朋友白嫖) -> 必须被严格拦截！
+            localStorage.setItem(DEVICE_ID_KEY, 'DEV_FRIEND_04');
+            const v4 = await verifyLicenseKey(testKey);
+            assert(!v4.success && v4.message.includes('上限'), '设备 4 (跨设备转发) 被系统严格拦截并报警', `原因: ${v4.message}`);
+
+            log('<h3>5. 图片资源与海报引擎检测 (Assets & Canvas)</h3>', 'section');
+            let imgTestsPass = true;
+            for (const sin of sins) {
+                const ok = await new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = () => resolve(true);
+                    img.onerror = () => resolve(false);
+                    img.src = `assets/images/characters/${sin}.jpg`;
+                });
+                if (!ok) imgTestsPass = false;
+            }
+            assert(imgTestsPass, '七宗罪全部立绘图片 (7/7 含暴食) 均可正常读取');
+
+            const dummyResult = calculateSinResults(QUESTIONS.map(() => 0));
+            const posterData = await generateSinPoster(dummyResult, '测试买家', 'avatar');
+            assert(!!posterData && posterData.startsWith('data:image/png;base64,'), '1080x1440 专属海报生成正常');
+
+            log('<h3>测试总结</h3>', 'section');
+            log(`总计用例: <strong>${stats.total}</strong> | 通过: <span class="pass">${stats.passed}</span> | 失败: <span class="fail">${stats.failed}</span>`);
+            
+            const summaryDiv = document.createElement('div');
+            summaryDiv.id = 'test-summary-final';
+            summaryDiv.textContent = `FINAL_STATS: TOTAL=${stats.total}, PASSED=${stats.passed}, FAILED=${stats.failed}`;
+            document.body.appendChild(summaryDiv);
+        }
+
+        runTests();
+    </script>
+</body>
+</html>

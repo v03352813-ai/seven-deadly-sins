@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+*.log
+test_out.txt
+.system_generated/
+scratch/
