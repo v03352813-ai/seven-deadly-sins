@@ -1,11 +1,21 @@
 var CUSTOMER_SERVICE_WECHAT = "你的客服微信"; // 可替换为您的微信号，方便没有小红书买家直接添加购买
 var STORE_SHOP_LINK = "https://m.xianyu.com"; // 可替换为您的小红书/闲鱼店铺或商品链接
-/**
- * Assessment Platform Core Engine - Standalone Single Test Architecture
- * High-Density Comprehensive Result Engine & Instant Bulletproof Runner
- */
-
 var MINI_PROGRAM_LINK = "#小程序://一子一木/0JPDrt84ecI5Gwd";
+
+// ==========================================================================
+// 0. Vercel Web Analytics & Speed Insights Integration
+// ==========================================================================
+(function() {
+  if (typeof window !== 'undefined') {
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    if (!document.querySelector('script[src*="/_vercel/insights/script.js"]')) {
+      var vaScript = document.createElement('script');
+      vaScript.defer = true;
+      vaScript.src = '/_vercel/insights/script.js';
+      document.head.appendChild(vaScript);
+    }
+  }
+})();
 
 // ==========================================================================
 // 1. Comprehensive Result Profiles Database
