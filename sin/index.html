@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>七宗罪·灵魂暗面深度测验 | 地狱来客神级审判</title>
+    <meta name="description" content="直面你人前伪装的七美德，与深渊深处真实的七宗罪。测出你的地狱审判神级称号！">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- Toast 提示容器 -->
+<div id="toastMsg" class="toast-msg">
+    <span>📱</span> <span id="toastText">已复制小程序口令，正在打开【一子一木】...</span>
+</div>
+
+<div id="main-container" class="app-container">
+
+    <!-- 顶部状态栏：地狱罪印审判司 + C位切换标签 + 壁纸抽奖 -->
+    <header class="app-header">
+        <div class="header-brand">
+            <span style="font-size: 1.15rem;">💀</span>
+            <span class="header-title">地狱罪印审判司</span>
+        </div>
+
+        <!-- 结果页激活时展示的 3 款 C 位切换胶囊按钮（在同一导航行上） -->
+        <div class="showcase-tabs-bar" id="showcase-tabs-bar" style="display: none;">
+            <button class="capsule-tab active" data-theme="avatar">
+                <span class="tab-icon">👑</span>
+                <span class="tab-label">觉醒神位</span>
+            </button>
+            <button class="capsule-tab" data-theme="radar">
+                <span class="tab-icon">🕸️</span>
+                <span class="tab-label">灵魂蛛网</span>
+            </button>
+            <button class="capsule-tab" data-theme="ranking">
+                <span class="tab-icon">📊</span>
+                <span class="tab-label">罪位排行</span>
+            </button>
+        </div>
+
+        <button class="btn btn-reward" onclick="openMiniProgramAd();" style="padding: 4px 10px; font-size: 0.76rem; border-radius: 14px;">
+            🎁 免费壁纸/抽大奖
+        </button>
+    </header>
+
+    <!-- 视图 1：英雄开场页 -->
+    <main id="view-welcome" class="page-view active" style="padding: 24px 18px 40px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+            
+            <div class="judge-avatar-wrapper" style="margin-bottom: 12px;">
+                <div class="judge-avatar-ring"></div>
+                <div class="judge-avatar-img-box">
+                    <svg width="100%" height="100%" viewBox="0 0 100 100">
+                        <defs>
+                            <radialGradient id="chiefGlow" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#ef4444" stop-opacity="0.8"/>
+                                <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                            </radialGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="46" fill="#120c18" stroke="#d4af37" stroke-width="2.5"/>
+                        <circle cx="50" cy="50" r="40" fill="url(#chiefGlow)" opacity="0.4"/>
+                        <path d="M22,35 L34,18 L50,32 L66,18 L78,35 L72,50 L28,50 Z" fill="#d4af37" stroke="#fbbf24" stroke-width="1.5"/>
+                        <polygon points="50,42 66,60 50,85 34,60" fill="#2d1218" stroke="#dc2626" stroke-width="2"/>
+                        <line x1="40" y1="58" x2="48" y2="58" stroke="#ffffff" stroke-width="3"/>
+                        <line x1="60" y1="58" x2="52" y2="58" stroke="#ffffff" stroke-width="3"/>
+                        <circle cx="44" cy="58" r="1.5" fill="#ef4444"/>
+                        <circle cx="56" cy="58" r="1.5" fill="#ef4444"/>
+                    </svg>
+                </div>
+            </div>
+
+            <p style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 4px;">SEVEN DEADLY SINS & VIRTUES</p>
+            <h1 style="font-family: var(--font-serif); font-size: 1.8rem; font-weight: 900; line-height: 1.3; margin-bottom: 8px; color: #ffffff;">
+                七宗罪 · 灵魂暗面<br>地狱判官深层测验
+            </h1>
+            <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 360px; margin: 0 auto; line-height: 1.5;">
+                直面你人前伪装的美德，与深渊深处真实的罪印。
+            </p>
+        </div>
+
+        <!-- 1. 受审代号 / 昵称输入 -->
+        <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 0.84rem; color: var(--text-muted); margin-bottom: 8px;">
+                输入你的受审代号 / 昵称：
+            </label>
+            <input type="text" id="input-username" placeholder="例如：夜行者 / 你的名字" maxlength="12"
+                style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; color: #ffffff; font-size: 1rem; outline: none;">
+        </div>
+
+        <!-- 2. 审判过堂须知与特色亮点卡片 (居中放置) -->
+        <div class="glass-card gold-border" style="margin-bottom: 18px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                <span style="color: var(--gold); font-size: 1.1rem;">⚖️</span>
+                <span style="font-weight: 700; font-size: 0.95rem; color: #f3f4f6;">审判过堂须知</span>
+            </div>
+            <ul style="color: #9ca3af; font-size: 0.86rem; padding-left: 20px; line-height: 1.75;">
+                <li>21 道发疯情境暴击题</li>
+                <li>测定 <strong>地狱来了一位【XXX】</strong> 爆款称号</li>
+                <li>生成 <strong>暗红蛛网分布图</strong> 与 <strong>维度血条排行</strong></li>
+                <li>解锁 <strong>镜像</strong> 与千字潜意识救赎档案</li>
+            </ul>
+        </div>
+
+        <!-- 3. 核心开测 CTA 按钮 -->
+        <button id="btn-start-quiz" class="btn-mystic">
+            <span>开启灵魂过堂 ➔</span>
+        </button>
+
+        <div style="text-align: center; margin-top: 14px; margin-bottom: 20px; color: var(--text-dim); font-size: 0.76rem;">
+            已有 68,900+ 位灵魂完成地狱档案归档
+        </div>
+
+        <!-- 🎁 一子一木专属 4K 壁纸与抽奖引流横幅 -->
+        <div class="ad-reward-banner">
+            <div class="ad-content-left">
+                <div class="ad-icon-badge">
+                    <img src="assets/images/wallpaper_thumb.jpg" alt="4K壁纸预览" class="ad-thumb-img">
+                </div>
+                <div class="ad-text-group">
+                    <h4 style="font-size: 0.92rem; font-weight: 700; color: #fbbf24; margin-bottom: 2px;">测七宗罪领【一子一木】壁纸积分抽大奖</h4>
+                    <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; line-height: 1.4;">凭测试结果前往微信小程序，免费兑换 4K 高清绝美壁纸并参与积分抽大奖！</p>
+                    <span class="ad-code-badge">#小程序://一子一木/0JPDrt84ecI5Gwd</span>
+                </div>
+            </div>
+            <button class="btn-reward" onclick="openMiniProgramAd();">
+                🎁 免费领取/抽奖 →
+            </button>
+        </div>
+    </main>
+
+    <!-- 视图 2：沉浸式发疯答题页 -->
+    <main id="view-quiz" class="page-view" style="padding: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--gold);">
+            <span id="quiz-scenario-badge" style="background: rgba(220,38,38,0.15); color: #f87171; padding: 2px 8px; border-radius: 4px; font-weight: 700;">💥 职场发疯时刻</span>
+            <span id="quiz-progress-text">1 / 21</span>
+        </div>
+        <div class="progress-bar-container" style="border-radius: 4px; margin-bottom: 18px;">
+            <div id="quiz-progress-bar" class="progress-bar-fill" style="width: 5%;"></div>
+        </div>
+
+        <!-- 题目卡片 -->
+        <div class="glass-card" style="margin-bottom: 16px; min-height: 100px; display: flex; align-items: center; border-color: rgba(220,38,38,0.3);">
+            <h2 id="quiz-question-title" style="font-size: 1.05rem; font-weight: 700; line-height: 1.5; color: #ffffff;">
+                题目加载中...
+            </h2>
+        </div>
+
+        <!-- 选项列表 -->
+        <div id="quiz-options-list" style="margin-bottom: 16px;"></div>
+
+        <!-- 底部返回上一题 -->
+        <div style="display: flex; justify-content: flex-start;">
+            <button id="btn-prev-question" style="background: none; border: none; color: var(--text-dim); font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 4px;">
+                <span>←</span>
+                <span>返回上一题</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- 视图 3：地府生死簿急速过审过渡页 -->
+    <main id="view-analyzing" class="page-view" style="padding: 80px 18px; text-align: center;">
+        <div class="anim-alert-pulse" style="font-size: 4rem; margin-bottom: 20px;">
+            📜
+        </div>
+        <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--gold); margin-bottom: 10px;">
+            地狱生死簿过堂审判中...
+        </h3>
+        <div style="background: rgba(220,38,38,0.1); border: 1px dashed rgba(220,38,38,0.4); padding: 12px; border-radius: 10px; max-width: 320px; margin: 0 auto 16px;">
+            <p id="analyzing-tip" style="color: #fca5a5; font-size: 0.86rem; font-weight: 600; min-height: 24px;">
+                ⚠️ 警告：检测到极高浓度欲望与精神暗面...
+            </p>
+        </div>
+        <div style="font-size: 0.76rem; color: var(--text-dim);">阎王正在翻看卷宗，即将落印宣判</div>
+    </main>
+
+    <!-- 视图 4：小红书实图 1:1 同款结果页 -->
+    <main id="view-result" class="page-view" style="padding: 14px 12px 50px;">
+        
+        <!-- 动态画框插槽容器 -->
+        <div id="showcase-container" class="showcase-container">
+            <!-- 顶部 C 位主舞台 (Hero Slot) -->
+            <div id="showcase-hero-slot" class="showcase-slot showcase-hero-slot"></div>
+
+            <!-- 盲盒爆款倾斜印章（固定居中核心爆点） -->
+            <div class="viral-sticker-box" style="margin: 6px 0 12px;">
+                <div id="res-hell-title" class="viral-sticker-title">地狱来了一位【笑面虎】</div>
+                <div id="res-hell-tagline" class="viral-sticker-subtitle">“表面人畜无害佛系摆烂，暗地里精算利益寸步不让”</div>
+            </div>
+
+            <!-- 底部两个副舞台 (Sub Slots) -->
+            <div class="showcase-sub-grid">
+                <div id="showcase-sub-left" class="showcase-slot showcase-sub-slot" data-slot="sub-left"></div>
+                <div id="showcase-sub-right" class="showcase-slot showcase-sub-slot" data-slot="sub-right"></div>
+            </div>
+        </div>
+
+        <!-- 3 个独立的画框 DOM 模块（通过 JS 动态挂载到各插槽中） -->
+        <div id="module-pool" style="display: none;">
+            <!-- 模块 1：魔神立绘卡片 -->
+            <div id="mod-avatar" class="showcase-card mod-card-avatar" data-module="avatar">
+                <div class="card-pin-badge">⚡ 点击置顶</div>
+                <div class="viral-section-title">— 觉 醒 神 位 卷 宗 —</div>
+
+                <div id="res-judge-name-tag" class="demon-lord-title-text" style="margin-top: 6px;">
+                    深渊傲皇 · 路西法 (Lucifer)
+                </div>
+
+                <div class="demon-lord-img-wrapper">
+                    <img id="res-demon-lord-img" class="demon-lord-img" src="assets/images/characters/pride.jpg" alt="觉醒魔神王座">
+                </div>
+
+                <div id="res-demon-lord-motto" class="demon-lord-motto-text">
+                    “宁愿在自己的地狱中孤独称王，也绝不在平庸的人间随波逐流。”
+                </div>
+            </div>
+
+            <!-- 模块 2：纯净 7 维灵魂蛛网雷达卡片 -->
+            <div id="mod-radar" class="showcase-card mod-card-radar" data-module="radar">
+                <div class="card-pin-badge">⚡ 点击置顶</div>
+                <div class="viral-section-title" style="margin-bottom: 4px;">— 七 宗 罪 维 度 分 布 —</div>
+                
+                <div class="radar-display-box" style="margin-bottom: 2px;">
+                    <canvas id="classicRadarCanvas" width="340" height="270" style="width: 340px; height: 270px; max-width: 100%; display: block;"></canvas>
+                </div>
+            </div>
+
+            <!-- 模块 3：7 宗罪维度排行榜卡片 -->
+            <div id="mod-ranking" class="showcase-card mod-card-ranking" data-module="ranking">
+                <div class="card-pin-badge">⚡ 点击置顶</div>
+                <div class="viral-section-title" style="margin-bottom: 8px;">— 七 宗 罪 维 度 排 行 —</div>
+
+                <!-- 维度排行榜血条 (PR/GR/EN/WR/SL/GL/LU) -->
+                <div id="res-rank-list" class="rank-list" style="margin-bottom: 4px;"></div>
+            </div>
+        </div>
+
+        <!-- 七美德镜面对照卡片 (置于生成海报按钮上方) -->
+        <div id="card-virtue-mirror" class="glass-card" style="margin-bottom: 16px; border-left: 3px solid #10b981;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <h3 style="font-size: 0.95rem; font-weight: 700; color: #10b981;">🕊️ 光暗双生：七美德伪装镜像</h3>
+                <span id="res-virtue-sublabel" style="font-size: 0.75rem; color: var(--text-dim);">人前伪装 vs 深渊本色</span>
+            </div>
+            <p style="color: #9ca3af; font-size: 0.84rem; line-height: 1.5;">
+                你在人前展现的伪装指数：<strong style="color: #ffffff;" id="res-virtue-score">88%</strong>。<span id="res-virtue-detail">你在世俗社交中极擅长用理智和温和掩盖内心的暗黑火焰。</span>
+            </p>
+        </div>
+
+        <!-- 海报一键生成按钮 -->
+        <div style="margin-bottom: 16px;">
+            <button id="btn-open-poster-modal" class="btn-mystic">
+                <span>📸 生成你的专属海报</span>
+            </button>
+        </div>
+
+        <!-- 深度千字长文报告（卡密解锁） -->
+        <div class="glass-card" style="margin-bottom: 24px; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
+                <h3 style="font-family: var(--font-serif); font-size: 1.05rem; color: var(--gold); font-weight: 800;">
+                    📜 地狱判官 · 千字深度审判卷宗
+                </h3>
+                <button id="btn-export-pdf" onclick="exportReportPdf();" class="btn-secondary" style="width: auto; padding: 4px 11px; font-size: 0.74rem; border-color: rgba(212,175,55,0.5); color: #fbbf24; cursor: pointer; font-weight: 700; background: rgba(212,175,55,0.1); border-radius: 6px; transition: all 0.2s;">
+                    📥 导出 PDF深度完整卷宗
+                </button>
+            </div>
+
+            <div id="report-content-box" class="locked-blur-content"></div>
+
+            <!-- 未解锁卡密遮罩 -->
+            <div id="lock-pay-container" class="lock-pay-overlay">
+                <div style="font-size: 2.2rem; margin-bottom: 6px;">🔒</div>
+                <h4 style="font-size: 1.05rem; color: #ffffff; font-weight: 700; margin-bottom: 4px;">解锁地狱判官千字深度卷宗</h4>
+                <p style="color: #9ca3af; font-size: 0.82rem; max-width: 320px; line-height: 1.5; margin-bottom: 14px;">
+                    包含潜意识发疯诱因、双刃剑超能力、灵魂相吸相克与深渊救赎指南
+                </p>
+                <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 20px; padding: 4px 14px; margin-bottom: 14px; color: var(--gold); font-size: 0.8rem; font-weight: 600;">
+                    ✨ 永久绑定 · 专属深度卷宗
+                </div>
+                <button id="btn-open-license-modal" class="btn-mystic" style="max-width: 260px; padding: 12px 18px; font-size: 0.9rem;">
+                    <span>输入卡密 / 立即解锁 ➔</span>
+                </button>
+            </div>
+        </div>
+
+        <button id="btn-restart-quiz" class="btn-secondary" style="margin-bottom: 16px;">
+            <span>🔄 重新过堂审判</span>
+        </button>
+
+        <!-- 🎁 结果页：一子一木专属 4K 壁纸与抽奖引流横幅 -->
+        <div class="ad-reward-banner" style="margin-top: 20px;">
+            <div class="ad-content-left">
+                <div class="ad-icon-badge">
+                    <img src="assets/images/wallpaper_thumb.jpg" alt="4K壁纸预览" class="ad-thumb-img">
+                </div>
+                <div class="ad-text-group">
+                    <h4 style="font-size: 0.92rem; font-weight: 700; color: #fbbf24; margin-bottom: 2px;">测七宗罪领【一子一木】壁纸积分抽大奖</h4>
+                    <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 4px; line-height: 1.4;">凭测试卷宗前往微信小程序，免费兑换 4K 高清绝美壁纸并参与积分抽大奖！</p>
+                    <span class="ad-code-badge">#小程序://一子一木/0JPDrt84ecI5Gwd</span>
+                </div>
+            </div>
+            <button class="btn-reward" onclick="openMiniProgramAd();">
+                🎁 免费领取/抽奖 →
+            </button>
+        </div>
+    </main>
+
+    <!-- 底部 -->
+    <footer style="text-align: center; padding: 16px; color: var(--text-dim); font-size: 0.72rem; border-top: 1px solid rgba(255,255,255,0.05);">
+        Seven Deadly Sins & Virtues Psyche Project
+    </footer>
+
+</div>
+
+<!-- 弹窗 1：卡密兑换 -->
+<div id="modal-license" class="modal-overlay">
+    <div class="modal-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <h3 style="color: var(--gold); font-family: var(--font-serif); font-size: 1.1rem; font-weight: 700;">
+                🔑 兑换卡密解锁档案
+            </h3>
+            <button id="btn-close-license-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">✕</button>
+        </div>
+
+        <p style="color: #9ca3af; font-size: 0.85rem; line-height: 1.5; margin-bottom: 14px;">
+            请输入购买获得的 <strong>卡密兑换码</strong>，输入后永久解锁完整深度报告。
+        </p>
+
+        <div style="margin-bottom: 12px;">
+            <input type="text" id="input-license-key" placeholder="请输入卡密 (如 SIN-XXXX 或 VIP888)"
+                style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(212,175,55,0.3); border-radius: 10px; padding: 12px 14px; color: #ffffff; font-family: var(--font-mono); font-size: 0.95rem; outline: none;">
+            <div id="license-error-tip" style="color: #ef4444; font-size: 0.8rem; margin-top: 4px; min-height: 16px;"></div>
+        </div>
+
+        <button id="btn-verify-license" class="btn-mystic" style="margin-bottom: 12px;">
+            立即验证并解锁
+        </button>
+
+        <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; text-align: center;">
+            <span style="color: var(--text-dim); font-size: 0.8rem;">还没有卡密？</span>
+            <a href="https://xhslink.com" target="_blank" style="color: var(--gold); font-size: 0.8rem; text-decoration: none; font-weight: 600; margin-left: 4px;">
+                去小红书/店铺获取 ➔
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- 弹窗 2：海报预览 -->
+<div id="modal-poster" class="modal-overlay">
+    <div class="modal-content" style="max-width: 460px; padding: 14px 14px 12px; max-height: 94vh; display: flex; flex-direction: column;">
+        <!-- 弹窗顶栏：标题 + 三个版型模块切换 + 关闭按钮 -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 6px;">
+            <div style="font-size: 0.88rem; font-weight: 800; color: var(--gold); font-family: var(--font-serif); letter-spacing: 0.5px; white-space: nowrap;">
+                📜 灵魂罪印卷宗
+            </div>
+            
+            <!-- 海报版型切换 3 个模块（移至顶端标题后方） -->
+            <div class="poster-tabs-bar" id="poster-tabs-bar" style="margin-bottom: 0; display: flex; gap: 4px;">
+                <button class="poster-tab-btn active" data-theme="avatar" style="padding: 4px 8px; font-size: 0.75rem;">👑 立绘款</button>
+                <button class="poster-tab-btn" data-theme="radar" style="padding: 4px 8px; font-size: 0.75rem;">🕸️ 蛛网款</button>
+                <button class="poster-tab-btn" data-theme="ranking" style="padding: 4px 8px; font-size: 0.75rem;">📊 排行款</button>
+            </div>
+
+            <button id="btn-close-poster-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; padding: 2px 4px; line-height: 1;">✕</button>
+        </div>
+
+        <div style="flex: 1; overflow-y: auto; text-align: center; background: #000; border-radius: 12px; margin-bottom: 8px; border: 1px solid var(--border-color); padding: 4px; position: relative;">
+            <div id="poster-loading-mask" class="poster-loading-mask" style="display: none;">
+                <span>⏳ 正在重绘专属海报...</span>
+            </div>
+            <img id="img-poster-preview" src="" alt="七宗罪专属海报" style="width: 100%; border-radius: 8px; display: block;">
+        </div>
+
+        <div style="text-align: center;">
+            <p style="color: #ffffff; font-size: 0.82rem; font-weight: 600; margin: 0;">
+                📱 手机端：长按上方图片即可保存到相册
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- 弹窗 3：一子一木壁纸与抽奖小程序码 -->
+<div id="modal-wallpaper" class="modal-overlay">
+    <div class="modal-content" style="max-width: 380px; padding: 22px 18px; text-align: center;">
+        <div style="display: flex; justify-content: flex-end; margin-top: -8px;">
+            <button id="btn-close-wallpaper-modal" onclick="closeWallpaperModal();" style="background: none; border: none; color: var(--text-muted); font-size: 1.3rem; cursor: pointer; padding: 2px 6px;">✕</button>
+        </div>
+        <div style="margin-top: -6px; margin-bottom: 12px;">
+            <span style="font-size: 0.76rem; background: rgba(245, 158, 11, 0.15); color: #fbbf24; padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.4); font-weight: 700;">🎁 专属壁纸抽奖福利</span>
+            <h3 style="font-size: 1.2rem; font-weight: 700; color: #fff; margin-top: 8px; margin-bottom: 4px;">一子一木壁纸屋</h3>
+            <p style="font-size: 0.8rem; color: #9ca3af; line-height: 1.5; margin-bottom: 12px;">
+                在微信内<strong>长按识别下方小程序码</strong>，或截图扫码，即可免费兑换 4K 高清绝美壁纸并参与积分抽大奖！
+            </p>
+        </div>
+
+        <div style="background: #fff; padding: 10px; border-radius: 14px; display: inline-block; margin-bottom: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.5);">
+            <img src="assets/images/qrcode.png" alt="一子一木壁纸屋小程序码" style="width: 190px; height: 190px; display: block; border-radius: 8px;">
+        </div>
+
+        <div style="background: rgba(0,0,0,0.4); border: 1px dashed rgba(245,158,11,0.45); border-radius: 8px; padding: 6px 10px; font-size: 0.78rem; color: #fcd34d; word-break: break-all; margin-bottom: 12px;">
+            #小程序://一子一木/0JPDrt84ecI5Gwd
+        </div>
+
+        <button class="btn-mystic" onclick="copyMiniProgramCode();" style="padding: 10px 18px; font-size: 0.85rem;">
+            📋 一键复制小程序口令
+        </button>
+    </div>
+</div>
+
+<script src="assets/js/questions.js"></script>
+<script src="assets/js/reports.js"></script>
+<script src="assets/js/license.js"></script>
+<script src="assets/js/poster.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>

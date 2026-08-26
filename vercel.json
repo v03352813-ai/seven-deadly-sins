@@ -1,0 +1,8 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/sin", "destination": "/sin/index.html" },
+    { "source": "/7sins", "destination": "/sin/index.html" },
+    { "source": "/sins", "destination": "/sin/index.html" }
+  ]
+}

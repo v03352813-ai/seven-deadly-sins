@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七宗罪系统 - 商业化运营与多渠道卡密管理后台</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .admin-box {
+            max-width: 840px !important;
+            padding: 30px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.88rem;
+            color: #d1d5db;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: #ffffff;
+            font-size: 0.92rem;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .form-control:focus {
+            border-color: var(--gold);
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+        }
+        .stat-num {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-top: 4px;
+        }
+        .tag-pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body style="padding: 20px 10px;">
+
+<!-- 登录验证层 -->
+<div id="login-panel" class="app-container admin-box glass-card gold-border" style="margin: 40px auto; text-align: center;">
+    <div style="font-size: 3rem; margin-bottom: 12px;">🛡️</div>
+    <h2 class="gothic-title" style="font-size: 1.6rem; margin-bottom: 8px;">管理员认证</h2>
+    <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px;">请输入后台管理密码进入控制台</p>
+
+    <div style="max-width: 320px; margin: 0 auto;">
+        <input type="password" id="admin-pass" class="form-control" placeholder="默认初始密码: admin888" style="text-align: center; margin-bottom: 16px;">
+        <button id="btn-admin-login" class="btn-mystic">登录控制台</button>
+    </div>
+</div>
+
+<!-- 主控制台 -->
+<div id="dashboard-panel" class="app-container admin-box" style="display: none; margin: 20px auto;">
+    
+    <!-- 头部 -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+        <div>
+            <h1 class="gothic-title" style="font-size: 1.35rem;">七宗罪测试 · 商业化与卡密管理后台</h1>
+            <p style="font-size: 0.82rem; color: var(--text-dim);">小红书/闲鱼多渠道隔离、设备指纹防刷限额、批量一键发货管理</p>
+        </div>
+        <a href="index.html" target="_blank" class="btn-secondary" style="width: auto; padding: 8px 16px; font-size: 0.85rem;">
+            预览前台 ➔
+        </a>
+    </div>
+
+    <!-- 统计看板 (分渠道细分) -->
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div style="color: var(--text-muted); font-size: 0.8rem;">📦 全部卡密库存</div>
+            <div id="stat-total-keys" class="stat-num">0</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 2px;">未核销: <span id="stat-unused-total" style="color: #a78bfa;">0</span></div>
+        </div>
+        <div class="stat-card" style="border-color: rgba(239, 68, 68, 0.4);">
+            <div style="color: #f87171; font-size: 0.8rem;">📕 小红书渠道 (XHS)</div>
+            <div id="stat-xhs-keys" class="stat-num" style="color: #f87171;">0</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 2px;">未售库存: <span id="stat-xhs-unused" style="color: #fca5a5;">0</span></div>
+        </div>
+        <div class="stat-card" style="border-color: rgba(234, 179, 8, 0.4);">
+            <div style="color: #facc15; font-size: 0.8rem;">🐟 闲鱼渠道 (XY)</div>
+            <div id="stat-xy-keys" class="stat-num" style="color: #facc15;">0</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 2px;">闲管家未售: <span id="stat-xy-unused" style="color: #fef08a;">0</span></div>
+        </div>
+        <div class="stat-card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div style="color: #10b981; font-size: 0.8rem;">✅ 已核销使用</div>
+            <div id="stat-used-keys" class="stat-num" style="color: #10b981;">0</div>
+            <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 2px;">核销率: <span id="stat-used-rate" style="color: #6ee7b7;">0%</span></div>
+        </div>
+    </div>
+
+    <!-- 模块 1：运营模式与设备限额设定 -->
+    <div class="glass-card" style="margin-bottom: 24px;">
+        <h3 style="color: var(--gold); font-size: 1.05rem; font-weight: 700; margin-bottom: 14px;">⚙️ 运营商业模式与防刷设置</h3>
+        
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+            <div class="form-group">
+                <label>前台运行模式：</label>
+                <select id="cfg-mode" class="form-control">
+                    <option value="license">🔐 卡密解锁模式（用户需输入卡密查看千字报告，用于变现搞钱）</option>
+                    <option value="free">🎁 纯免费引流模式（所有用户直接免费看完整报告，用于快速吸粉）</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>单卡密允许绑定设备数：</label>
+                <select id="cfg-devices" class="form-control">
+                    <option value="1">1 台设备 (严防严控)</option>
+                    <option value="2">2 台设备 (手机+电脑)</option>
+                    <option value="3" selected>3 台设备 (推荐: 手机+电脑+iPad)</option>
+                    <option value="5">5 台设备 (宽松模式)</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+                <label style="color: #fbbf24;">🔑 小红书/私域通用专属密码（12位）：</label>
+                <input type="text" id="cfg-universal-key" class="form-control" placeholder="默认12位: YZYM20268888" style="font-family: var(--font-mono); color: #fbbf24; border-color: rgba(212,175,55,0.5);">
+            </div>
+            <div class="form-group">
+                <label>客服微信 / 公众号提示：</label>
+                <input type="text" id="cfg-wx" class="form-control" placeholder="如：soul_test_vip">
+            </div>
+            <div class="form-group">
+                <label>购买卡密跳转链接：</label>
+                <input type="text" id="cfg-url" class="form-control" placeholder="https://...">
+            </div>
+        </div>
+
+        <button id="btn-save-config" class="btn-mystic" style="width: auto; padding: 10px 24px; font-size: 0.9rem;">
+            保存基础配置生效
+        </button>
+    </div>
+
+    <!-- 模块 2：多渠道批量生成与隔离导出 -->
+    <div class="glass-card" style="margin-bottom: 24px;">
+        <h3 style="color: var(--gold); font-size: 1.05rem; font-weight: 700; margin-bottom: 12px;">📦 分渠道批量生成卡密与导出</h3>
+        <p style="color: var(--text-muted); font-size: 0.84rem; margin-bottom: 14px; line-height: 1.5;">
+            选择专属销售渠道生成卡密，导出为对应 TXT 文本，直接导入 <strong>闲管家（闲鱼自动发货）</strong> 或 <strong>小红书发货工具</strong>，杜绝渠道混杂与一码两卖！
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr auto; gap: 12px; align-items: end; margin-bottom: 16px;">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>选择售卖渠道：</label>
+                <select id="gen-channel" class="form-control">
+                    <option value="XY" selected>🐟 闲鱼专用 (生成 XY-XXXX-XXXX-XXXX，用于闲管家)</option>
+                    <option value="XHS">📕 小红书专用 (生成 XHS-XXXX-XXXX-XXXX，用于小红书/微店)</option>
+                    <option value="SIN">🌐 通用/全渠道 (生成 SIN-XXXX-XXXX-XXXX，备用/线下)</option>
+                </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>生成数量：</label>
+                <select id="gen-count" class="form-control">
+                    <option value="10">生成 10 张</option>
+                    <option value="50" selected>生成 50 张</option>
+                    <option value="100">生成 100 张</option>
+                    <option value="500">生成 500 张</option>
+                </select>
+            </div>
+
+            <button id="btn-generate-batch" class="btn-mystic" style="padding: 10px 18px; white-space: nowrap;">
+                ⚡ 立即生成
+            </button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+            <button id="btn-export-xy" class="btn-secondary" style="width: auto; padding: 8px 14px; font-size: 0.85rem; border-color: rgba(234, 179, 8, 0.5); color: #facc15;">
+                📥 仅导出【闲鱼-闲管家专用库存】TXT
+            </button>
+            <button id="btn-export-xhs" class="btn-secondary" style="width: auto; padding: 8px 14px; font-size: 0.85rem; border-color: rgba(239, 68, 68, 0.5); color: #f87171;">
+                📥 仅导出【小红书专用库存】TXT
+            </button>
+            <button id="btn-export-all" class="btn-secondary" style="width: auto; padding: 8px 14px; font-size: 0.85rem;">
+                📥 导出所有未使用卡密 TXT
+            </button>
+        </div>
+
+        <div class="form-group">
+            <label>最新生成的卡密预览列表：</label>
+            <textarea id="output-generated-keys" class="form-control" rows="5" readonly style="font-family: var(--font-mono); font-size: 0.85rem; color: #a78bfa;" placeholder="点击批量生成后，卡密将在此显示..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button id="btn-clear-pool" style="background: none; border: 1px solid rgba(239, 68, 68, 0.4); color: var(--crimson); font-size: 0.8rem; padding: 6px 14px; border-radius: 6px; cursor: pointer;">
+                🗑️ 清空本地所有卡密库
+            </button>
+        </div>
+    </div>
+
+    <!-- 模块 3：免费云端核销防转发设置 (可选配置) -->
+    <div class="glass-card" style="margin-bottom: 24px; border-color: rgba(139, 92, 246, 0.35);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3 style="color: #c4b5fd; font-size: 1.05rem; font-weight: 700;">☁️ 免费云端核销防刷库 (LeanCloud 对接)</h3>
+            <span style="font-size: 0.76rem; background: rgba(139, 92, 246, 0.15); color: #c4b5fd; padding: 2px 8px; border-radius: 4px;">可选进阶 · 填入即刻全网一码一销</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 14px; line-height: 1.5;">
+            配置 LeanCloud 凭证后，前台核销将实现 <strong>全网实时设备绑定校验</strong>，彻底杜绝跨设备转发与多人共享白嫖。不配置则自动运行本地离线模式。
+        </p>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>LeanCloud AppID：</label>
+                <input type="text" id="cloud-appid" class="form-control" placeholder="如：a8K3mNx...">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label>LeanCloud AppKey：</label>
+                <input type="text" id="cloud-appkey" class="form-control" placeholder="如：9xP2Lq...">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>REST API 服务器地址 (Server URL)：</label>
+            <input type="text" id="cloud-serverurl" class="form-control" placeholder="如：https://your-app-domain.api.lncldglobal.com">
+        </div>
+
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <button id="btn-save-cloud" class="btn-mystic" style="width: auto; padding: 8px 20px; font-size: 0.85rem;">
+                💾 保存云端核销配置
+            </button>
+            <span id="cloud-status-tip" style="font-size: 0.8rem; color: var(--text-dim);"></span>
+        </div>
+    </div>
+
+    <!-- 模块 4：7 大魔神真身与海报效果一键预览（管理员专用通道） -->
+    <div class="glass-card" style="margin-bottom: 24px; border-color: rgba(212, 175, 55, 0.45); background: rgba(18, 12, 22, 0.95);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3 style="color: var(--gold); font-size: 1.05rem; font-weight: 700;">🔮 七宗罪 7 大魔神真身与海报效果一键预览（管理员专用）</h3>
+            <span style="font-size: 0.76rem; background: rgba(212, 175, 55, 0.15); color: #fbbf24; padding: 2px 8px; border-radius: 4px;">免答题 · 秒测立绘/蛛网/排行/海报</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 14px; line-height: 1.5;">
+            已将测试前台的快速预览通道移至此处。点击下方任一魔神罪印，即可一键在新标签页免答题直接打开对应的<strong>高阶深度卷宗、立绘、三款海报</strong>进行效果验收：
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <a href="index.html?preview=pride" target="_blank" class="btn-secondary" style="width: auto; padding: 7px 14px; font-size: 0.82rem; text-decoration: none; border-color: rgba(212,175,55,0.4); color: #fbbf24;">👑 傲慢 (路西法)</a>
+            <a href="index.html?preview=wrath" target="_blank" class="btn-secondary" style="width: auto; padding: 7px 14px; font-size: 0.82rem; text-decoration: none; border-color: rgba(239,68,68,0.4); color: #f87171;">💥 暴怒 (萨麦尔)</a>
+            <a href="index.html?preview=greed" target="_blank" class="btn-secondary" style="width: auto; padding: 7px 14px; font-size: 0.82rem; text-decoration: none; border-color: rgba(245,158,11,0.4); color: #fcd34d;">🪙 贪婪 (玛门)</a>
+            <a href="index.html?preview=envy" target="_blank" class="btn-secondary" style="width: auto; padding: 7px 14px; font-size: 0.82rem; text-decoration: none; border-color: rgba(16,185,129,0.4); color: #6ee7b7;">🪞 嫉妒 (利维坦)</a>
+            <a href="index.html?preview=sloth" target="_blank" class="btn-secondary" style="width: auto; padding: 7px 14px; font-size: 0.82rem; text-decoration: none; border-color: rgba(139,92,246,0.4); color: #c4b5fd;">💤 懒惰 (贝尔芬格)</a>
+            <a href="index.html?preview=lust" target="_blank" class="btn-secondary" style="width: auto; padding: 7px 14px; font-size: 0.82rem; text-decoration: none; border-color: rgba(236,72,153,0.4); color: #f472b6;">🌹 色欲 (阿斯蒙蒂斯)</a>
+            <a href="index.html?preview=gluttony" target="_blank" class="btn-secondary" style="width: auto; padding: 7px 14px; font-size: 0.82rem; text-decoration: none; border-color: rgba(234,179,8,0.4); color: #fde047;">🍷 暴食 (别西卜)</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- 脚本 -->
+<script src="assets/js/license.js"></script>
+<script>
+    const ADMIN_PASS = 'admin888';
+
+    const loginPanel = document.getElementById('login-panel');
+    const dashboardPanel = document.getElementById('dashboard-panel');
+    const btnLogin = document.getElementById('btn-admin-login');
+    const inputPass = document.getElementById('admin-pass');
+
+    // 登录校验
+    btnLogin.addEventListener('click', () => {
+        if (inputPass.value === ADMIN_PASS) {
+            loginPanel.style.display = 'none';
+            dashboardPanel.style.display = 'block';
+            loadAdminData();
+        } else {
+            alert('密码错误！默认初始密码为 admin888');
+        }
+    });
+
+    // 渲染后台数据
+    function loadAdminData() {
+        const config = getLicenseConfig();
+        document.getElementById('cfg-mode').value = config.mode || 'license';
+        document.getElementById('cfg-devices').value = config.maxDevices || 3;
+        document.getElementById('cfg-universal-key').value = config.universalKey || 'SIN778899';
+        document.getElementById('cfg-wx').value = config.serviceWx || 'soul_test_vip';
+        document.getElementById('cfg-url').value = config.buyUrl || '';
+
+        if (config.cloud) {
+            document.getElementById('cloud-appid').value = config.cloud.appId || '';
+            document.getElementById('cloud-appkey').value = config.cloud.appKey || '';
+            document.getElementById('cloud-serverurl').value = config.cloud.serverUrl || '';
+            if (config.cloud.appId && config.cloud.appKey) {
+                document.getElementById('cloud-status-tip').textContent = '✅ 云端核销已配置生效';
+                document.getElementById('cloud-status-tip').style.color = '#10b981';
+            }
+        }
+
+        updateStats();
+    }
+
+    // 统计刷新（分渠道统计）
+    function updateStats() {
+        const pool = getGeneratedKeysPool();
+        const keys = Object.values(pool);
+        const total = keys.length;
+        const used = keys.filter(k => k.used).length;
+        const unusedTotal = total - used;
+
+        // 渠道过滤
+        const xhsKeys = keys.filter(k => (k.channel === 'XHS' || k.key.startsWith('XHS-')));
+        const xhsUnused = xhsKeys.filter(k => !k.used).length;
+
+        const xyKeys = keys.filter(k => (k.channel === 'XY' || k.key.startsWith('XY-')));
+        const xyUnused = xyKeys.filter(k => !k.used).length;
+
+        document.getElementById('stat-total-keys').textContent = total;
+        document.getElementById('stat-unused-total').textContent = unusedTotal;
+
+        document.getElementById('stat-xhs-keys').textContent = xhsKeys.length;
+        document.getElementById('stat-xhs-unused').textContent = xhsUnused;
+
+        document.getElementById('stat-xy-keys').textContent = xyKeys.length;
+        document.getElementById('stat-xy-unused').textContent = xyUnused;
+
+        document.getElementById('stat-used-keys').textContent = used;
+        const rate = total > 0 ? Math.round((used / total) * 100) : 0;
+        document.getElementById('stat-used-rate').textContent = `${rate}%`;
+    }
+
+    // 保存基础配置
+    document.getElementById('btn-save-config').addEventListener('click', () => {
+        const config = getLicenseConfig();
+        config.mode = document.getElementById('cfg-mode').value;
+        config.maxDevices = parseInt(document.getElementById('cfg-devices').value, 10) || 3;
+        config.universalKey = document.getElementById('cfg-universal-key').value.trim() || 'SIN778899';
+        config.serviceWx = document.getElementById('cfg-wx').value;
+        config.buyUrl = document.getElementById('cfg-url').value;
+
+        saveLicenseConfig(config);
+        alert('基础运营配置与设备限额已成功保存生效！');
+    });
+
+    // 保存云端配置
+    document.getElementById('btn-save-cloud').addEventListener('click', () => {
+        const config = getLicenseConfig();
+        const appId = document.getElementById('cloud-appid').value.trim();
+        const appKey = document.getElementById('cloud-appkey').value.trim();
+        const serverUrl = document.getElementById('cloud-serverurl').value.trim();
+
+        config.cloud = {
+            enabled: !!(appId && appKey),
+            appId: appId,
+            appKey: appKey,
+            serverUrl: serverUrl
+        };
+
+        saveLicenseConfig(config);
+        if (config.cloud.enabled) {
+            document.getElementById('cloud-status-tip').textContent = '✅ 云端核销配置已成功保存！';
+            document.getElementById('cloud-status-tip').style.color = '#10b981';
+            alert('云端核销防转发配置已保存生效！');
+        } else {
+            document.getElementById('cloud-status-tip').textContent = 'ℹ️ 云端核销未启用，将继续使用本地离线算法';
+            document.getElementById('cloud-status-tip').style.color = '#9ca3af';
+            alert('已保存（云端配置已清除，恢复纯离线模式）');
+        }
+    });
+
+    // 批量生成（支持渠道）
+    let latestGenerated = [];
+    document.getElementById('btn-generate-batch').addEventListener('click', () => {
+        const count = parseInt(document.getElementById('gen-count').value, 10);
+        const channel = document.getElementById('gen-channel').value;
+        const channelNames = { 'XHS': '小红书', 'XY': '闲鱼(闲管家)', 'SIN': '通用' };
+        
+        latestGenerated = generateBatchKeys(count, channel);
+        document.getElementById('output-generated-keys').value = latestGenerated.join('\n');
+        updateStats();
+        alert(`成功为【${channelNames[channel] || channel}】批量生成 ${count} 张卡密！`);
+    });
+
+    // 导出工具函数
+    function downloadTxt(filename, keysArray) {
+        if (!keysArray || keysArray.length === 0) {
+            alert('当前没有可导出的未使用卡密！');
+            return;
+        }
+        const textContent = keysArray.join('\r\n');
+        const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // 仅导出闲鱼专用卡密 (导入闲管家)
+    document.getElementById('btn-export-xy').addEventListener('click', () => {
+        const pool = getGeneratedKeysPool();
+        const unusedKeys = Object.values(pool)
+            .filter(k => !k.used && (k.channel === 'XY' || k.key.startsWith('XY-')))
+            .map(k => k.key);
+        
+        const dateStr = new Date().toISOString().slice(0, 10);
+        downloadTxt(`七宗罪卡密_闲鱼渠道专用(直接导入闲管家)_${unusedKeys.length}张_${dateStr}.txt`, unusedKeys);
+    });
+
+    // 仅导出小红书专用卡密
+    document.getElementById('btn-export-xhs').addEventListener('click', () => {
+        const pool = getGeneratedKeysPool();
+        const unusedKeys = Object.values(pool)
+            .filter(k => !k.used && (k.channel === 'XHS' || k.key.startsWith('XHS-')))
+            .map(k => k.key);
+        
+        const dateStr = new Date().toISOString().slice(0, 10);
+        downloadTxt(`七宗罪卡密_小红书渠道专用_${unusedKeys.length}张_${dateStr}.txt`, unusedKeys);
+    });
+
+    // 导出所有未用卡密
+    document.getElementById('btn-export-all').addEventListener('click', () => {
+        const pool = getGeneratedKeysPool();
+        const unusedKeys = Object.values(pool).filter(k => !k.used).map(k => k.key);
+        const dateStr = new Date().toISOString().slice(0, 10);
+        downloadTxt(`七宗罪卡密_全部库存_${unusedKeys.length}张_${dateStr}.txt`, unusedKeys);
+    });
+
+    // 清空卡密池
+    document.getElementById('btn-clear-pool').addEventListener('click', () => {
+        if (confirm('确定要清空本地所有卡密记录吗？此操作不可逆！')) {
+            localStorage.removeItem('sin_used_license_keys_v1');
+            updateStats();
+            document.getElementById('output-generated-keys').value = '';
+            alert('本地卡密库已清空！');
+        }
+    });
+</script>
+
+</body>
+</html>
