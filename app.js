@@ -1905,6 +1905,15 @@ function isTestUnlocked(testId) {
   return false;
 }
 
+function stripUrlKeyParams() {
+  try {
+    if (typeof window !== 'undefined' && window.history && window.history.replaceState && window.location.search) {
+      var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+      window.history.replaceState(null, document.title, cleanUrl);
+    }
+  } catch (e) {}
+}
+
 function unlockTest(testId) {
   if (!testId) return;
   try {
@@ -2223,6 +2232,8 @@ document.addEventListener("DOMContentLoaded", function() {
     if (search.indexOf('key=') !== -1 || search.indexOf('token=') !== -1) {
       if (isTestUnlocked(matchedId)) {
         showToast("🎉 欢迎订购用户！已为您自动识别卡密并解锁《" + (TEST_DATABASE[matchedId] ? TEST_DATABASE[matchedId].title : "测评") + "》！");
+        // 瞬间静默抹除地址栏中的 key 密钥参数，防止买家直接通过浏览器/微信右上角转发带密链接
+        stripUrlKeyParams();
       }
     }
   }
